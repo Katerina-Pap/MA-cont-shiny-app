@@ -218,8 +218,6 @@ shinyServer(function(input, output, session) {
  })
   
   # Output table of final calculations  - if missing data 
- 
-  # Output table of final calculations  - if missing data 
   analysis_data <- reactive({
     if(is.null(df5()))
     {return(NULL)}
@@ -431,9 +429,7 @@ shinyServer(function(input, output, session) {
       # Calculate ancova estimate using formula from Senn et al. 2007
       # using the pooled correlation
       
-      # @ Andreas: these are the 2 values that need to be reactive with the sliders for correlations
-      # Correlation_0 <-input$cor1
-      # Correlation_1 <-input$cor2
+
       
       ripooled <- with(data.AD_wide, ((NCFB_1*Correlation_1*sdBaseline_1*sdFU_1 +  NCFB_0*Correlation_0 *sdBaseline_0*sdFU_0) )
                        /((NCFB_1+NCFB_0)*sdpooledB*sdpooledF))

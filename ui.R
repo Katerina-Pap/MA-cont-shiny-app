@@ -23,7 +23,6 @@ jsCode <- 'shinyjs.winprint = function(){
 window.print();
 }'
 
-
 # Define UI --------------------------------------------------------------------------------------------------------------------------------------------------------
 shinyUI(
 
@@ -90,14 +89,6 @@ shinyUI(
                )
              )
                      
-            #  includeMarkdown("overview.md"),
-            #  br(), br(),
-            #  h4(textOutput("counter")),
-            # 
-            # mainPanel(
-            #   uiOutput("video")
-            #           )       
-            # 
     ),
     
 
