@@ -268,7 +268,7 @@ shinyServer(function(input, output, session) {
         dd <- analysis_data()
         # For the first three methods the data need to be in wide format
         drop         <- which(colnames( dd) %in% "Study")
-        dd           <-  dd[,-drop]
+        dd           <- dd[,-drop]
         data.AD_wide <- dcast(melt(dd, id.vars=c("ID", "group")), ID~variable+group)
 
         MA.fixed.final <- rma(m1i=MeanFU_1, m2i=MeanFU_0, sd1i=sdFU_1, sd2i=sdFU_0, n1i=NCFB_1, n2i=NCFB_0, data=data.AD_wide, measure="MD", method="FE")
@@ -279,7 +279,8 @@ shinyServer(function(input, output, session) {
   })
   
   output$final_fe.out <- renderPrint({
-    final.FE()
+    cat("--- Mean Differences of Final scores ---", "\n")
+        final.FE()
   })
   
   # RE analysis results 
@@ -295,8 +296,9 @@ shinyServer(function(input, output, session) {
       dd           <-  dd[,-drop]
       data.AD_wide <- dcast(melt(dd, id.vars=c("ID", "group")), ID~variable+group)
       
-      MA.random.final <- rma(m1i=MeanFU_1, m2i=MeanFU_0, sd1i=sdFU_1, sd2i=sdFU_0, n1i=NCFB_1, n2i=NCFB_0, data=data.AD_wide, measure="MD", method="REML", knha=input$HK)
-      #list(MA.random.final=MA.random.final) 
+      MA.random.final <- rma(m1i=MeanFU_1, m2i=MeanFU_0, sd1i=sdFU_1, sd2i=sdFU_0, n1i=NCFB_1, n2i=NCFB_0, 
+                             data=data.AD_wide, measure="MD", method="REML", knha=input$HK)
+      # list(MA.random.final=MA.random.final) 
       MA.random.final
       
     }
@@ -304,9 +306,8 @@ shinyServer(function(input, output, session) {
   })
   
   output$final_re.out<- renderPrint({
-    #cat(crayon::bold("test\n"))
-  cat("--- Mean Differences of Final scores ---","\n")
-    final.RE()
+      cat("--- Mean Differences of Final scores ---","\n")
+          final.RE()
   })
   
   # Output change scores analysis --------------------------------------------------------------------------------------------------------------------------------
@@ -379,8 +380,8 @@ shinyServer(function(input, output, session) {
         dd           <-  dd[,-drop]
         data.AD_wide <- dcast(melt( dd, id.vars=c("ID", "group")), ID~variable+group)
 
-        sdpooledB<- with(data.AD_wide, sqrt((((NCFB_1 - 1)*(sdBaseline_1^2)) + (NCFB_0 - 1)*(sdBaseline_0^2))/((NCFB_1+NCFB_0)-2)))
-        sdpooledF<- with(data.AD_wide, sqrt((((NCFB_1 - 1)*(sdFU_1^2)) + (NCFB_0 - 1)*(sdFU_0^2))/((NCFB_1+NCFB_0)-2)))
+        sdpooledB <- with(data.AD_wide, sqrt((((NCFB_1 - 1)*(sdBaseline_1^2)) + (NCFB_0 - 1)*(sdBaseline_0^2))/((NCFB_1+NCFB_0)-2)))
+        sdpooledF <- with(data.AD_wide, sqrt((((NCFB_1 - 1)*(sdFU_1^2)) + (NCFB_0 - 1)*(sdFU_0^2))/((NCFB_1+NCFB_0)-2)))
 
         # Calculate ancova estimate using formula from Senn et al. 2007
         # using the pooled correlation
@@ -423,13 +424,11 @@ shinyServer(function(input, output, session) {
       dd           <-  dd[,-drop]
       data.AD_wide <- dcast(melt( dd, id.vars=c("ID", "group")), ID~variable+group)
       
-      sdpooledB<- with(data.AD_wide, sqrt((((NCFB_1 - 1)*(sdBaseline_1^2)) + (NCFB_0 - 1)*(sdBaseline_0^2))/((NCFB_1+NCFB_0)-2)))
-      sdpooledF<- with(data.AD_wide, sqrt((((NCFB_1 - 1)*(sdFU_1^2)) + (NCFB_0 - 1)*(sdFU_0^2))/((NCFB_1+NCFB_0)-2)))
+      sdpooledB <- with(data.AD_wide, sqrt((((NCFB_1 - 1)*(sdBaseline_1^2)) + (NCFB_0 - 1)*(sdBaseline_0^2))/((NCFB_1+NCFB_0)-2)))
+      sdpooledF <- with(data.AD_wide, sqrt((((NCFB_1 - 1)*(sdFU_1^2)) + (NCFB_0 - 1)*(sdFU_0^2))/((NCFB_1+NCFB_0)-2)))
       
       # Calculate ancova estimate using formula from Senn et al. 2007
       # using the pooled correlation
-      
-
       
       ripooled <- with(data.AD_wide, ((NCFB_1*Correlation_1*sdBaseline_1*sdFU_1 +  NCFB_0*Correlation_0 *sdBaseline_0*sdFU_0) )
                        /((NCFB_1+NCFB_0)*sdpooledB*sdpooledF))
@@ -462,8 +461,7 @@ shinyServer(function(input, output, session) {
   
   #------------------------------------------------------------------------------------------------------------------------------------------------------------------
  
-  # make pseudo IPD as reactive data 
-  
+  # Make pseudo IPD as reactive data 
   
   # Output one-stage pseudo IPD main effect--------------------------------------------------------------------------------------------------------------------------
   
@@ -506,7 +504,7 @@ shinyServer(function(input, output, session) {
     resid         <- residuals(lm(ytmp2 ~ ytmp1 - 1 , data = datatmp))
     Resid <- datatmp$ytmp2 - cor.ytmp*datatmp$ytmp1
     # coefficient beta of regression of ytmp2 on ytmp1
-    #coef          <- coef(lm(ytmp2 ~ ytmp1 - 1 , data = datatmp))
+    #coef         <- coef(lm(ytmp2 ~ ytmp1 - 1 , data = datatmp))
     data.IPD2     <- rbind( data.IPD2, data.frame(datatmp,cor.ytmp,resid,Resid))
     }  
     } 
@@ -541,7 +539,7 @@ shinyServer(function(input, output, session) {
     
     
     ctrl <- lmeControl(opt="optim", msMaxIter=100)
-    # arm and study specific variances estimated  
+    # arm- and study-specific variances estimated  
     FRstudyarm    <- lme(fixed=y2 ~ y1center + group + as.factor(study) + y1center*as.factor(study), random= ~ -1 + groupcenter|study,
                          weights =varIdent(form=~study|arm), control=ctrl,
                          data=data.pseudoIPD, method='REML')
@@ -556,7 +554,7 @@ shinyServer(function(input, output, session) {
     FRgroup      <-   lme(fixed=y2 ~ y1center + group+ as.factor(study) + y1center*as.factor(study) , random= ~ -1 + groupcenter|study,
                           weights =varIdent(form=~1|group), control=ctrl, data=data.pseudoIPD, method='REML')
     
-    #one residual variance estimated
+    # one residual variance estimated
     FRone        <-   lme(fixed=y2 ~ y1center + group + as.factor(study) + y1center*as.factor(study) , random= ~-1 + groupcenter|study,
                           control=ctrl, data=data.pseudoIPD, method='REML')
     
@@ -727,7 +725,7 @@ shinyServer(function(input, output, session) {
   
   twostage_ME.FE <- reactive({
     
-    if (input$type == "fe") {
+    if (input$type == "ce") {
       
       if (is.null(analysis_data())){return(NULL)}
       analysis_data()
@@ -736,10 +734,10 @@ shinyServer(function(input, output, session) {
       data.IPD <- data.frame(study         = rep(dd2$Study, dd2$NCFB),
                              group         = rep(dd2$group, dd2$NCFB),
                              meanBaseline  = rep(dd2$MeanBaseline, dd2$NCFB),
-                             sdBaseline    = rep(dd2$sdBaseline, dd2$NCFB),
+                             sdBaseline    = rep(dd2$sdBaseline,   dd2$NCFB),
                              meanPost      = rep(dd2$MeanFU, dd2$NCFB),
-                             sdPost        = rep(dd2$sdFU, dd2$NCFB),
-                             correlation   = rep(dd2$Correlation,dd2$NCFB))
+                             sdPost        = rep(dd2$sdFU,   dd2$NCFB),
+                             correlation   = rep(dd2$Correlation, dd2$NCFB))
       
       set.seed(123456)
       data.IPD$ytmp1 <- rnorm(nrow(data.IPD),0,1)
@@ -764,7 +762,7 @@ shinyServer(function(input, output, session) {
       resid         <- residuals(lm(ytmp2 ~ ytmp1 - 1 , data = datatmp))
       Resid <- datatmp$ytmp2 - cor.ytmp*datatmp$ytmp1
       # coefficient beta of regression of ytmp2 on ytmp1
-      #coef          <- coef(lm(ytmp2 ~ ytmp1 - 1 , data = datatmp))
+      #coef         <- coef(lm(ytmp2 ~ ytmp1 - 1 , data = datatmp))
       data.IPD2     <- rbind( data.IPD2, data.frame(datatmp,cor.ytmp,resid,Resid))
       }  
       } 
@@ -902,7 +900,7 @@ shinyServer(function(input, output, session) {
       se_ancova   <- NULL
       
       for (i in unique(data.pseudoIPD$study ))
-      {         fit <- lm(y2~ y1 + group, data.pseudoIPD[data.pseudoIPD$study==i,])
+      {         fit <- lm(y2 ~ y1 + group, data.pseudoIPD[data.pseudoIPD$study==i,])
       coef_ancova   <- rbind(coef_ancova,fit$coefficients) 
       se_ancova     <- rbind(se_ancova,sqrt(diag(vcov(fit))))
       }
@@ -925,7 +923,7 @@ shinyServer(function(input, output, session) {
   
   forest_twostageME = function(){
     
-    if (input$type == "fe") {
+    if (input$type == "ce") {
       MA_twostageME <- twostage_ME.FE()$MA_twostageME
       forest(MA_twostageME)
       
