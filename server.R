@@ -731,7 +731,7 @@ shinyServer(function(input, output, session) {
   
   twostage_ME.FE <- reactive({
     
-    if (input$type == "fe") {
+    if (input$type == "ce") {
       
       if (is.null(analysis_data())){return(NULL)}
       analysis_data()
