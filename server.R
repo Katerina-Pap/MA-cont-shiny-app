@@ -730,8 +730,9 @@ shinyServer(function(input, output, session) {
   # Output two-stage pseudo IPD
   
   twostage_ME.FE <- reactive({
+  
     
-    if (input$type == "fe") {
+    if (input$type == "ce") {
       
       if (is.null(analysis_data())){return(NULL)}
       analysis_data()
@@ -930,16 +931,16 @@ shinyServer(function(input, output, session) {
   forest_twostageME = function(){
     
     if (input$type == "ce") {
-      MA_twostageME <- twostage_ME.FE()$MA_twostageME
-      forest(MA_twostageME)
+      MA_twostageME_ce <- twostage_ME.FE()$MA_twostageME
+      forest(MA_twostageME_ce)
       
     }
     
     
     if (input$type == "re") {
       
-      MA_twostageME <- twostage_ME.RE()$MA_twostageME
-      forest(MA_twostageME)
+      MA_twostageME_re <- twostage_ME.RE()$MA_twostageME
+      forest(MA_twostageME_re)
       
     }
   }
