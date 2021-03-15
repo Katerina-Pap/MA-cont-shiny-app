@@ -378,7 +378,7 @@ shinyUI(
     footer = titlePanel( 
       div(
         column(width = 6,   
-               h5(strong("Meta-analysis of continuous outcomes: pre/post treatment analysis v0.1")), 
+               h5(strong("Meta-analysis of continuous outcomes: pre/post effect size v0.1")), 
                em(), 
                h6("Developed by : Katerina Papadimitropoulou, katerina.papadimitropoulou@gmail.com"),
                em(),
