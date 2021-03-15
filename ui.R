@@ -28,8 +28,8 @@ shinyUI(
 
   
   navbarPage(
-    id = "mytabsetpanel",
-    theme = shinytheme("flatly"), # shinytheme("flatly"),
+    id    = "mytabsetpanel",
+    theme = shinytheme("flatly"), 
     title = div("MA-cont: pre/post effect size"),
     # Begin overview of tabs-------------------------------------------------------------------------------
     # Tab1: Main or home tab; include only an RMD file 
@@ -40,7 +40,7 @@ shinyUI(
                column(
                  8,
                  title = "About",
-                 id = "home_about",
+                 id    = "home_about",
                  sidebarLayout(
                    sidebarPanel(
                      h3(strong("About")),
@@ -82,25 +82,20 @@ shinyUI(
                          br(),
                          actionButton("gotodata", "Upload your data")
                        ),
-                       #column(width=4),
-                       column(
-                         width=6,
-                         #align="right", 
-                         br(),
-                         uiOutput("video")
-                       )
-                   ),
                   includeMarkdown("overview.md"), # to uncomment out later
-                  
-                  
-                  #fluidRow(
-                 
-                  #)
-                  
-                )
+                              )
                )
+            )
+          ),  # ends column after fluidRow
+               column(
+                 4,
+                 align="right", 
+                 br(),
+                 uiOutput("video")
                )
-             )
+            )
+             
+             
                      
     ),
     
