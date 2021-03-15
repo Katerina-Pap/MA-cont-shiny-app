@@ -47,8 +47,7 @@ shinyServer(function(input, output, session) {
     
   })
   
-  #rv <- reactiveValues()
-  
+
   df_upload <- reactive({
     inFile <- input$data_upload
     if (is.null(inFile)) {return(defaultDat())}

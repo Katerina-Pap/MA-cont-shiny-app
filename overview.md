@@ -10,9 +10,11 @@ The available statistical approaches are:
 - One-stage pseudo IPD ANCOVA
 - Two-stage pseudo IPD ANCOVA
 
-For details regarding on model formulations and statistical calculations look at `Technical details`.
+For details regarding the models analytical expressions and statistical calculations look at `Technical details`.
 
-###   Disclaimer
 For more information on how to use the tool please follow the instructive video or get in contact with the developer of the tool. The app is powered by [Shiny](shiny.rstudio.com) using the statistical software [R](http://cran.r-project.org/).
 
 
+####   Disclaimer
+
+The tool is intended for a wide audience of nontechnical and technical users. Use it wisely and seek advice from technical experts when necessary.

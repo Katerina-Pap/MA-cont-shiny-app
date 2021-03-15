@@ -121,8 +121,12 @@ shinyUI(
                                       #accept = c(".xlsx", ".xls", ".csv")
                             ),
                             
-                            h5(tags$a(href = 'example.csv', class = "btn", icon("download"), style="color:#4ec4aa",'Download and use the data template to prepare your file')),
-                            
+                            # p(
+                            # downloadButton("downloadData", "RoB2.0 dataset")
+                            # ),
+                            h5(tags$a(href = 'example.csv', class = "btn", icon("download"), style='background-color:#91d1c2ff; color: #fdfbfb',
+                                      'Download and use the data template to prepare your file')),
+                            #style="color:#DCDCDC",
                             # Input: Checkbox if file has header ---------
                             checkboxInput("header", "Header", TRUE),
                             
