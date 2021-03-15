@@ -75,7 +75,7 @@ shinyUI(
                    ),
                    mainPanel(
                      fluidRow(
-                       column(width = 6, h3("Getting started")),
+                       column(width = 6, align="left", h3("Getting started")),
                        column(
                          width = 6,
                          align = "right",
@@ -83,7 +83,7 @@ shinyUI(
                          actionButton("gotodata", "Upload your data")
                        ),
                   includeMarkdown("overview.md"), # to uncomment out later
-                              )
+                  )
                )
             )
           ),  # ends column after fluidRow
@@ -209,6 +209,7 @@ shinyUI(
                                     sidebarLayout(
                                       sidebarPanel(
                                         h2("Perform meta-analysis of pre/post effect size"),
+                                        h3("Effect size: Mean difference"),
                                         #p("The goal ...."),
                                         
                                         radioButtons("type", h3("Select model:"),
