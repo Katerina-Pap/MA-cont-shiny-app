@@ -46,7 +46,7 @@ shinyUI(
                      h3(strong("About")),
                      p(
                        em("MA-cont: pre/post effect size"),
-                       "enables the meta-analysis of continuous data using standard AD methods, and pseudo IPD methods accounting for the baseline measurements. Treatment-by-baseline interactions can be
+                       "enables the meta-analysis of continuous data using standard AD methods, and pseudo IPD methods, accounting for the baseline measurements. Treatment-by-baseline effects can be
                        additionally explored."
                        ),
                     # br(),
@@ -138,12 +138,8 @@ shinyUI(
                             radioButtons("dec","Decimal",
                                          choices = c(Point = ".",Comma = ","),                                
                                          selected  = '.'),
-                            
-                            
                             br(),
-                            fluidRow(column(2,  actionButton(inputId = "SEfromSD", class = "SEfromSD", label = "Fill-in SD from SE"),
-                                            #helpText("Using: $$ SD = SE *\\sqrt{n} $$")
-                                            )),
+                            fluidRow(column(2,  actionButton(inputId = "SEfromSD", class = "SEfromSD", label = "Fill-in SD from SE"))),
                             br(),
                             fluidRow(column(2,  actionButton(inputId = "sameSD", class = "sameSD", label = "Equal SDs at pre/post"))), 
                             br(),
@@ -198,11 +194,10 @@ shinyUI(
                               
                             )
                           ) # end of main panel of tab: Data upload
-                          
                         )
-                      )
+                     )
              )
-             #)
+           
     ), # end of tabpanel :data upload
     
     # Tab 2: Data upload with -----------------------------------------------------------------------------
@@ -213,8 +208,8 @@ shinyUI(
                                   fluidPage(
                                     sidebarLayout(
                                       sidebarPanel(
-                                        h2("About meta-analysis of pre/post effect size:"),
-                                        p("The goal ...."),
+                                        h2("Perform meta-analysis of pre/post effect size"),
+                                        #p("The goal ...."),
                                         
                                         radioButtons("type", h3("Select model:"),
                                                      list("Random-effects (RE)" = "re",
@@ -225,8 +220,8 @@ shinyUI(
                                         helpText("Only applicable under RE model")
                                         
                                        # br(),
-                                        #yeah4("Final Scores analysis"), 
-                                        #withMathJax(includeMarkdown("methods.md")),
+                                       # yeah4("Final Scores analysis"), 
+                                       # withMathJax(includeMarkdown("methods.md")),
                                        # helpText("The fields are pre-populated for you. Be patient for a few seconds and the results will be printed on the right panel."),
                                        # sliderInput("cor1", "Correlation coefficient in treatment group:", min = -1, max = 1, value = 0.5, step =0.001),
                                        # sliderInput("cor2", "Correlation coefficient in control group:", min = -1, max = 1, value = 0.5, step =0.001),

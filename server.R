@@ -111,9 +111,9 @@ shinyServer(function(input, output, session) {
   
   # Print data structure ---------------------------------------------------------------------------------------------------------------------------------
   output$structure <- renderPrint({
-    req(df_upload())
-    Dataset <- df_upload() # renaming dataset to appear better in the table
-    skim(Dataset)
+                      req(df_upload())
+                      Dataset <- df_upload() # renaming dataset to appear better in the table
+                      skim(Dataset)
   })
   
   
@@ -123,26 +123,26 @@ shinyServer(function(input, output, session) {
   rv <- reactiveValues()
   
   df1 <- reactive({
-    rv$df <- df_upload()
+        rv$df <- df_upload()
     
-    rv$ID           <- rv$df[[1]]
-    rv$Study        <- rv$df[[2]]
-    rv$MeanBaseline <- rv$df[[3]]
-    rv$sdBaseline   <- rv$df[[4]]
-    rv$seBaseline   <- rv$df[[5]]
-    rv$MeanFU       <- rv$df[[6]]
-    rv$sdFU         <- rv$df[[7]]
-    rv$seFU         <- rv$df[[8]]
-    rv$Correlation  <- rv$df[[9]]
-    rv$MeanCFB      <- rv$df[[10]]
-    rv$sdCFB        <- rv$df[[11]]
-    rv$seCFB        <- rv$df[[12]]
-    rv$NCFB         <- rv$df[[13]]
-    rv$group        <- rv$df[[14]]
+        rv$ID           <- rv$df[[1]]
+        rv$Study        <- rv$df[[2]]
+        rv$MeanBaseline <- rv$df[[3]]
+        rv$sdBaseline   <- rv$df[[4]]
+        rv$seBaseline   <- rv$df[[5]]
+        rv$MeanFU       <- rv$df[[6]]
+        rv$sdFU         <- rv$df[[7]]
+        rv$seFU         <- rv$df[[8]]
+        rv$Correlation  <- rv$df[[9]]
+        rv$MeanCFB      <- rv$df[[10]]
+        rv$sdCFB        <- rv$df[[11]]
+        rv$seCFB        <- rv$df[[12]]
+        rv$NCFB         <- rv$df[[13]]
+        rv$group        <- rv$df[[14]]
     
-    rv$df2  <- rv$df %>%
-      mutate (MeanFU     = ifelse(is.na(rv$MeanFU), rv$MeanCFB + rv$MeanBaseline, rv$MeanFU),
-              MeanCFB    = ifelse(is.na(rv$MeanCFB), rv$MeanFU - rv$MeanBaseline, rv$MeanCFB) )
+        rv$df2  <- rv$df %>%
+            mutate (MeanFU     = ifelse(is.na(rv$MeanFU), rv$MeanCFB + rv$MeanBaseline, rv$MeanFU),
+                    MeanCFB    = ifelse(is.na(rv$MeanCFB), rv$MeanFU - rv$MeanBaseline, rv$MeanCFB) )
   })
   
   # Dataset 2: Calculate SDs from SEs-----------------------------------------------------------------------------------------------------------------------------
