@@ -68,8 +68,9 @@ shinyUI(
                      p(
                        "Log an issue on",
                        a(href = "https://github.com/Katerina-Pap/MA-cont-pre-post-ES-shiny-app/issues", "GitHub")
-                     ),
-                     width = 4
+                     )
+                    #,
+                     #width = 4
                      
                    ),
                    mainPanel(
@@ -80,11 +81,23 @@ shinyUI(
                          align = "right",
                          br(),
                          actionButton("gotodata", "Upload your data")
+                       ),
+                       #column(width=4),
+                       column(
+                         width=6,
+                         #align="right", 
+                         br(),
+                         uiOutput("video")
                        )
                    ),
                   includeMarkdown("overview.md"), # to uncomment out later
-                  uiOutput("video")
-                 )
+                  
+                  
+                  #fluidRow(
+                 
+                  #)
+                  
+                )
                )
                )
              )

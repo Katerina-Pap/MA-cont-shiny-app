@@ -12,13 +12,6 @@ The available statistical approaches are:
 
 For details regarding on model formulations and statistical calculations look at `Technical details`.
 
-
-### Page Structure & Typical Workflow
-
-Each section is separated by tabs, for example, this one is a sub-tab of the `Home` tab.
-
-A typical workflow starts by uploading a CSV file of the data in long format. Some values may be partially available from published sources, we provide simple back-calculations and sensible imputations by actiobuttons under `Data upload & pre-processing`. Once the final dataset is created, standard AD and pseudo IPD methods to synthesize the data are performed.
-
 For more information on how to use the tool please follow the instructive video or get in contact with the developer of the tool. The app is powered by [Shiny](shiny.rstudio.com) using the statistical software [R](http://cran.r-project.org/).
 
 
