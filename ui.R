@@ -45,7 +45,7 @@ shinyUI(
                    sidebarPanel(
                      h3(strong("About")),
                      p(
-                       em("MA-cont: pre/post effect size to be changed"),
+                       em("MA-cont: pre/post effect size"),
                        "enables the meta-analysis of continuous data using standard AD methods, and pseudo IPD methods accounting for the baseline measurements. Treatment-by-baseline interactions can be
                        additionally explored."
                        ),
