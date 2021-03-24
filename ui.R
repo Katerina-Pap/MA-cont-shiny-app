@@ -240,13 +240,13 @@ shinyUI(
                                           tabPanel('Standard AD', 
                                                    
                                                    tabsetPanel(      
-                                                      tabPanel("Final Scores",
+                                                      tabPanel("Final (follow-up) Scores",
                                                                
                                                                tags$style(type="text/css",
                                                                           ".shiny-output-error { visibility: hidden; }",
                                                                           ".shiny-output-error:before { visibility: hidden; }"
                                                                ),     
-                                                               h2("Final Scores"),
+                                                               h2("Final (follow-up) Scores"),
                                                                verbatimTextOutput('final_fe.out'),
                                                                verbatimTextOutput('final_re.out'),
                                                                

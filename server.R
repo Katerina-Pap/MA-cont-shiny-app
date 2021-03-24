@@ -285,15 +285,25 @@ shinyServer(function(input, output, session) {
   #   final.FE() 
   # })
   
-  output$final_fe.out <- renderPrint({
+  
+ fe.final <- reactive({
+   
+   if (input$type == "ce")  {
+     
     MA.fixed.final <- final.FE()$MA.fixed.final
     
-    cat("---- Mean differences based on final (follow-up) scores. ----","\n")
+    cat("--- Mean differences based on final (follow-up) scores under the CE model ---","\n")
+    
     MA.fixed.final
+   }
+   
+  })
+  
+  
+  output$final_fe.out <- renderPrint({
+  fe.final()
   })
     
-    
-  
   # RE analysis results 
   final.RE <- reactive({
     
@@ -315,11 +325,19 @@ shinyServer(function(input, output, session) {
     
   })
   
-  output$final_re.out<- renderPrint({
+  re.final <- reactive({
+    
+    if (input$type == "re") {
     MA.random.final <- final.RE()$MA.random.final
     
-    cat("---- Mean differences based on final (follow-up) scores. ----","\n")
+    cat("--- Mean differences based on final (follow-up) scores under the RE model ---","\n")
+    
     MA.random.final
+    }
+  })
+  
+  output$final_re.out<- renderPrint({
+  re.final()
   })
   
   # Output change scores analysis --------------------------------------------------------------------------------------------------------------------------------
