@@ -384,23 +384,6 @@ shinyServer(function(input, output, session) {
       print(forestRE.final())
     })
   
-  # output$downloadFE <- downloadHandler(
-  #   filename = function() {
-  #     paste("Final scores CE model", Sys.Date(), sep='')
-  #   },
-  #   content = function(file){
-  #     if(input$format == "png")
-  #       png(file)
-  #     if(input$format == "pdf")
-  #       pdf(file)
-  #     print(makefePlot())
-  #     dev.off()
-  #   }
-  # )
-  # 
-  
-  
-  
   # Output change scores analysis --------------------------------------------------------------------------------------------------------------------------------
   
   # FE analysis results 
