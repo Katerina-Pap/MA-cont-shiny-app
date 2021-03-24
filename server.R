@@ -268,24 +268,18 @@ shinyServer(function(input, output, session) {
       if (is.null(analysis_data())){return(NULL)}
       analysis_data()
       df <- analysis_data()
-      # For the first three methods the data need to be in wide format
+      # change to wide format
       drop         <- which(colnames(df) %in% "Study")
       df           <-  df[,-drop]
       data.AD_wide <- dcast(melt(df, id.vars=c("ID", "group")), ID~variable+group)
       
       MA.fixed.final <- rma(m1i=MeanFU_1, m2i=MeanFU_0, sd1i=sdFU_1, sd2i=sdFU_0, n1i=NCFB_1, n2i=NCFB_0, data=data.AD_wide, measure="MD", method="FE")
       list(MA.fixed.final = MA.fixed.final) 
-      #MA.fixed.final
     }
     
   })
   
-  # Old version to keep 
-  # output$final_fe.out <- renderPrint({
-  #   final.FE() 
-  # })
-  
-  
+
  fe.final <- reactive({
    
    if (input$type == "ce")  {
@@ -312,7 +306,7 @@ shinyServer(function(input, output, session) {
       if (is.null(analysis_data())){return(NULL)}
       analysis_data()
       df <- analysis_data()
-      # For the first three methods the data need to be in wide format
+      # change to wide format 
       drop         <- which(colnames(df) %in% "Study")
       df          <-  df[,-drop]
       data.AD_wide <- dcast(melt(df, id.vars=c("ID", "group")), ID~variable+group)
@@ -341,7 +335,7 @@ shinyServer(function(input, output, session) {
   re.final()
   })
   
-  
+  # Forest plots for FE and RE 
   forest.final <- function(){
     
     if (input$type == "ce") {
@@ -360,8 +354,7 @@ shinyServer(function(input, output, session) {
       
   }
     
-    output$final.forest <- renderPlot(
-      {
+    output$final.forest <- renderPlot({
         withProgress(message = 'Rendering', detail = 'Forest plot - CE model', value = 0, {
           for (i in 1:5) {
             incProgress(1/5)
@@ -372,7 +365,16 @@ shinyServer(function(input, output, session) {
       })
 
   
-  
+    output$downloadfinalForest <- downloadHandler(
+      filename = function() {
+        paste('final.forest', Sys.Date(), '.pdf', sep='')
+      },
+      content = function(FILE=NULL) {
+        pdf(file=FILE)
+        print(forest.final())
+        dev.off()
+      }
+    )  
   
 
   # forestFE.final <- function(){
@@ -433,24 +435,39 @@ shinyServer(function(input, output, session) {
       if (is.null(analysis_data())){return(NULL)}
       analysis_data()
       df <- analysis_data()
-      # For the first three methods the data need to be in wide format
+      
+      # change to wide format 
       drop         <- which(colnames(df) %in% "Study")
       df           <-  df[,-drop]
       data.AD_wide <- dcast(melt(df, id.vars=c("ID", "group")), ID~variable+group)
       
       MA.fixed.change <- rma(m1i=MeanCFB_1, m2i=MeanCFB_0, sd1i=sdCFB_1, sd2i=sdCFB_0, n1i=NCFB_1, n2i=NCFB_0,
                              data=data.AD_wide, measure="MD", method="FE")
-      list(MA.fixed.change=MA.fixed.change) 
+      list(MA.fixed.change = MA.fixed.change) 
       
     }
     
   })
   
-  output$change_fe.out <- renderPrint({
-    change.FE()
+  fe.change <- reactive({
+      
+      if (input$type == "ce")  {
+        
+        MA.fixed.change <- change.FE()$MA.fixed.change
+        
+        cat("--- Mean differences based on change scores under the CE model ---","\n")
+        
+        MA.fixed.change
+      }
+      
+    }) 
+    
+    
+ output$change_fe.out <- renderPrint({
+   fe.change()
   })
   
-  # RE analysis results 
+# RE analysis results 
   change.RE <- reactive({
     
     if (input$type == "re") {
@@ -458,23 +475,81 @@ shinyServer(function(input, output, session) {
       if (is.null(analysis_data())){return(NULL)}
       analysis_data()
       df <- analysis_data()
-      # For the first three methods the data need to be in wide format
+      
+      # change to wide format 
       drop         <- which(colnames(df) %in% "Study")
       df           <-  df[,-drop]
       data.AD_wide <- dcast(melt(df, id.vars=c("ID", "group")), ID~variable+group)
       
       MA.random.change <- rma(m1i=MeanCFB_1, m2i=MeanCFB_0, sd1i=sdCFB_1, sd2i=sdCFB_0, n1i=NCFB_1, n2i=NCFB_0,
                               data=data.AD_wide, measure="MD", method="REML", knha=input$HK)
-      #list(MA.random.change=MA.random.change) 
-      MA.random.change
+      list(MA.random.change = MA.random.change) 
+     
       
     }
     
   })
   
+  re.change <- reactive({
+    
+    if (input$type == "re")  {
+      
+      MA.random.change <- change.RE()$MA.random.change
+      
+      cat("--- Mean differences based on change scores under the RE model ---","\n")
+      
+      MA.random.change
+    }
+    
+  }) 
+  
   output$change_re.out <- renderPrint({
-    change.RE()
+    re.change()
   })
+  
+  
+  # Forest plots for FE and RE 
+  forest.change <- function(){
+    
+    if (input$type == "ce") {
+      
+      MA.fixed.change <- change.FE()$MA.fixed.change
+      
+      forest(MA.fixed.change)
+    }
+    
+    else if (input$type == "re") {
+      
+      MA.random.change <- change.RE()$MA.random.change
+      
+      forest(MA.random.change)
+    }
+    
+  }
+  
+  output$change.forest <- renderPlot(
+    {
+      withProgress(message = 'Rendering', detail = 'Forest plot - CE model', value = 0, {
+        for (i in 1:5) {
+          incProgress(1/5)
+          Sys.sleep(0.05)
+        }
+      })
+      print(forest.change())
+    })
+  
+  
+  output$downloadchangeForest <- downloadHandler(
+    filename = function() {
+      paste('change.forest', Sys.Date(), '.pdf', sep='')
+    },
+    content = function(FILE=NULL) {
+      pdf(file=FILE)
+      print(forest.change())
+      dev.off()
+    }
+  )  
+  
   
   # Output recovered ANCOVA approach -------------------------------------------------------------------------------------------------------------------------------
   
@@ -499,7 +574,7 @@ shinyServer(function(input, output, session) {
       # Calculate ancova estimate using formula from Senn et al. 2007
       # using the pooled correlation
       
-      ripooled <- with(data.AD_wide, ((NCFB_1*Correlation_1*sdBaseline_1*sdFU_1 +  NCFB_0*Correlation_0 *sdBaseline_0*sdFU_0) )
+      ripooled <- with(data.AD_wide, ((NCFB_1*Correlation_1*sdBaseline_1*sdFU_1 +  NCFB_0*Correlation_0*sdBaseline_0*sdFU_0) )
                        /((NCFB_1+NCFB_0)*sdpooledB*sdpooledF))
       
       # ripooled <- with(data.AD_wide, ((NCFB_1*Correlation_1*sdBaseline_1*sdFU_1 +  NCFB_0*Correlation_0 *sdBaseline_0*sdFU_0) )
@@ -512,9 +587,8 @@ shinyServer(function(input, output, session) {
       se_ancovas_est  <- with(data.AD_wide,sqrt(var_ancova_est))
       
       MA.fixed.ANCOVA <- rma(yi=ancova_est, sei=se_ancovas_est, method="FE")
-      #list(MA.fixed.ANCOVA=MA.fixed.ANCOVA) 
-      MA.fixed.ANCOVA
-      
+      list(MA.fixed.ANCOVA = MA.fixed.ANCOVA) 
+     
     }
     
   })

@@ -210,7 +210,7 @@ shinyUI(
                                       sidebarPanel(
                                         h2("Perform meta-analysis of pre/post effect size"),
                                         #h3("Effect size: Mean difference"),
-                                        prettyRadioButtons(inputId = "effect",  icon=icon("check"),
+                                        prettyRadioButtons(inputId = "es",  icon=icon("check"), # input is effect size - for now only MD, extension to SMD possible
                                                            h3('Select the effect size:'),
                                                            choices =   c('Mean difference'),
                                                            selected = "Mean difference"),
@@ -257,15 +257,20 @@ shinyUI(
                                                                br(),
                                                                
                                                                h3("Forest plot"),
-                                                               downloadButton('downloadfePlot', 'Download the plot as pdf'),
+                                                               downloadButton('downloadfinalForest', 'Download the plot as pdf'),
                                                                plotOutput("final.forest",  height = "550px", width = "450px"),
-#                                                                plotOutput("final_fe.forest",  height = "550px", width = "450px")
-                                                                ),
+#                                                               
+                                                               ),
+
                                                       tabPanel("Change Scores",
                                                      
                                                                h2("Results"),
                                                                verbatimTextOutput('change_fe.out'),
-                                                               verbatimTextOutput('change_re.out')
+                                                               verbatimTextOutput('change_re.out'),
+                                                               br(),
+                                                               h3("Forest plot"),
+                                                               downloadButton('downloadchangeForest', 'Download the plot as pdf'),
+                                                               plotOutput("change.forest",  height = "550px", width = "450px"),
                                                                
                                                                ),
                                                       
@@ -273,8 +278,15 @@ shinyUI(
                                                                h2("Results"),
                                                                #verbatimTextOutput("ancova"),
                                                                verbatimTextOutput('ancova_fe.out'),
-                                                               verbatimTextOutput('ancova_re.out')   
-                                                              ) 
+                                                               verbatimTextOutput('ancova_re.out'),
+                                                               br(),
+                                                               h3("Forest plot"),
+                                                               downloadButton('downloadANCOVAForest', 'Download the plot as pdf'),
+                                                               plotOutput("ANCOVA.forest",  height = "550px", width = "450px"),
+                                                              
+                                                               
+                                                               
+                                                               ) 
                                                      
                                                      ),
                                                    
