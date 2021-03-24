@@ -336,11 +336,13 @@ shinyServer(function(input, output, session) {
     }
   })
   
+  
   output$final_re.out<- renderPrint({
   re.final()
   })
   
-  forestFE.final <- function(){
+  
+  forest.final <- function(){
     
     if (input$type == "ce") {
       
@@ -349,40 +351,75 @@ shinyServer(function(input, output, session) {
       forest(MA.fixed.final)
     }
     
-}
-    
-  output$final_fe.forest <- renderPlot(
-    {
-      withProgress(message = 'Rendering', detail = 'Forest plot - CE model', value = 0, {
-        for (i in 1:5) {
-          incProgress(1/5)
-          Sys.sleep(0.05)
-        }
-      })
-      print(forestFE.final())
-    })
-  
-  forestRE.final <- function(){
-
-    if (input$type == "re") {
-
+    else if (input$type == "re") {
+      
       MA.random.final <- final.RE()$MA.random.final
-
+      
       forest(MA.random.final)
     }
-
+      
   }
-
-  output$final_re.forest<- renderPlot(
-    {
-      withProgress(message = 'Rendering', detail = 'Forest plot - RE model', value = 0, {
-        for (i in 1:5) {
-          incProgress(1/5)
-          Sys.sleep(0.05)
-        }
+    
+    output$final.forest <- renderPlot(
+      {
+        withProgress(message = 'Rendering', detail = 'Forest plot - CE model', value = 0, {
+          for (i in 1:5) {
+            incProgress(1/5)
+            Sys.sleep(0.05)
+          }
+        })
+        print(forest.final())
       })
-      print(forestRE.final())
-    })
+
+  
+  
+  
+
+  # forestFE.final <- function(){
+  # 
+  #   if (input$type == "ce") {
+  # 
+  #     MA.fixed.final <- final.FE()$MA.fixed.final
+  # 
+  #     forest(MA.fixed.final)
+  #   }
+  # 
+  # }
+  # 
+  
+#     
+#   output$final_fe.forest <- renderPlot(
+#     {
+#       withProgress(message = 'Rendering', detail = 'Forest plot - CE model', value = 0, {
+#         for (i in 1:5) {
+#           incProgress(1/5)
+#           Sys.sleep(0.05)
+#         }
+#       })
+#       print(forestFE.final())
+#     })
+#   
+#   forestRE.final <- function(){
+# 
+#     if (input$type == "re") {
+# 
+#       MA.random.final <- final.RE()$MA.random.final
+# 
+#       forest(MA.random.final)
+#     }
+# 
+#   }
+# 
+#   output$final_re.forest<- renderPlot(
+#     {
+#       withProgress(message = 'Rendering', detail = 'Forest plot - RE model', value = 0, {
+#         for (i in 1:5) {
+#           incProgress(1/5)
+#           Sys.sleep(0.05)
+#         }
+#       })
+#       print(forestRE.final())
+#     })
 
   
   

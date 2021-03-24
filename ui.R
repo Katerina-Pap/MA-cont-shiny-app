@@ -209,10 +209,15 @@ shinyUI(
                                     sidebarLayout(
                                       sidebarPanel(
                                         h2("Perform meta-analysis of pre/post effect size"),
-                                        h3("Effect size: Mean difference"),
+                                        #h3("Effect size: Mean difference"),
+                                        prettyRadioButtons(inputId = "effect",  icon=icon("check"),
+                                                           h3('Select the effect size:'),
+                                                           choices =   c('Mean difference'),
+                                                           selected = "Mean difference"),
+                                        
                                         #p("The goal ...."),
                                         
-                                        radioButtons("type", h3("Select model:"),
+                                        radioButtons("type", h3("Select the MA model:"),
                                                      list("Random-effects (RE)" = "re",
                                                           "Common(fixed)-effect (CE)" = "ce"
                                                      ),
@@ -253,22 +258,19 @@ shinyUI(
                                                                
                                                                h3("Forest plot"),
                                                                downloadButton('downloadfePlot', 'Download the plot as pdf'),
-                                                               plotOutput("final_re.forest",  height = "550px", width = "450px"),
-                                                               plotOutput("final_fe.forest",  height = "550px", width = "450px")
-                                                               
-                                                               
-                                                               
-                                                               ),
+                                                               plotOutput("final.forest",  height = "550px", width = "450px"),
+#                                                                plotOutput("final_fe.forest",  height = "550px", width = "450px")
+                                                                ),
                                                       tabPanel("Change Scores",
                                                      
-                                                               h2("Change Scores"),
+                                                               h2("Results"),
                                                                verbatimTextOutput('change_fe.out'),
                                                                verbatimTextOutput('change_re.out')
                                                                
                                                                ),
                                                       
                                                       tabPanel("ANCOVA Recovered effect estimates",
-                                                               h2("ANCOVA"),
+                                                               h2("Results"),
                                                                #verbatimTextOutput("ancova"),
                                                                verbatimTextOutput('ancova_fe.out'),
                                                                verbatimTextOutput('ancova_re.out')   
