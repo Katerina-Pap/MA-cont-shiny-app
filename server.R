@@ -353,7 +353,7 @@ shinyServer(function(input, output, session) {
     
   output$final_fe.forest <- renderPlot(
     {
-      withProgress(message = 'Rendering', detail = 'Forest plot - fixed effects', value = 0, {
+      withProgress(message = 'Rendering', detail = 'Forest plot - CE model', value = 0, {
         for (i in 1:5) {
           incProgress(1/5)
           Sys.sleep(0.05)
@@ -363,19 +363,19 @@ shinyServer(function(input, output, session) {
     })
   
   forestRE.final <- function(){
-    
+
     if (input$type == "re") {
-      
+
       MA.random.final <- final.RE()$MA.random.final
-      
+
       forest(MA.random.final)
     }
-    
+
   }
-  
+
   output$final_re.forest<- renderPlot(
     {
-      withProgress(message = 'Rendering', detail = 'Forest plot - fixed effects', value = 0, {
+      withProgress(message = 'Rendering', detail = 'Forest plot - RE model', value = 0, {
         for (i in 1:5) {
           incProgress(1/5)
           Sys.sleep(0.05)
@@ -383,6 +383,8 @@ shinyServer(function(input, output, session) {
       })
       print(forestRE.final())
     })
+
+  
   
   # Output change scores analysis --------------------------------------------------------------------------------------------------------------------------------
   

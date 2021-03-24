@@ -246,7 +246,7 @@ shinyUI(
                                                                           ".shiny-output-error { visibility: hidden; }",
                                                                           ".shiny-output-error:before { visibility: hidden; }"
                                                                ),     
-                                                               h2("Final (follow-up) Scores"),
+                                                               h2("Results"),
                                                                verbatimTextOutput('final_fe.out'),
                                                                verbatimTextOutput('final_re.out'),
                                                                br(),
