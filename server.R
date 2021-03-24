@@ -340,6 +340,67 @@ shinyServer(function(input, output, session) {
   re.final()
   })
   
+  forestFE.final <- function(){
+    
+    if (input$type == "ce") {
+      
+      MA.fixed.final <- final.FE()$MA.fixed.final
+      
+      forest(MA.fixed.final)
+    }
+    
+}
+    
+  output$final_fe.forest <- renderPlot(
+    {
+      withProgress(message = 'Rendering', detail = 'Forest plot - fixed effects', value = 0, {
+        for (i in 1:5) {
+          incProgress(1/5)
+          Sys.sleep(0.05)
+        }
+      })
+      print(forestFE.final())
+    })
+  
+  forestRE.final <- function(){
+    
+    if (input$type == "re") {
+      
+      MA.random.final <- final.RE()$MA.random.final
+      
+      forest(MA.random.final)
+    }
+    
+  }
+  
+  output$final_re.forest<- renderPlot(
+    {
+      withProgress(message = 'Rendering', detail = 'Forest plot - fixed effects', value = 0, {
+        for (i in 1:5) {
+          incProgress(1/5)
+          Sys.sleep(0.05)
+        }
+      })
+      print(forestRE.final())
+    })
+  
+  # output$downloadFE <- downloadHandler(
+  #   filename = function() {
+  #     paste("Final scores CE model", Sys.Date(), sep='')
+  #   },
+  #   content = function(file){
+  #     if(input$format == "png")
+  #       png(file)
+  #     if(input$format == "pdf")
+  #       pdf(file)
+  #     print(makefePlot())
+  #     dev.off()
+  #   }
+  # )
+  # 
+  
+  
+  
   # Output change scores analysis --------------------------------------------------------------------------------------------------------------------------------
   
   # FE analysis results 

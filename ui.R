@@ -249,6 +249,14 @@ shinyUI(
                                                                h2("Final (follow-up) Scores"),
                                                                verbatimTextOutput('final_fe.out'),
                                                                verbatimTextOutput('final_re.out'),
+                                                               br(),
+                                                               
+                                                               h3("Forest plot"),
+                                                               downloadButton('downloadfePlot', 'Download the plot as pdf'),
+                                                               plotOutput("final_re.forest",  height = "550px", width = "450px"),
+                                                               plotOutput("final_fe.forest",  height = "550px", width = "450px")
+                                                               
+                                                               
                                                                
                                                                ),
                                                       tabPanel("Change Scores",
@@ -341,7 +349,7 @@ shinyUI(
                                                               # fluidRow(column(6, style = "background-color:#DCDCDC", 
                                                               h2("Forestplot of Mean difference"), 
                                                               div(style = "margin-top: -10px"),
-                                                              plotOutput("forest_twoME", height = "550px", width= "450px"), #)), 
+                                                              plotOutput("forest_twoME", height = "550px", width= "450px"), 
                                                               br(),
                                                               selectInput("format","Choose file format",
                                                                           choices = list("pdf","png")),
