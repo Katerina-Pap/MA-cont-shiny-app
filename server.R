@@ -258,7 +258,7 @@ shinyServer(function(input, output, session) {
   #----------------------------------------------------------------------------------------------------------------------------------------------------------------    
   # Output Standard AD analyses
   
-  # Output final scores analysis ----------------------------------------------------------------
+  # Output final (follow-up) scores analysis ----------------------------------------------------------------
   
   # FE analysis results 
   final.FE <- reactive({
@@ -267,22 +267,32 @@ shinyServer(function(input, output, session) {
       
       if (is.null(analysis_data())){return(NULL)}
       analysis_data()
-      dd <- analysis_data()
+      df <- analysis_data()
       # For the first three methods the data need to be in wide format
-      drop         <- which(colnames( dd) %in% "Study")
-      dd           <-  dd[,-drop]
-      data.AD_wide <- dcast(melt(dd, id.vars=c("ID", "group")), ID~variable+group)
+      drop         <- which(colnames(df) %in% "Study")
+      df           <-  df[,-drop]
+      data.AD_wide <- dcast(melt(df, id.vars=c("ID", "group")), ID~variable+group)
       
       MA.fixed.final <- rma(m1i=MeanFU_1, m2i=MeanFU_0, sd1i=sdFU_1, sd2i=sdFU_0, n1i=NCFB_1, n2i=NCFB_0, data=data.AD_wide, measure="MD", method="FE")
-      #list(MA.fixed.final=MA.fixed.final) 
-      MA.fixed.final
+      list(MA.fixed.final = MA.fixed.final) 
+      #MA.fixed.final
     }
     
   })
   
+  # Old version to keep 
+  # output$final_fe.out <- renderPrint({
+  #   final.FE() 
+  # })
+  
   output$final_fe.out <- renderPrint({
-    final.FE()
+    MA.fixed.final <- final.FE()$MA.fixed.final
+    
+    cat("---- Mean differences based on final (follow-up) scores. ----","\n")
+    MA.fixed.final
   })
+    
+    
   
   # RE analysis results 
   final.RE <- reactive({
@@ -291,24 +301,25 @@ shinyServer(function(input, output, session) {
       
       if (is.null(analysis_data())){return(NULL)}
       analysis_data()
-      dd <- analysis_data()
+      df <- analysis_data()
       # For the first three methods the data need to be in wide format
-      drop         <- which(colnames( dd) %in% "Study")
-      dd           <-  dd[,-drop]
-      data.AD_wide <- dcast(melt(dd, id.vars=c("ID", "group")), ID~variable+group)
+      drop         <- which(colnames(df) %in% "Study")
+      df          <-  df[,-drop]
+      data.AD_wide <- dcast(melt(df, id.vars=c("ID", "group")), ID~variable+group)
       
       MA.random.final <- rma(m1i=MeanFU_1, m2i=MeanFU_0, sd1i=sdFU_1, sd2i=sdFU_0, n1i=NCFB_1, n2i=NCFB_0, data=data.AD_wide, measure="MD", method="REML", knha=input$HK)
-      #list(MA.random.final=MA.random.final) 
-      MA.random.final
+      list(MA.random.final = MA.random.final) 
+      # MA.random.final
       
     }
     
   })
   
   output$final_re.out<- renderPrint({
-    #cat(crayon::bold("test\n"))
-    cat("--- Mean Differences of Final scores ---","\n")
-    final.RE()
+    MA.random.final <- final.RE()$MA.random.final
+    
+    cat("---- Mean differences based on final (follow-up) scores. ----","\n")
+    MA.random.final
   })
   
   # Output change scores analysis --------------------------------------------------------------------------------------------------------------------------------
@@ -320,11 +331,11 @@ shinyServer(function(input, output, session) {
       
       if (is.null(analysis_data())){return(NULL)}
       analysis_data()
-      dd <- analysis_data()
+      df <- analysis_data()
       # For the first three methods the data need to be in wide format
-      drop         <- which(colnames( dd) %in% "Study")
-      dd           <-  dd[,-drop]
-      data.AD_wide <- dcast(melt(dd, id.vars=c("ID", "group")), ID~variable+group)
+      drop         <- which(colnames(df) %in% "Study")
+      df           <-  df[,-drop]
+      data.AD_wide <- dcast(melt(df, id.vars=c("ID", "group")), ID~variable+group)
       
       MA.fixed.change <- rma(m1i=MeanCFB_1, m2i=MeanCFB_0, sd1i=sdCFB_1, sd2i=sdCFB_0, n1i=NCFB_1, n2i=NCFB_0,
                              data=data.AD_wide, measure="MD", method="FE")
@@ -345,11 +356,11 @@ shinyServer(function(input, output, session) {
       
       if (is.null(analysis_data())){return(NULL)}
       analysis_data()
-      dd <- analysis_data()
+      df <- analysis_data()
       # For the first three methods the data need to be in wide format
-      drop         <- which(colnames( dd) %in% "Study")
-      dd           <-  dd[,-drop]
-      data.AD_wide <- dcast(melt(dd, id.vars=c("ID", "group")), ID~variable+group)
+      drop         <- which(colnames(df) %in% "Study")
+      df           <-  df[,-drop]
+      data.AD_wide <- dcast(melt(df, id.vars=c("ID", "group")), ID~variable+group)
       
       MA.random.change <- rma(m1i=MeanCFB_1, m2i=MeanCFB_0, sd1i=sdCFB_1, sd2i=sdCFB_0, n1i=NCFB_1, n2i=NCFB_0,
                               data=data.AD_wide, measure="MD", method="REML", knha=input$HK)
@@ -373,13 +384,13 @@ shinyServer(function(input, output, session) {
       
       if (is.null(analysis_data())){return(NULL)}
       analysis_data()
-      dd <- analysis_data()
+      df <- analysis_data()
       
       # calculate pooled standard deviations of baseline and follow-up values
       # For the first three methods the data need to be in wide format
-      drop         <- which(colnames( dd) %in% "Study")
-      dd           <-  dd[,-drop]
-      data.AD_wide <- dcast(melt( dd, id.vars=c("ID", "group")), ID~variable+group)
+      drop         <- which(colnames(df) %in% "Study")
+      df           <-  df[,-drop]
+      data.AD_wide <- dcast(melt(df, id.vars=c("ID", "group")), ID~variable+group)
       
       sdpooledB<- with(data.AD_wide, sqrt((((NCFB_1 - 1)*(sdBaseline_1^2)) + (NCFB_0 - 1)*(sdBaseline_0^2))/((NCFB_1+NCFB_0)-2)))
       sdpooledF<- with(data.AD_wide, sqrt((((NCFB_1 - 1)*(sdFU_1^2)) + (NCFB_0 - 1)*(sdFU_0^2))/((NCFB_1+NCFB_0)-2)))
@@ -418,12 +429,12 @@ shinyServer(function(input, output, session) {
     if (input$type == "re") {
       if (is.null(analysis_data())){return(NULL)}
       analysis_data()
-      dd <- analysis_data()
+      df <- analysis_data()
       # calculate pooled standard deviations of baseline and follow-up values
       # For the first three methods the data need to be in wide format
-      drop         <- which(colnames( dd) %in% "Study")
-      dd           <-  dd[,-drop]
-      data.AD_wide <- dcast(melt( dd, id.vars=c("ID", "group")), ID~variable+group)
+      drop         <- which(colnames(df) %in% "Study")
+      df           <- df[,-drop]
+      data.AD_wide <- dcast(melt(df, id.vars=c("ID", "group")), ID~variable+group)
       
       sdpooledB<- with(data.AD_wide, sqrt((((NCFB_1 - 1)*(sdBaseline_1^2)) + (NCFB_0 - 1)*(sdBaseline_0^2))/((NCFB_1+NCFB_0)-2)))
       sdpooledF<- with(data.AD_wide, sqrt((((NCFB_1 - 1)*(sdFU_1^2)) + (NCFB_0 - 1)*(sdFU_0^2))/((NCFB_1+NCFB_0)-2)))
@@ -431,7 +442,7 @@ shinyServer(function(input, output, session) {
       # Calculate ancova estimate using formula from Senn et al. 2007
       # using the pooled correlation
       
-      # @ Andreas: these are the 2 values that need to be reactive with the sliders for correlations
+    
       # Correlation_0 <-input$cor1
       # Correlation_1 <-input$cor2
       
@@ -477,15 +488,15 @@ shinyServer(function(input, output, session) {
         #renderPrint({
         if (is.null(analysis_data())){return(NULL)}
         analysis_data()
-        dd2 <- analysis_data()
+        df2 <- analysis_data()
         # Generate the pseudo baselines and outcomes
-        data.IPD <- data.frame(study         = rep(dd2$ID, dd2$NCFB),
-                               group         = rep(dd2$group, dd2$NCFB),
-                               meanBaseline  = rep(dd2$MeanBaseline, dd2$NCFB),
-                               sdBaseline    = rep(dd2$sdBaseline, dd2$NCFB),
-                               meanPost      = rep(dd2$MeanFU, dd2$NCFB),
-                               sdPost        = rep(dd2$sdFU, dd2$NCFB),
-                               correlation   = rep(dd2$Correlation,dd2$NCFB))
+        data.IPD <- data.frame(study         = rep(df2$ID, df2$NCFB),
+                               group         = rep(df2$group, df2$NCFB),
+                               meanBaseline  = rep(df2$MeanBaseline, df2$NCFB),
+                               sdBaseline    = rep(df2$sdBaseline, df2$NCFB),
+                               meanPost      = rep(df2$MeanFU, df2$NCFB),
+                               sdPost        = rep(df2$sdFU, df2$NCFB),
+                               correlation   = rep(df2$Correlation,df2$NCFB))
         
         set.seed(123456)
         data.IPD$ytmp1 <- rnorm(nrow(data.IPD),0,1)
@@ -606,15 +617,15 @@ shinyServer(function(input, output, session) {
         #renderPrint({
         if (is.null(analysis_data())){return(NULL)}
         analysis_data()
-        dd2 <- analysis_data()
+        df2 <- analysis_data()
         # Generate the pseudo baselines and outcomes
-        data.IPD <- data.frame(study         = rep(dd2$ID, dd2$NCFB),
-                               group         = rep(dd2$group, dd2$NCFB),
-                               meanBaseline  = rep(dd2$MeanBaseline, dd2$NCFB),
-                               sdBaseline    = rep(dd2$sdBaseline, dd2$NCFB),
-                               meanPost      = rep(dd2$MeanFU, dd2$NCFB),
-                               sdPost        = rep(dd2$sdFU, dd2$NCFB),
-                               correlation   = rep(dd2$Correlation,dd2$NCFB))
+        data.IPD <- data.frame(study         = rep(df2$ID, df2$NCFB),
+                               group         = rep(df2$group, df2$NCFB),
+                               meanBaseline  = rep(df2$MeanBaseline, df2$NCFB),
+                               sdBaseline    = rep(df2$sdBaseline, df2$NCFB),
+                               meanPost      = rep(df2$MeanFU, df2$NCFB),
+                               sdPost        = rep(df2$sdFU, df2$NCFB),
+                               correlation   = rep(df2$Correlation,df2$NCFB))
         
         set.seed(123456)
         data.IPD$ytmp1 <- rnorm(nrow(data.IPD),0,1)
@@ -736,15 +747,15 @@ shinyServer(function(input, output, session) {
       
       if (is.null(analysis_data())){return(NULL)}
       analysis_data()
-      dd2 <- analysis_data()
+      df2 <- analysis_data()
       # Generate the pseudo baselines and outcomes
-      data.IPD <- data.frame(study         = rep(dd2$Study, dd2$NCFB),
-                             group         = rep(dd2$group, dd2$NCFB),
-                             meanBaseline  = rep(dd2$MeanBaseline, dd2$NCFB),
-                             sdBaseline    = rep(dd2$sdBaseline, dd2$NCFB),
-                             meanPost      = rep(dd2$MeanFU, dd2$NCFB),
-                             sdPost        = rep(dd2$sdFU, dd2$NCFB),
-                             correlation   = rep(dd2$Correlation,dd2$NCFB))
+      data.IPD <- data.frame(study         = rep(df2$Study, df2$NCFB),
+                             group         = rep(df2$group, df2$NCFB),
+                             meanBaseline  = rep(df2$MeanBaseline, df2$NCFB),
+                             sdBaseline    = rep(df2$sdBaseline, df2$NCFB),
+                             meanPost      = rep(df2$MeanFU, df2$NCFB),
+                             sdPost        = rep(df2$sdFU, df2$NCFB),
+                             correlation   = rep(df2$Correlation,df2$NCFB))
       
       set.seed(123456)
       data.IPD$ytmp1 <- rnorm(nrow(data.IPD),0,1)
@@ -835,15 +846,15 @@ shinyServer(function(input, output, session) {
       
       if (is.null(analysis_data())){return(NULL)}
       analysis_data()
-      dd2 <- analysis_data()
+      df2 <- analysis_data()
       # Generate the pseudo baselines and outcomes
-      data.IPD <- data.frame(study         = rep(dd2$Study, dd2$NCFB),
-                             group         = rep(dd2$group, dd2$NCFB),
-                             meanBaseline  = rep(dd2$MeanBaseline, dd2$NCFB),
-                             sdBaseline    = rep(dd2$sdBaseline, dd2$NCFB),
-                             meanPost      = rep(dd2$MeanFU, dd2$NCFB),
-                             sdPost        = rep(dd2$sdFU, dd2$NCFB),
-                             correlation   = rep(dd2$Correlation,dd2$NCFB))
+      data.IPD <- data.frame(study         = rep(df2$Study, df2$NCFB),
+                             group         = rep(df2$group, df2$NCFB),
+                             meanBaseline  = rep(df2$MeanBaseline, df2$NCFB),
+                             sdBaseline    = rep(df2$sdBaseline, df2$NCFB),
+                             meanPost      = rep(df2$MeanFU, df2$NCFB),
+                             sdPost        = rep(df2$sdFU, df2$NCFB),
+                             correlation   = rep(df2$Correlation,df2$NCFB))
       
       set.seed(123456)
       data.IPD$ytmp1 <- rnorm(nrow(data.IPD),0,1)
