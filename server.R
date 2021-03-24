@@ -111,12 +111,12 @@ shinyServer(function(input, output, session) {
   # Print data structure ---------------------------------------------------------------------------------------------------------------------------------
   output$structure <- renderPrint({
                       req(df_upload())
-                      Dataset <- df_upload() # renaming dataset to appear better in the table
+                      Dataset <- df_upload() # Renaming the data set to appear better in the table
                       skim(Dataset)
   })
   
   
-  # Need to build multiple reactive dataframes to make the final imputed one because of over-writing variable names
+  # Need to build multiple reactive dataframes to make the final (filled-in) data set
   
   # Dataset 1: make reactive calculating means -------------------------------------------------------------------------------------------------------------------
   rv <- reactiveValues()
@@ -161,7 +161,7 @@ shinyServer(function(input, output, session) {
     #coalsce(df2(),df1())
   })
   
-  # Dataset 3: Assume SDs equal pre and post ---------------------------------------------------------------------------------------------------------------------
+  # Dataset 3: Assume equal pre and post SDs ---------------------------------------------------------------------------------------------------------------------
   df3 <- eventReactive(input$sameSD, {
     df2() %>%
       mutate (sdFU = ifelse(is.na(sdFU), sdBaseline, sdFU) 
@@ -177,10 +177,10 @@ shinyServer(function(input, output, session) {
   })
   
   
-  # Dataset 4: Calculate Correlations from SDs-------------------------------------------------------------------------------------------------------------------
+  # Dataset 4: Calculate Correlations from SDs--------------------------------------------------------------------------------------------------------------------
   df4 <- eventReactive(input$correl, {
     df3() %>%
-      mutate ( Correlation = ifelse(is.na(Correlation), (sdBaseline^2+sdFU^2-sdCFB^2)/(2*sdBaseline*sdFU), Correlation)
+      mutate (Correlation = ifelse(is.na(Correlation), (sdBaseline^2+sdFU^2-sdCFB^2)/(2*sdBaseline*sdFU), Correlation)
       )
   })
   
@@ -216,9 +216,8 @@ shinyServer(function(input, output, session) {
     # 
   })
   
-  # Output table of final calculations  - if missing data 
-  
-  # Output table of final calculations  - if missing data 
+
+  # Final dataset where models will be fitted on ------------------------------------------------------------------------------------------------------------------
   analysis_data <- reactive({
     if(is.null(df5()))
     {return(NULL)}
@@ -248,12 +247,14 @@ shinyServer(function(input, output, session) {
   # 
   # })
   
-  # The output table with the final dataset for analysis     
+  # Output data table of final dataset  
   output$final_data<-renderTable({
     if(is.null(analysis_data()))
     {return(NULL)}
     analysis_data()
   })
+  
+
   #----------------------------------------------------------------------------------------------------------------------------------------------------------------    
   # Output Standard AD analyses
   
