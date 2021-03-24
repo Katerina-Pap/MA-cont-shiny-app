@@ -140,7 +140,7 @@ shinyServer(function(input, output, session) {
         rv$group        <- rv$df[[14]]
     
         rv$df2  <- rv$df %>%
-            mutate (MeanFU     = ifelse(is.na(rv$MeanFU), rv$MeanCFB + rv$MeanBaseline, rv$MeanFU),
+            mutate (MeanFU     = ifelse(is.na(rv$MeanFU),  rv$MeanCFB + rv$MeanBaseline, rv$MeanFU),
                     MeanCFB    = ifelse(is.na(rv$MeanCFB), rv$MeanFU - rv$MeanBaseline, rv$MeanCFB) )
   })
   
