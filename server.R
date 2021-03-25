@@ -376,54 +376,6 @@ shinyServer(function(input, output, session) {
       }
     )  
   
-
-  # forestFE.final <- function(){
-  # 
-  #   if (input$type == "ce") {
-  # 
-  #     MA.fixed.final <- final.FE()$MA.fixed.final
-  # 
-  #     forest(MA.fixed.final)
-  #   }
-  # 
-  # }
-  # 
-  
-#     
-#   output$final_fe.forest <- renderPlot(
-#     {
-#       withProgress(message = 'Rendering', detail = 'Forest plot - CE model', value = 0, {
-#         for (i in 1:5) {
-#           incProgress(1/5)
-#           Sys.sleep(0.05)
-#         }
-#       })
-#       print(forestFE.final())
-#     })
-#   
-#   forestRE.final <- function(){
-# 
-#     if (input$type == "re") {
-# 
-#       MA.random.final <- final.RE()$MA.random.final
-# 
-#       forest(MA.random.final)
-#     }
-# 
-#   }
-# 
-#   output$final_re.forest<- renderPlot(
-#     {
-#       withProgress(message = 'Rendering', detail = 'Forest plot - RE model', value = 0, {
-#         for (i in 1:5) {
-#           incProgress(1/5)
-#           Sys.sleep(0.05)
-#         }
-#       })
-#       print(forestRE.final())
-#     })
-
-  
   
   # Output change scores analysis --------------------------------------------------------------------------------------------------------------------------------
   
@@ -647,7 +599,6 @@ shinyServer(function(input, output, session) {
       MA.random.ANCOVA <- rma(yi=ancova_est, sei=se_ancovas_est, method="REML", knha=input$HK)
       list(MA.random.ANCOVA = MA.random.ANCOVA) 
      
-      
     }
     
   })
@@ -718,13 +669,10 @@ shinyServer(function(input, output, session) {
     js$winprint()
   })
   
-  #------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+  # One-stage pseudo IPD main effect---------------------------------------------------------------------------------------------------------------------------------
   
-  # make pseudo IPD as reactive data 
-  
-  
-  # Output one-stage pseudo IPD main effect--------------------------------------------------------------------------------------------------------------------------
-  
+  # Make the pseudo IPD as reactive data set to be used in the modelling further
   pseudoIPD <- reactive({
     
     if (is.null(analysis_data())){return(NULL)}
@@ -801,7 +749,7 @@ shinyServer(function(input, output, session) {
     
   })
   
-  output$test <- DT::renderDataTable({
+  output$pseudoData <- DT::renderDataTable({
     pseudoIPD()
     if (is.null(pseudoIPD())){return(NULL)}
     DT::datatable(pseudoIPD(),
@@ -814,6 +762,7 @@ shinyServer(function(input, output, session) {
                   
    })
     
+  # Output one-stage pseudo IPD main effect-------------------------------------------------------------------------------------------------------------------------------------
   
   output$one <- DT::renderDataTable(
     DT::datatable({
@@ -824,22 +773,16 @@ shinyServer(function(input, output, session) {
         
         ctrl <- lmeControl(opt="optim", msMaxIter=100)
         # arm and study specific variances estimated  
-        FRstudyarm <- lme(fixed=y2 ~ y1center + group + as.factor(study) + y1center*as.factor(study), random= ~ -1 + groupcenter|study,
-                             weights =varIdent(form=~study|arm), control=ctrl, data=df3, method='REML')
+        FRstudyarm <- lme(fixed=y2 ~ y1center + group + as.factor(study) + y1center*as.factor(study), random= ~ -1 + groupcenter|study,  weights =varIdent(form=~study|arm), control=ctrl, data=df3, method='REML')
         
         # study-specific variance estimates 
-        FRstudy    <-  lme(fixed=y2 ~ y1center+ group + as.factor(study) + y1center*as.factor(study) , random= ~ -1 + groupcenter|study,
-                              weights =varIdent(form=~1|study), control=ctrl, data=df3, method='REML')
-        
-        summary(FRstudy)$tTable["group",1]
+        FRstudy    <- lme(fixed=y2 ~ y1center+ group + as.factor(study) + y1center*as.factor(study) , random= ~ -1 + groupcenter|study, weights =varIdent(form=~1|study), control=ctrl, data=df3, method='REML')
         
         # gruop specific variance estimated 
-        FRgroup    <-   lme(fixed=y2 ~ y1center + group+ as.factor(study) + y1center*as.factor(study) , random= ~ -1 + groupcenter|study,
-                              weights =varIdent(form=~1|group), control=ctrl, data=df3, method='REML')
+        FRgroup    <- lme(fixed=y2 ~ y1center + group+ as.factor(study) + y1center*as.factor(study) , random= ~ -1 + groupcenter|study, weights =varIdent(form=~1|group), control=ctrl, data=df3, method='REML')
         
         #one residual variance estimated
-        FRone      <-   lme(fixed=y2 ~ y1center + group + as.factor(study) + y1center*as.factor(study) , random= ~-1 + groupcenter|study,
-                              control=ctrl, data=df3, method='REML')
+        FRone      <- lme(fixed=y2 ~ y1center + group + as.factor(study) + y1center*as.factor(study) , random= ~-1 + groupcenter|study, control=ctrl, data=df3, method='REML')
         
         
         arm_study_specific <- round(summary(FRstudyarm)$tTable["group",1], 3) 
@@ -850,13 +793,29 @@ shinyServer(function(input, output, session) {
         se_group           <- round(summary(FRgroup)$tTable["group",2], 3)
         one_variance       <- round(summary(FRone)$tTable["group",1], 3)
         se_one             <- round(summary(FRone)$tTable["group",2], 3)
+        CIarm              <- data.frame(intervals(FRstudyarm, which="fixed")$fixed)
+        lower_arm          <- round(CIarm["group",]$lower, 3)
+        upper_arm          <- round(CIarm["group",]$upper, 3)
+        CIstudy            <- data.frame(intervals(FRstudy, which="fixed")$fixed)
+        lower_study        <- round(CIstudy["group",]$lower, 3)
+        upper_study        <- round(CIstudy["group",]$upper, 3)
+        CIgroup            <- data.frame(intervals(FRgroup, which="fixed")$fixed)
+        lower_group        <- round(CIgroup["group",]$lower, 3)
+        upper_group        <- round(CIgroup["group",]$upper, 3)
+        CIone              <- data.frame(intervals(FRone, which="fixed")$fixed)
+        lower_one          <- round(CIone["group",]$lower, 3)
+        upper_one          <- round(CIone["group",]$upper, 3)
         
+
         
         table1 <- data.frame(
-          Estimate = rbind(arm_study_specific,study_specific, group_specific, one_variance),
-          SE       = rbind(se_arm_study, se_study, se_group, se_one)
-        )
+                    Estimate = rbind(arm_study_specific,study_specific, group_specific, one_variance),
+                    SE       = rbind(se_arm_study, se_study, se_group, se_one),
+                    Lower    = rbind(lower_arm, lower_study, lower_group, lower_one),
+                    Upper    = rbind(upper_arm, upper_study, upper_group, upper_one)
+                            )
         
+        names(table1)[c(1,2,3,4)] <- c("MD estimate", "Standard error", "Lower bound of 95% CI", "Upper bound of 95% CI") 
         table1},
       
       extensions = c("Buttons", "Scroller"),
@@ -875,32 +834,27 @@ shinyServer(function(input, output, session) {
   )
   
   
-  # Output one-stage pseudo IPD main effect--------------------------------------------------------------------------------------------------------------------------
+  # Output one-stage pseudo IPD interaction effect------------------------------------------------------------------------------------------------------------------------
   
   output$oneINT <- DT::renderDataTable(
-    DT::datatable(
-      {
+    DT::datatable({
+      
         if (is.null(pseudoIPD())){return(NULL)}
         pseudoIPD()
         df3 <- pseudoIPD()
         
         ctrl <- lmeControl(opt="optim", msMaxIter=100)
         # arm and study specific variances estimated  
-        FRstudyarmInt <-lme(fixed=y2 ~ y1center*as.factor(study) + y1center*group + group:meany1bystudy, random= ~ -1 + groupcenter|study,
-                             weights =varIdent(form=~study|arm), control=ctrl, data=df3, method='REML')
+        FRstudyarmInt <-lme(fixed=y2 ~ y1center*as.factor(study) + y1center*group + group:meany1bystudy, random= ~ -1 + groupcenter|study,  weights =varIdent(form=~study|arm), control=ctrl, data=df3, method='REML')
         
         # study-specific variance estimates 
-        FRstudyInt   <- lme(fixed=y2 ~ y1center*as.factor(study) + y1center*group + group:meany1bystudy, random= ~ -1 + groupcenter|study,
-                              weights =varIdent(form=~1|study), control=ctrl, data=df3, method='REML')
-        
+        FRstudyInt    <- lme(fixed=y2 ~ y1center*as.factor(study) + y1center*group + group:meany1bystudy, random= ~ -1 + groupcenter|study, weights =varIdent(form=~1|study), control=ctrl, data=df3, method='REML')
         
         # gruop specific variance estimated 
-        FRgroupInt   <- lme(fixed=y2 ~ y1center*as.factor(study) + y1center*group + group:meany1bystudy, random= ~ -1 + groupcenter|study,
-                              weights =varIdent(form=~1|group), control=ctrl, data=df3, method='REML')
+        FRgroupInt    <- lme(fixed=y2 ~ y1center*as.factor(study) + y1center*group + group:meany1bystudy, random= ~ -1 + groupcenter|study,  weights =varIdent(form=~1|group), control=ctrl, data=df3, method='REML')
         
         #one residual variance estimated
-        FRoneInt     <- lme(fixed=y2 ~ y1center*as.factor(study) + y1center*group + group:meany1bystudy , random= ~ -1 + groupcenter|study, control=ctrl, data=df3, method='REML')
-        
+        FRoneInt      <- lme(fixed=y2 ~ y1center*as.factor(study) + y1center*group + group:meany1bystudy , random= ~ -1 + groupcenter|study, control=ctrl, data=df3, method='REML')
         
         arm_study_specificINT <- round(summary(FRstudyarmInt)$tTable["y1center:group",1], 3) 
         se_arm_studyINT       <- round(summary(FRstudyarmInt)$tTable["y1center:group",2], 3)
@@ -910,28 +864,44 @@ shinyServer(function(input, output, session) {
         se_groupINT           <- round(summary(FRgroupInt)$tTable["y1center:group",2], 3)
         one_varianceINT       <- round(summary(FRoneInt)$tTable["y1center:group",1], 3)
         se_oneINT             <- round(summary(FRoneInt)$tTable["y1center:group",2], 3)
-        
+        CIarm_INT             <- data.frame(intervals(FRstudyarmInt, which="fixed")$fixed)
+        lower_armINT          <- round(CIarm_INT["y1center:group",]$lower, 3)
+        upper_armINT          <- round(CIarm_INT["y1center:group",]$upper, 3)
+        CIstudy_INT           <- data.frame(intervals(FRstudyInt, which="fixed")$fixed)
+        lower_studyINT        <- round(CIstudy_INT["y1center:group",]$lower, 3)
+        upper_studyINT        <- round(CIstudy_INT["y1center:group",]$upper, 3)
+        CIgroup_INT           <- data.frame(intervals(FRgroupInt, which="fixed")$fixed)
+        lower_groupINT        <- round(CIgroup_INT["y1center:group",]$lower, 3)
+        upper_groupINT        <- round(CIgroup_INT["y1center:group",]$upper, 3)
+        CIone_INT             <- data.frame(intervals(FRoneInt, which="fixed")$fixed)
+        lower_oneINT          <- round(CIone_INT["y1center:group",]$lower, 3)
+        upper_oneINT          <- round(CIone_INT["y1center:group",]$upper, 3)
+
         
         table1 <- data.frame(
-          Estimate = rbind(arm_study_specificINT,study_specificINT, group_specificINT, one_varianceINT),
-          SE       = rbind(se_arm_studyINT, se_studyINT, se_groupINT, se_oneINT)
-        )
+                        Estimate = rbind(arm_study_specificINT,study_specificINT, group_specificINT, one_varianceINT),
+                        SE       = rbind(se_arm_studyINT, se_studyINT, se_groupINT, se_oneINT),
+                        Lower    = rbind(lower_armINT, lower_studyINT, lower_groupINT, lower_oneINT),
+                        Upper    = rbind(upper_armINT, upper_studyINT, upper_groupINT, upper_oneINT)
+                            )
         
-        table1}
-      
-      # extensions = c("Buttons", "Scroller"),
-      # 
-      # options = list(
-      #   paging = TRUE,
-      #   searching = TRUE,
-      #   fixedColumns = TRUE,
-      #   autoWidth = TRUE,
-      #   ordering = TRUE,
-      #   dom = 'tB',
-      #   buttons = c('copy', 'pdf', 'print')
-      # ),
-      # class="display"
-    ))
+        names(table1)[c(1,2,3,4)] <- c("Interaction estimate", "Standard error", "Lower bound of 95% CI", "Upper bound of 95% CI") 
+        table1},
+        
+        extensions = c("Buttons", "Scroller"),
+        
+        options = list(
+          paging =       TRUE,
+          searching =    TRUE,
+          fixedColumns = TRUE,
+          autoWidth =    TRUE,
+          ordering =     TRUE,
+          dom = 'tB',
+          buttons = c('copy', 'pdf', 'print')
+        ),
+        class="display"
+    )
+  )
   
   #---------------------------------------------------------------------------------------------------------------------------------------------------------------
   # Output two-stage pseudo IPD

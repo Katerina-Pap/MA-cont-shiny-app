@@ -327,27 +327,30 @@ shinyUI(
                                                                               br(),
                                                                        
                                                               fluidRow(column(10, style = "background-color:#DCDCDC",       
-                                                                              h4("Results: Study-stratified model with options for within-study residual variance"),
+                                                                              h3("Results: Study-stratified model, options for the residual variances"),
                                                                               DT::dataTableOutput("one") %>% withSpinner(type = getOption("spinner.type", 5), color="#88BDBC")
                                                                               )
                                                                        )
                                                               
-                                                          
-                                                              
                                                      ),
                                                 
                                                      tabPanel("Treatment-by-baseline interaction effect",
-                                                              h4("Study-stratified results: options for within-study residual variance"),
-                                                              DT::dataTableOutput("oneINT") %>% withSpinner(type = getOption("spinner.type", 1), color="#88BDBC")
-                                                              #div(DT::dataTableOutput("table"), style = "font-size: 75%; width: 75%")
+                                                                fluidRow(column(10, style = "background-color:#DCDCDC",  
+                                                                                h3("Results: Study-stratified model, options for the residual variances"),
+                                                                                DT::dataTableOutput("oneINT") %>% withSpinner(type = getOption("spinner.type", 1), color="#88BDBC")
+                                                                                )
+                                                                         
+                                                                         )
+                                                             
+                                                             
                                                      ) 
                                                      
                                                    ),
                                                    
                                                   
                                                    
-                                                   ),
-                                          #textOutput('one')%>% withSpinner(type = getOption("spinner.type",5), color="#88BDBC"),
+                                          ),
+                                       
                                           
                                           tabPanel('Two-stage pseudo IPD', 
                                                    
