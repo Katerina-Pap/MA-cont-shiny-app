@@ -904,7 +904,7 @@ shinyServer(function(input, output, session) {
   )
   
   #---------------------------------------------------------------------------------------------------------------------------------------------------------------
-  # Output two-stage pseudo IPD
+  # Output two-stage pseudo IPD main effect 
   
   twostage_ME.FE <- reactive({
 
@@ -1044,31 +1044,147 @@ shinyServer(function(input, output, session) {
     }
   )
   
+  #---------------------------------------------------------------------------------------------------------------------------------------------------------------
+  # Output two-stage pseudo IPD interaction effect 
+  
+  twostage_ME.FEint<- reactive({
+    
+    if (input$type == "ce") {
+      
+      if (is.null(pseudoIPD())){return(NULL)}
+      pseudoIPD()
+      df3 <- pseudoIPD()
+      
+      # ANCOVA per study on pseudo IPD for subsequent two-stage MA
+      coef_ancova_int <- NULL
+      se_ancova_int   <- NULL
+      
+      for (i in unique(df3$study))
+      {         fit   <- lm(y2 ~ y1center + group + y1center*group, df3[df3$study==i,])
+      coef_ancova_int <- rbind(coef_ancova_int,fit$coefficients) 
+      se_ancova_int   <- rbind(se_ancova_int,sqrt(diag(vcov(fit))))
+      }
+      
+      # Prepare data for two stage MA
+      two_stageMA_int <- data.frame(study=unique(df3$study), coef_group=coef_ancova_int[,"y1center:group"], secoef_group = se_ancova_int[,"y1center:group"])
+      # Run aggregate meta-analysis 
+      MA_int  <- rma(yi=coef_group, sei=secoef_group, slab=study, method="FE", data=two_stageMA_int)
+      list(MA_int = MA_int)
+      
+    }
+    
+  })
+  
+  fe.twostage_MEint <- reactive({
+    
+    if (input$type == "ce")  {
+      
+      MA_int <- twostage_ME.FEint()$MA_int 
+      
+      cat("--- Interaction effect based on two-stage estimates under the CE model ---","\n")
+      
+      MA_int
+    }
+    
+  }) 
+  
+  output$twostageME_FEint.out<- renderPrint({
+    fe.twostage_MEint()
+  })
   
   
-  # output$downloadtwoMEPlot <- downloadHandler(
-  #   filename = function() {
-  #     paste('Twostage_main.effect', Sys.Date(), '.pdf', sep='')
-  #   },
-  #   content = function(FILE=NULL) {
-  #     pdf(file=FILE)
-  #     print(forest_twostageME())
-  #     dev.off()
-  #   }
-  # )
-  # 
-  # output$downloadtwoMEPlotpng <- downloadHandler(
-  #   filename = function() {
-  #     paste('forest_twoME', Sys.Date(), '.png', sep='')
-  #   },
-  #   content = function(file) {
-  #     png(file=FILE)
-  #     print(forest_twostageME())
-  #     dev.off()
-  #   },
-  #   contentType = 'image/png'
-  # )
+  twostage_ME.REint<- reactive({
+    
+    if (input$type == "re") {
+      
+      if (is.null(pseudoIPD())){return(NULL)}
+      pseudoIPD()
+      df3 <- pseudoIPD()
+      
+      # ANCOVA per study on pseudo IPD for subsequent two-stage MA
+      coef_ancova_int <- NULL
+      se_ancova_int   <- NULL
+      
+      for (i in unique(df3$study))
+      {         fit   <- lm(y2 ~ y1center + group + y1center*group, df3[df3$study==i,])
+      coef_ancova_int <- rbind(coef_ancova_int,fit$coefficients) 
+      se_ancova_int   <- rbind(se_ancova_int,sqrt(diag(vcov(fit))))
+      }
+      
+      # Prepare data for two stage MA
+      two_stageMA_int <- data.frame(study=unique(df3$study), coef_group=coef_ancova_int[,"y1center:group"], secoef_group = se_ancova_int[,"y1center:group"])
+      # Run aggregate meta-analysis 
+      MA_int.re  <- rma(yi=coef_group, sei=secoef_group, slab=study, method="REML", data=two_stageMA_int,  knha=input$HK)
+      list(MA_int.re = MA_int.re)
+      
+    }
+    
+  })
   
+  re.twostage_MEint <- reactive({
+    
+    if (input$type == "re")  {
+      
+      MA_int.re <- twostage_ME.REint()$MA_int.re 
+      
+      cat("--- Interaction effect based on two-stage estimates under the RE model ---","\n")
+      
+      MA_int.re
+    }
+    
+  }) 
+  
+  output$twostageME_REint.out<- renderPrint({
+    re.twostage_MEint()
+  })
+  
+  
+  # Forestplots of two stage approach for the main effect ------------------
+  
+  forest_twostageME.int = function(){
+    
+    if (input$type == "ce") {
+      MA_int <- twostage_ME.FEint()$MA_int 
+      forest(MA_int)
+    }
+    
+    if (input$type == "re") {
+      MA_int.re <- twostage_ME.REint()$MA_int.re
+      forest(MA_int.re)
+    }
+  }
+  
+  output$forest_twoMEint<- renderPlot(
+    {
+      withProgress(message = 'Rendering', detail = 'Forest plot - Two-stage interaction', value = 0, {
+        for (i in 1:2) {
+          incProgress(1/2)
+          Sys.sleep(0.05)
+        }
+      })
+      
+      forest_twostageME.int()
+      
+    }) 
+  
+  
+  output$downloadPlotInt <- downloadHandler(
+    filename = function() {
+      paste("Twostage_interaction", Sys.Date(), sep='')
+    },
+    content = function(file){
+      if(input$format == "png")
+        png(file)
+      if(input$format == "pdf")
+        pdf(file)
+      print(fforest_twostageME.int())
+      dev.off()
+    }
+  )
+  
+  
+  
+
   
 }
 )

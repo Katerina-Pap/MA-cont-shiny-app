@@ -356,8 +356,8 @@ shinyUI(
                                                    
    
                                                    tabsetPanel(      
-                                                     tabPanel("Treatment Effect",
-                                                              
+                                                     tabPanel("Treatment effect",
+                                                              h3('Results'),
                                                               tags$style(type="text/css",
                                                                          ".shiny-output-error { visibility: hidden; }",
                                                                          ".shiny-output-error:before { visibility: hidden; }"
@@ -374,11 +374,20 @@ shinyUI(
                                                               plotOutput("forest_twoME",  height = "550px", width = "600px")
                                                               
                                                               
-                                                     ),
+                                                              ),
                                                      
                                                      tabPanel("Treatment-by-baseline interaction effect",
+                                                              h3('Results'),
+                                                              verbatimTextOutput("twostageME_FEint.out"),
+                                                              verbatimTextOutput("twostageME_REint.out"),
+                                                              h3('Forest plot'),
+                                                              selectInput("format","Choose file format",
+                                                                          choices = list("pdf","png")),
+                                                              downloadButton("downloadPlotInt","Download Here"),
+                                                              #downloadButton('downloadANCOVAForest', 'Download the plot as pdf'),
+                                                              plotOutput("forest_twoMEint",  height = "550px", width = "600px")
                                                               
-                                                     ) 
+                                                              ) 
                                                      
                                                    ),
                                                    
