@@ -562,11 +562,13 @@ shinyServer(function(input, output, session) {
       analysis_data()
       df <- analysis_data()
       
-      # calculate pooled standard deviations of baseline and follow-up values
-      # For the first three methods the data need to be in wide format
+      
       drop         <- which(colnames(df) %in% "Study")
       df           <-  df[,-drop]
       data.AD_wide <- dcast(melt(df, id.vars=c("ID", "group")), ID~variable+group)
+      
+      # calculate pooled standard deviations of baseline and follow-up values
+      # For the first three methods the data need to be in wide format
       
       sdpooledB<- with(data.AD_wide, sqrt((((NCFB_1 - 1)*(sdBaseline_1^2)) + (NCFB_0 - 1)*(sdBaseline_0^2))/((NCFB_1+NCFB_0)-2)))
       sdpooledF<- with(data.AD_wide, sqrt((((NCFB_1 - 1)*(sdFU_1^2)) + (NCFB_0 - 1)*(sdFU_0^2))/((NCFB_1+NCFB_0)-2)))
@@ -593,8 +595,22 @@ shinyServer(function(input, output, session) {
     
   })
   
+  fe.ancova <- reactive({
+    
+    if (input$type == "ce")  {
+      
+      MA.fixed.ANCOVA <- ancova.FE()$MA.fixed.ANCOVA
+      
+      cat("--- Mean differences based on reconstructed ANCOVA estimates under the CE model ---","\n")
+      
+      MA.fixed.ANCOVA
+    }
+    
+  }) 
+  
+  
   output$ancova_fe.out <- renderPrint({
-    ancova.FE()
+    fe.ancova()
   })
   
   
@@ -615,17 +631,12 @@ shinyServer(function(input, output, session) {
       sdpooledF<- with(data.AD_wide, sqrt((((NCFB_1 - 1)*(sdFU_1^2)) + (NCFB_0 - 1)*(sdFU_0^2))/((NCFB_1+NCFB_0)-2)))
       
       # Calculate ancova estimate using formula from Senn et al. 2007
-      # using the pooled correlation
       
-    
       # Correlation_0 <-input$cor1
       # Correlation_1 <-input$cor2
       
       ripooled <- with(data.AD_wide, ((NCFB_1*Correlation_1*sdBaseline_1*sdFU_1 +  NCFB_0*Correlation_0 *sdBaseline_0*sdFU_0) )
                        /((NCFB_1+NCFB_0)*sdpooledB*sdpooledF))
-      
-      # ripooled <- with(data.AD_wide, ((NCFB_1*Correlation_1*sdBaseline_1*sdFU_1 +  NCFB_0*Correlation_0 *sdBaseline_0*sdFU_0) )
-      #                  /((NCFB_1+NCFB_0)*sdpooledB*sdpooledF))
       
       ancova_est      <- with(data.AD_wide, (MeanFU_1-MeanFU_0)-ripooled*(sdpooledF/sdpooledB)*(MeanBaseline_1-MeanBaseline_0))
       
@@ -634,15 +645,28 @@ shinyServer(function(input, output, session) {
       se_ancovas_est  <- with(data.AD_wide,sqrt(var_ancova_est))
       
       MA.random.ANCOVA <- rma(yi=ancova_est, sei=se_ancovas_est, method="REML", knha=input$HK)
-      #list(MA.random.ANCOVA=MA.random.ANCOVA) 
-      MA.random.ANCOVA
+      list(MA.random.ANCOVA = MA.random.ANCOVA) 
+     
       
     }
     
   })
   
+  re.ancova <- reactive({
+    
+    if (input$type == "re")  {
+      
+      MA.random.ANCOVA <- ancova.RE()$MA.random.ANCOVA
+      
+      cat("--- Mean differences based on reconstructed ANCOVA estimates under the RE model ---","\n")
+      
+      MA.random.ANCOVA
+    }
+    
+  }) 
+  
   output$ancova_re.out <- renderPrint({
-    ancova.RE()
+    re.ancova()
   })
   
   # Print window of standard AD results -----------------------------------------------------------------------------------------------------------------------------

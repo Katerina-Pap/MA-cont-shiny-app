@@ -283,9 +283,7 @@ shinyUI(
                                                                h3("Forest plot"),
                                                                downloadButton('downloadANCOVAForest', 'Download the plot as pdf'),
                                                                plotOutput("ANCOVA.forest",  height = "550px", width = "450px"),
-                                                              
-                                                               
-                                                               
+
                                                                ) 
                                                      
                                                      ),
