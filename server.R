@@ -375,6 +375,47 @@ shinyServer(function(input, output, session) {
         dev.off()
       }
     )  
+    
+    # Funnel plots for FE and RE 
+    funnel.final <- function(){
+      
+      if (input$type == "ce") {
+        
+        MA.fixed.final <- final.FE()$MA.fixed.final
+        
+        funnel(MA.fixed.final, main="Standard Error")
+      }
+      
+      else if (input$type == "re") {
+        
+        MA.random.final <- final.RE()$MA.random.final
+        
+        funnel(MA.random.final, main="Standard Error")
+      }
+      
+    }
+    
+    output$final.funnel <- renderPlot({
+      withProgress(message = 'Rendering', detail = 'Forest plot - CE model', value = 0, {
+        for (i in 1:5) {
+          incProgress(1/5)
+          Sys.sleep(0.05)
+        }
+      })
+      print(funnel.final())
+    })
+    
+    
+    output$downloadfinalFunnel <- downloadHandler(
+      filename = function() {
+        paste('final.funnel', Sys.Date(), '.pdf', sep='')
+      },
+      content = function(FILE=NULL) {
+        pdf(file=FILE)
+        print(funnel.final())
+        dev.off()
+      }
+    )  
   
   
   # Output change scores analysis --------------------------------------------------------------------------------------------------------------------------------

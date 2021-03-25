@@ -259,7 +259,11 @@ shinyUI(
                                                                h3("Forest plot"),
                                                                downloadButton('downloadfinalForest', 'Download the plot as pdf'),
                                                                plotOutput("final.forest",  height = "550px", width = "600px"),
-#                                                               
+                                                               h3("Funnel plot"),
+                                                               downloadButton('downloadfinalFunnel', 'Download the plot as pdf'),
+                                                               plotOutput("final.funnel",  height = "550px", width = "600px"),
+
+
                                                                ),
 
                                                       tabPanel("Change Scores",
@@ -406,7 +410,7 @@ shinyUI(
              )
     ), # end of tabpanel : meta-analysis 
     
-    tabPanel("Technical Details", icon = icon("fas fa-book-reader"),
+    tabPanel("About", icon = icon("fas fa-book-reader"),
              withMathJax(includeMarkdown("technical_notes.md"))
     ),
 
