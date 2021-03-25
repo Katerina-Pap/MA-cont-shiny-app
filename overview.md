@@ -6,7 +6,7 @@ The tool is designed to perform meta-analysis of continuous aggregate data (AD) 
 
 The available statistical approaches are:
 
-- Standard AD: Final scores, Change scores, ANCOVA recovered estimates
+- Standard AD: Final (follow-up) scores, Change scores, ANCOVA recovered estimates
 - One-stage pseudo IPD ANCOVA
 - Two-stage pseudo IPD ANCOVA
 
@@ -15,6 +15,6 @@ For details regarding the models analytical expressions and statistical calculat
 For more information on how to use the tool please follow the instructive video or get in contact with the developer of the tool. The app is powered by [Shiny](shiny.rstudio.com) using the statistical software [R](http://cran.r-project.org/).
 
 
-####   Disclaimer
+####   **Disclaimer**
 
 The tool is intended for a wide audience of nontechnical and technical users. Use it wisely and seek advice from technical experts when necessary.

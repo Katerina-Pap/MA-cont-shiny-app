@@ -71,7 +71,7 @@ shinyUI(
                    ),
                    mainPanel(
                      fluidRow(
-                       column(width = 6, align="left", h3("Getting started")),
+                       column(width = 6, align="left", h3(strong("Getting started"))),
                        column(
                          width = 6,
                          align = "right",
