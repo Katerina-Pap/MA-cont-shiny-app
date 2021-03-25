@@ -815,7 +815,7 @@ shinyServer(function(input, output, session) {
                     Upper    = rbind(upper_arm, upper_study, upper_group, upper_one)
                             )
         
-        names(table1)[c(1,2,3,4)] <- c("MD estimate", "Standard error", "Lower bound of 95% CI", "Upper bound of 95% CI") 
+        names(table1)[c(1,2,3,4)] <- c("Effect estimate", "Standard error", "Lower bound of 95% CI", "Upper bound of 95% CI") 
         table1},
       
       extensions = c("Buttons", "Scroller"),
@@ -907,102 +907,48 @@ shinyServer(function(input, output, session) {
   # Output two-stage pseudo IPD
   
   twostage_ME.FE <- reactive({
-  
-    
+
     if (input$type == "ce") {
       
-      if (is.null(analysis_data())){return(NULL)}
-      analysis_data()
-      df2 <- analysis_data()
-      # Generate the pseudo baselines and outcomes
-      data.IPD <- data.frame(study         = rep(df2$Study, df2$NCFB),
-                             group         = rep(df2$group, df2$NCFB),
-                             meanBaseline  = rep(df2$MeanBaseline, df2$NCFB),
-                             sdBaseline    = rep(df2$sdBaseline, df2$NCFB),
-                             meanPost      = rep(df2$MeanFU, df2$NCFB),
-                             sdPost        = rep(df2$sdFU, df2$NCFB),
-                             correlation   = rep(df2$Correlation,df2$NCFB))
-      
-      set.seed(123456)
-      data.IPD$ytmp1 <- rnorm(nrow(data.IPD),0,1)
-      set.seed(7891011)
-      data.IPD$ytmp2 <- rnorm(nrow(data.IPD),0,1)
-      
-      # Standardize ytmp1 and ytmp2, calculate correlation between ytmp1 and ytmp2, 
-      # and the residuals of regressing ytmp2 on ytmp1
-      # per study and group
-      
-      data.IPD2 <- NULL
-      for(study in unique(data.IPD$study))
-      {   for (group in unique(data.IPD$group))
-      { datatmp     <- data.IPD[data.IPD$study==study & data.IPD$group==group,]
-      # standardized y1tmp
-      datatmp$ytmp1 <- (datatmp$ytmp1-mean(datatmp$ytmp1))/sd(datatmp$ytmp1)
-      # standardized y2tmp
-      datatmp$ytmp2 <- (datatmp$ytmp2-mean(datatmp$ytmp2))/sd(datatmp$ytmp2)
-      # correlation between y1tmp and y2tmp
-      cor.ytmp      <- cor(datatmp$ytmp1, datatmp$ytmp2)
-      # residuals of regression of ytmp2 on ytmp1
-      resid         <- residuals(lm(ytmp2 ~ ytmp1 - 1 , data = datatmp))
-      Resid <- datatmp$ytmp2 - cor.ytmp*datatmp$ytmp1
-      # coefficient beta of regression of ytmp2 on ytmp1
-      #coef          <- coef(lm(ytmp2 ~ ytmp1 - 1 , data = datatmp))
-      data.IPD2     <- rbind( data.IPD2, data.frame(datatmp,cor.ytmp,resid,Resid))
-      }  
-      } 
-      
-      # temporary variable needed to generate the pseudo baseline and pseudo follow-up outcomes
-      data.IPD2$ytmp3 <- data.IPD2$ytmp1*data.IPD2$correlation + sqrt(1-data.IPD2$correlation^2)*data.IPD2$resid/sqrt(1-data.IPD2$cor.ytmp^2)
-      # generate pseudo baseline and pseudo follow-up outcomes
-      data.IPD2$y1    <- data.IPD2$ytmp1*data.IPD2$sdBaseline + data.IPD2$meanBaseline
-      data.IPD2$y2    <- data.IPD2$ytmp3*data.IPD2$sdPost + data.IPD2$meanPost
-      
-      # make new dataset, with only relevant variables
-      data.pseudoIPD <- data.IPD2[,c("study", "group", "y1", "y2")]
-      #View(data.pseudoIPD) # final pseudo IPD dataset 
-      rm(data.IPD2,data.IPD)
-      
-      # Check the mean and sd of y1 and y2, and correlation y1, y2
-      check <-cbind(aggregate(y1~group+study, data=data.pseudoIPD, mean), 
-                    aggregate(y2~group+study, data=data.pseudoIPD, mean)[3],
-                    aggregate(y1~group+study, data=data.pseudoIPD, sd)[3],
-                    aggregate(y2~group+study, data=data.pseudoIPD, sd)[3],
-                    as.vector(cbind(by(data.pseudoIPD, data.pseudoIPD[,c("group","study")], function(x) {cor(x$y1,x$y2)}))))
-      
-      colnames(check)<- c(colnames(check)[1:2], "meany1", "meany2","sdy1", "sdy2","cory1y2")
-      check
-      rm(check)
-      
-      # Pre-step to calculate centered baseline values by study
-      data.pseudoIPD$meany1bystudy <- ave(data.pseudoIPD$y1, data.pseudoIPD$study)
-      data.pseudoIPD$y1center      <- data.pseudoIPD$y1 - data.pseudoIPD$meany1bystudy
-      data.pseudoIPD$groupcenter   <- data.pseudoIPD$group - 0.5
-      data.pseudoIPD$arm           <- 1000*data.pseudoIPD$study + data.pseudoIPD$group
-      
+      if (is.null(pseudoIPD())){return(NULL)}
+      pseudoIPD()
+      df3 <- pseudoIPD()
+
       # ANCOVA per study on pseudo IPD for subsequent two-stage MA
-      
       coef_ancova <- NULL
       se_ancova   <- NULL
       
-      for (i in unique(data.pseudoIPD$study ))
-      {         fit <- lm(y2~ y1 + group, data.pseudoIPD[data.pseudoIPD$study==i,])
+      for (i in unique(df3$study))
+      {         fit <- lm(y2~ y1 + group, df3[df3$study==i,])
       coef_ancova   <- rbind(coef_ancova,fit$coefficients) 
       se_ancova     <- rbind(se_ancova,sqrt(diag(vcov(fit))))
       }
       
       # Prepare data for two stage MA
-      two_stageMA <- data.frame(study=unique(data.pseudoIPD$study), coef_group=coef_ancova[,"group"], secoef_group = se_ancova[,"group"])
-      
+      two_stageMA <- data.frame(study=unique(df3$study), coef_group=coef_ancova[,"group"], secoef_group = se_ancova[,"group"])
       # Run aggregate meta-analysis 
-      MA_twostageME  <- rma(yi=coef_group, sei=secoef_group, slab=study, method="FE", data=two_stageMA, knha=FALSE)
+      MA_twostageME  <- rma(yi=coef_group, sei=secoef_group, slab=study, method="FE", data=two_stageMA)
       list(MA_twostageME = MA_twostageME)
       
     }
     
   })
   
+  fe.twostage_ME <- reactive({
+    
+    if (input$type == "ce")  {
+      
+      MA_twostageME  <- twostage_ME.FE()$MA_twostageME 
+      
+      cat("--- Mean differences based on two-stage ANCOVA estimates under the CE model ---","\n")
+      
+      MA_twostageME 
+    }
+    
+  }) 
+  
   output$twostageME_FE.out<- renderPrint({
-    twostage_ME.FE()
+    fe.twostage_ME()
   })
   
   
@@ -1010,114 +956,62 @@ shinyServer(function(input, output, session) {
     
     if (input$type == "re") {
       
-      if (is.null(analysis_data())){return(NULL)}
-      analysis_data()
-      df2 <- analysis_data()
-      # Generate the pseudo baselines and outcomes
-      data.IPD <- data.frame(study         = rep(df2$Study, df2$NCFB),
-                             group         = rep(df2$group, df2$NCFB),
-                             meanBaseline  = rep(df2$MeanBaseline, df2$NCFB),
-                             sdBaseline    = rep(df2$sdBaseline, df2$NCFB),
-                             meanPost      = rep(df2$MeanFU, df2$NCFB),
-                             sdPost        = rep(df2$sdFU, df2$NCFB),
-                             correlation   = rep(df2$Correlation,df2$NCFB))
-      
-      set.seed(123456)
-      data.IPD$ytmp1 <- rnorm(nrow(data.IPD),0,1)
-      set.seed(7891011)
-      data.IPD$ytmp2 <- rnorm(nrow(data.IPD),0,1)
-      
-      # Standardize ytmp1 and ytmp2, calculate correlation between ytmp1 and ytmp2, 
-      # and the residuals of regressing ytmp2 on ytmp1
-      # per study and group
-      
-      data.IPD2 <- NULL
-      for(study in unique(data.IPD$study))
-      {   for (group in unique(data.IPD$group))
-      { datatmp     <- data.IPD[data.IPD$study==study & data.IPD$group==group,]
-      # standardized y1tmp
-      datatmp$ytmp1 <- (datatmp$ytmp1-mean(datatmp$ytmp1))/sd(datatmp$ytmp1)
-      # standardized y2tmp
-      datatmp$ytmp2 <- (datatmp$ytmp2-mean(datatmp$ytmp2))/sd(datatmp$ytmp2)
-      # correlation between y1tmp and y2tmp
-      cor.ytmp      <- cor(datatmp$ytmp1, datatmp$ytmp2)
-      # residuals of regression of ytmp2 on ytmp1
-      resid         <- residuals(lm(ytmp2 ~ ytmp1 - 1 , data = datatmp))
-      Resid <- datatmp$ytmp2 - cor.ytmp*datatmp$ytmp1
-      # coefficient beta of regression of ytmp2 on ytmp1
-      #coef          <- coef(lm(ytmp2 ~ ytmp1 - 1 , data = datatmp))
-      data.IPD2     <- rbind( data.IPD2, data.frame(datatmp,cor.ytmp,resid,Resid))
-      }  
-      } 
-      
-      # temporary variable needed to generate the pseudo baseline and pseudo follow-up outcomes
-      data.IPD2$ytmp3 <- data.IPD2$ytmp1*data.IPD2$correlation + sqrt(1-data.IPD2$correlation^2)*data.IPD2$resid/sqrt(1-data.IPD2$cor.ytmp^2)
-      # generate pseudo baseline and pseudo follow-up outcomes
-      data.IPD2$y1    <- data.IPD2$ytmp1*data.IPD2$sdBaseline + data.IPD2$meanBaseline
-      data.IPD2$y2    <- data.IPD2$ytmp3*data.IPD2$sdPost + data.IPD2$meanPost
-      
-      # make new dataset, with only relevant variables
-      data.pseudoIPD <- data.IPD2[,c("study", "group", "y1", "y2")]
-      #View(data.pseudoIPD) # final pseudo IPD dataset 
-      rm(data.IPD2,data.IPD)
-      
-      # Check the mean and sd of y1 and y2, and correlation y1, y2
-      check <-cbind(aggregate(y1~group+study, data=data.pseudoIPD, mean), 
-                    aggregate(y2~group+study, data=data.pseudoIPD, mean)[3],
-                    aggregate(y1~group+study, data=data.pseudoIPD, sd)[3],
-                    aggregate(y2~group+study, data=data.pseudoIPD, sd)[3],
-                    as.vector(cbind(by(data.pseudoIPD, data.pseudoIPD[,c("group","study")], function(x) {cor(x$y1,x$y2)}))))
-      
-      colnames(check)<- c(colnames(check)[1:2], "meany1", "meany2","sdy1", "sdy2","cory1y2")
-      check
-      rm(check)
-      
-      # Pre-step to calculate centered baseline values by study
-      data.pseudoIPD$meany1bystudy <- ave(data.pseudoIPD$y1, data.pseudoIPD$study)
-      data.pseudoIPD$y1center      <- data.pseudoIPD$y1 - data.pseudoIPD$meany1bystudy
-      data.pseudoIPD$groupcenter   <- data.pseudoIPD$group - 0.5
-      data.pseudoIPD$arm           <- 1000*data.pseudoIPD$study + data.pseudoIPD$group
-      
+      if (is.null(pseudoIPD())){return(NULL)}
+      pseudoIPD()
+      df3 <- pseudoIPD()
+
       # ANCOVA per study on pseudo IPD for subsequent two-stage MA
-      
       coef_ancova <- NULL
       se_ancova   <- NULL
       
-      for (i in unique(data.pseudoIPD$study ))
-      {         fit <- lm(y2~ y1 + group, data.pseudoIPD[data.pseudoIPD$study==i,])
+      for (i in unique(df3$study ))
+      {         fit <- lm(y2~ y1 + group, df3[df3$study==i,])
       coef_ancova   <- rbind(coef_ancova,fit$coefficients) 
       se_ancova     <- rbind(se_ancova,sqrt(diag(vcov(fit))))
       }
       
       # Prepare data for two stage MA
-      two_stageMA <- data.frame(study=unique(data.pseudoIPD$study), coef_group=coef_ancova[,"group"], secoef_group = se_ancova[,"group"])
-      
+      two_stageMA <- data.frame(study=unique(df3$study), coef_group=coef_ancova[,"group"], secoef_group = se_ancova[,"group"])
       # Run aggregate meta-analysis 
-      MA_twostageME  <- rma(yi=coef_group, sei=secoef_group, slab=study, method="REML", data=two_stageMA, knha=input$HK)
-      list(MA_twostageME = MA_twostageME)
+      MA_twostageMEre  <- rma(yi=coef_group, sei=secoef_group, slab=study, method="REML", data=two_stageMA, knha=input$HK)
+      list(MA_twostageMEre = MA_twostageMEre)
       
     }
     
   })
   
+  re.twostage_ME <- reactive({
+    
+    if (input$type == "re")  {
+      
+      MA_twostageMEre  <- twostage_ME.RE()$MA_twostageMEre 
+      
+      cat("--- Mean differences based on two-stage ANCOVA estimates under the RE model ---","\n")
+      
+      MA_twostageMEre 
+    }
+    
+  }) 
+  
   output$twostageME_RE.out<- renderPrint({
-    twostage_ME.RE()
+    re.twostage_ME()
   })
   
+
+  # Forestplots of two stage approach for the main effect ------------------
   
   forest_twostageME = function(){
     
     if (input$type == "ce") {
-      MA_twostageME_ce <- twostage_ME.FE()$MA_twostageME
-      forest(MA_twostageME_ce)
+      MA_twostageME <- twostage_ME.FE()$MA_twostageME
+      forest(MA_twostageME)
       
     }
     
-    
     if (input$type == "re") {
       
-      MA_twostageME_re <- twostage_ME.RE()$MA_twostageME
-      forest(MA_twostageME_re)
+      MA_twostageMEre <- twostage_ME.RE()$MA_twostageMEre
+      forest(MA_twostageMEre)
       
     }
   }

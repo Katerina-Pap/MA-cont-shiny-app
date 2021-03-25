@@ -313,7 +313,7 @@ shinyUI(
                                           tabPanel('One-stage pseudo IPD', 
                                                    
                                                    tabsetPanel(      
-                                                     tabPanel("Treatment Effect",
+                                                     tabPanel("Treatment effect",
                                                               
                                                               tags$style(type="text/css",
                                                                          ".shiny-output-error { visibility: hidden; }",
@@ -365,17 +365,13 @@ shinyUI(
                                                               
                                                               verbatimTextOutput("twostageME_FE.out"),
                                                               verbatimTextOutput("twostageME_RE.out"),
-                                                              # fluidRow(column(6, style = "background-color:#DCDCDC", 
-                                                              h2("Forestplot of Mean difference"), 
-                                                              div(style = "margin-top: -10px"),
-                                                              plotOutput("forest_twoME", height = "550px", width= "450px"), 
-                                                              br(),
+                                                              h3("Forest plot"),
+
                                                               selectInput("format","Choose file format",
-                                                                          choices = list("pdf","png")),
-                                                              downloadButton("download","Download Here")
-                                                              
-                                                              #downloadButton('twoMEPlot', 'Download the plot as pdf'),
-                                                              #downloadButton('twoMEPlotpng', 'Download the plot as png')
+                                                                           choices = list("pdf","png")),
+                                                              downloadButton("downloadPlot","Download Here"),
+                                                              #downloadButton('downloadANCOVAForest', 'Download the plot as pdf'),
+                                                              plotOutput("forest_twoME",  height = "550px", width = "600px")
                                                               
                                                               
                                                      ),
