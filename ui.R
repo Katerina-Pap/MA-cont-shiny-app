@@ -258,7 +258,7 @@ shinyUI(
                                                                
                                                                h3("Forest plot"),
                                                                downloadButton('downloadfinalForest', 'Download the plot as pdf'),
-                                                               plotOutput("final.forest",  height = "550px", width = "450px"),
+                                                               plotOutput("final.forest",  height = "550px", width = "600px"),
 #                                                               
                                                                ),
 
@@ -270,7 +270,7 @@ shinyUI(
                                                                br(),
                                                                h3("Forest plot"),
                                                                downloadButton('downloadchangeForest', 'Download the plot as pdf'),
-                                                               plotOutput("change.forest",  height = "550px", width = "450px"),
+                                                               plotOutput("change.forest",  height = "550px", width = "600px"),
                                                                
                                                                ),
                                                       
@@ -282,7 +282,7 @@ shinyUI(
                                                                br(),
                                                                h3("Forest plot"),
                                                                downloadButton('downloadANCOVAForest', 'Download the plot as pdf'),
-                                                               plotOutput("ANCOVA.forest",  height = "550px", width = "450px"),
+                                                               plotOutput("ancova.forest",  height = "550px", width = "600px"),
 
                                                                ) 
                                                      
@@ -319,14 +319,18 @@ shinyUI(
                                                                          ".shiny-output-error { visibility: hidden; }",
                                                                          ".shiny-output-error:before { visibility: hidden; }"
                                                               ), 
-                                                              fluidRow(column(6, style = "background-color:#DCDCDC", 
-                                                                              h3("Mean difference effect estimates"),
-                                                                              h4("Study-stratified results: options for within-study residual variance"),
-                                                                              #tags$style(css),
-                                                                              #textInput("name", "Enter the nutrient's name", " "),
-                                                                              #textOutput('one')%>% withSpinner(type = getOption("spinner.type",5), color="#88BDBC")
-                                                                              #dataTableOutput("one") %>% withSpinner(color="#88BDBC") ))),
-                                                                              DT::dataTableOutput("one") %>% withSpinner(type = getOption("spinner.type", 5), color="#88BDBC") ))
+                                                              fluidRow(column(10, style = "background-color:#D1E8E2", 
+                                                                              h3("Pseudo IPD"),
+                                                                              DT::dataTableOutput("pseudoData") %>% withSpinner(type = getOption("spinner.type", 5), color="#88BDBC")
+                                                                              )),
+                                                                              br(), 
+                                                                              br(),
+                                                                       
+                                                              fluidRow(column(10, style = "background-color:#DCDCDC",       
+                                                                              h4("Results: Study-stratified model with options for within-study residual variance"),
+                                                                              DT::dataTableOutput("one") %>% withSpinner(type = getOption("spinner.type", 5), color="#88BDBC")
+                                                                              )
+                                                                       )
                                                               
                                                           
                                                               

@@ -342,14 +342,14 @@ shinyServer(function(input, output, session) {
       
       MA.fixed.final <- final.FE()$MA.fixed.final
       
-      forest(MA.fixed.final)
+      forest(MA.fixed.final, showweights=TRUE)
     }
     
     else if (input$type == "re") {
       
       MA.random.final <- final.RE()$MA.random.final
       
-      forest(MA.random.final)
+      forest(MA.random.final, showweights=TRUE)
     }
       
   }
@@ -515,14 +515,14 @@ shinyServer(function(input, output, session) {
       
       MA.fixed.change <- change.FE()$MA.fixed.change
       
-      forest(MA.fixed.change)
+      forest(MA.fixed.change, showweights=TRUE)
     }
     
     else if (input$type == "re") {
       
       MA.random.change <- change.RE()$MA.random.change
       
-      forest(MA.random.change)
+      forest(MA.random.change, showweights=TRUE)
     }
     
   }
@@ -669,6 +669,50 @@ shinyServer(function(input, output, session) {
     re.ancova()
   })
   
+  
+  # Forest plots for FE and RE 
+  forest.ancova <- function(){
+    
+    if (input$type == "ce") {
+      
+      MA.fixed.ANCOVA <- ancova.FE()$MA.fixed.ANCOVA
+      
+      forest(MA.fixed.ANCOVA, showweights=TRUE)
+    }
+    
+    else if (input$type == "re") {
+      
+      MA.random.ANCOVA <- ancova.RE()$MA.random.ANCOVA
+      
+      forest(MA.random.ANCOVA, showweights=TRUE)
+    }
+    
+  }
+  
+  output$ancova.forest <- renderPlot(
+    {
+      withProgress(message = 'Rendering', detail = 'Forest plot - CE model', value = 0, {
+        for (i in 1:5) {
+          incProgress(1/5)
+          Sys.sleep(0.05)
+        }
+      })
+      print(forest.ancova())
+    })
+  
+  
+  output$downloadANCOVAForest <- downloadHandler(
+    filename = function() {
+      paste('ancova.forest', Sys.Date(), '.pdf', sep='')
+    },
+    content = function(FILE=NULL) {
+      pdf(file=FILE)
+      print(forest.ancova())
+      dev.off()
+    }
+  )  
+  
+
   # Print window of standard AD results -----------------------------------------------------------------------------------------------------------------------------
   observeEvent(input$print,{
     js$winprint()
@@ -681,98 +725,121 @@ shinyServer(function(input, output, session) {
   
   # Output one-stage pseudo IPD main effect--------------------------------------------------------------------------------------------------------------------------
   
+  pseudoIPD <- reactive({
+    
+    if (is.null(analysis_data())){return(NULL)}
+    analysis_data()
+    df2 <- analysis_data()
+    # Generate the pseudo baselines and outcomes
+    data.IPD <- data.frame(study         = rep(df2$ID, df2$NCFB),
+                           group         = rep(df2$group, df2$NCFB),
+                           meanBaseline  = rep(df2$MeanBaseline, df2$NCFB),
+                           sdBaseline    = rep(df2$sdBaseline, df2$NCFB),
+                           meanPost      = rep(df2$MeanFU, df2$NCFB),
+                           sdPost        = rep(df2$sdFU, df2$NCFB),
+                           correlation   = rep(df2$Correlation,df2$NCFB))
+    
+    set.seed(123456)
+    data.IPD$ytmp1 <- rnorm(nrow(data.IPD),0,1)
+    set.seed(7891011)
+    data.IPD$ytmp2 <- rnorm(nrow(data.IPD),0,1)
+    
+    # Standardize ytmp1 and ytmp2, calculate correlation between ytmp1 and ytmp2, 
+    # and the residuals of regressing ytmp2 on ytmp1
+    # per study and group
+    
+    data.IPD2 <- NULL
+    for(study in unique(data.IPD$study))
+    {   for (group in unique(data.IPD$group))
+    { datatmp     <- data.IPD[data.IPD$study==study & data.IPD$group==group,]
+    # standardized y1tmp
+    datatmp$ytmp1 <- (datatmp$ytmp1-mean(datatmp$ytmp1))/sd(datatmp$ytmp1)
+    # standardized y2tmp
+    datatmp$ytmp2 <- (datatmp$ytmp2-mean(datatmp$ytmp2))/sd(datatmp$ytmp2)
+    # correlation between y1tmp and y2tmp
+    cor.ytmp      <- cor(datatmp$ytmp1, datatmp$ytmp2)
+    # residuals of regression of ytmp2 on ytmp1
+    resid         <- residuals(lm(ytmp2 ~ ytmp1 - 1 , data = datatmp))
+    Resid <- datatmp$ytmp2 - cor.ytmp*datatmp$ytmp1
+    # coefficient beta of regression of ytmp2 on ytmp1
+    #coef          <- coef(lm(ytmp2 ~ ytmp1 - 1 , data = datatmp))
+    data.IPD2     <- rbind( data.IPD2, data.frame(datatmp,cor.ytmp,resid,Resid))
+    }  
+    } 
+    
+    # temporary variable needed to generate the pseudo baseline and pseudo follow-up outcomes
+    data.IPD2$ytmp3 <- data.IPD2$ytmp1*data.IPD2$correlation + sqrt(1-data.IPD2$correlation^2)*data.IPD2$resid/sqrt(1-data.IPD2$cor.ytmp^2)
+    # generate pseudo baseline and pseudo follow-up outcomes
+    data.IPD2$y1    <- data.IPD2$ytmp1*data.IPD2$sdBaseline + data.IPD2$meanBaseline
+    data.IPD2$y2    <- data.IPD2$ytmp3*data.IPD2$sdPost + data.IPD2$meanPost
+    
+    # make new dataset, with only relevant variables
+    data.pseudoIPD <- data.IPD2[,c("study", "group", "y1", "y2")]
+    #View(data.pseudoIPD) # final pseudo IPD dataset 
+    rm(data.IPD2,data.IPD)
+    
+    # Check the mean and sd of y1 and y2, and correlation y1, y2
+    check <-cbind(aggregate(y1~group+study, data=data.pseudoIPD, mean), 
+                  aggregate(y2~group+study, data=data.pseudoIPD, mean)[3],
+                  aggregate(y1~group+study, data=data.pseudoIPD, sd)[3],
+                  aggregate(y2~group+study, data=data.pseudoIPD, sd)[3],
+                  as.vector(cbind(by(data.pseudoIPD, data.pseudoIPD[,c("group","study")], function(x) {cor(x$y1,x$y2)}))))
+    
+    colnames(check)<- c(colnames(check)[1:2], "meany1", "meany2","sdy1", "sdy2","cory1y2")
+    check
+    rm(check)
+    
+    # Pre-step to calculate centered baseline values by study
+    data.pseudoIPD$meany1bystudy <- round(ave(data.pseudoIPD$y1, data.pseudoIPD$study), 4)
+    data.pseudoIPD$y1center      <- round(data.pseudoIPD$y1 - data.pseudoIPD$meany1bystudy, 4)
+    data.pseudoIPD$groupcenter   <- data.pseudoIPD$group - 0.5
+    data.pseudoIPD$arm           <- 1000*data.pseudoIPD$study + data.pseudoIPD$group
+    data.pseudoIPD$y2            <- round(data.pseudoIPD$y2, 4)
+    data.pseudoIPD$y1            <- round(data.pseudoIPD$y1, 4)
+    
+    data.pseudoIPD
+    
+  })
+  
+  output$test <- DT::renderDataTable({
+    pseudoIPD()
+    if (is.null(pseudoIPD())){return(NULL)}
+    DT::datatable(pseudoIPD(),
+                  filter = 'top',
+                  selection = list(mode = 'single', selected = 1),
+                  options = list(search = list(caseInsensitive = TRUE),
+                                 searchHighlight = TRUE,
+                                 scrollX = TRUE,
+                                 pageLength = 5))
+                  
+   })
+    
+  
   output$one <- DT::renderDataTable(
-    DT::datatable(
-      {
-        #renderPrint({
-        if (is.null(analysis_data())){return(NULL)}
-        analysis_data()
-        df2 <- analysis_data()
-        # Generate the pseudo baselines and outcomes
-        data.IPD <- data.frame(study         = rep(df2$ID, df2$NCFB),
-                               group         = rep(df2$group, df2$NCFB),
-                               meanBaseline  = rep(df2$MeanBaseline, df2$NCFB),
-                               sdBaseline    = rep(df2$sdBaseline, df2$NCFB),
-                               meanPost      = rep(df2$MeanFU, df2$NCFB),
-                               sdPost        = rep(df2$sdFU, df2$NCFB),
-                               correlation   = rep(df2$Correlation,df2$NCFB))
-        
-        set.seed(123456)
-        data.IPD$ytmp1 <- rnorm(nrow(data.IPD),0,1)
-        set.seed(7891011)
-        data.IPD$ytmp2 <- rnorm(nrow(data.IPD),0,1)
-        
-        # Standardize ytmp1 and ytmp2, calculate correlation between ytmp1 and ytmp2, 
-        # and the residuals of regressing ytmp2 on ytmp1
-        # per study and group
-        
-        data.IPD2 <- NULL
-        for(study in unique(data.IPD$study))
-        {   for (group in unique(data.IPD$group))
-        { datatmp     <- data.IPD[data.IPD$study==study & data.IPD$group==group,]
-        # standardized y1tmp
-        datatmp$ytmp1 <- (datatmp$ytmp1-mean(datatmp$ytmp1))/sd(datatmp$ytmp1)
-        # standardized y2tmp
-        datatmp$ytmp2 <- (datatmp$ytmp2-mean(datatmp$ytmp2))/sd(datatmp$ytmp2)
-        # correlation between y1tmp and y2tmp
-        cor.ytmp      <- cor(datatmp$ytmp1, datatmp$ytmp2)
-        # residuals of regression of ytmp2 on ytmp1
-        resid         <- residuals(lm(ytmp2 ~ ytmp1 - 1 , data = datatmp))
-        Resid <- datatmp$ytmp2 - cor.ytmp*datatmp$ytmp1
-        # coefficient beta of regression of ytmp2 on ytmp1
-        #coef          <- coef(lm(ytmp2 ~ ytmp1 - 1 , data = datatmp))
-        data.IPD2     <- rbind( data.IPD2, data.frame(datatmp,cor.ytmp,resid,Resid))
-        }  
-        } 
-        
-        # temporary variable needed to generate the pseudo baseline and pseudo follow-up outcomes
-        data.IPD2$ytmp3 <- data.IPD2$ytmp1*data.IPD2$correlation + sqrt(1-data.IPD2$correlation^2)*data.IPD2$resid/sqrt(1-data.IPD2$cor.ytmp^2)
-        # generate pseudo baseline and pseudo follow-up outcomes
-        data.IPD2$y1    <- data.IPD2$ytmp1*data.IPD2$sdBaseline + data.IPD2$meanBaseline
-        data.IPD2$y2    <- data.IPD2$ytmp3*data.IPD2$sdPost + data.IPD2$meanPost
-        
-        # make new dataset, with only relevant variables
-        data.pseudoIPD <- data.IPD2[,c("study", "group", "y1", "y2")]
-        #View(data.pseudoIPD) # final pseudo IPD dataset 
-        rm(data.IPD2,data.IPD)
-        
-        # Check the mean and sd of y1 and y2, and correlation y1, y2
-        check <-cbind(aggregate(y1~group+study, data=data.pseudoIPD, mean), 
-                      aggregate(y2~group+study, data=data.pseudoIPD, mean)[3],
-                      aggregate(y1~group+study, data=data.pseudoIPD, sd)[3],
-                      aggregate(y2~group+study, data=data.pseudoIPD, sd)[3],
-                      as.vector(cbind(by(data.pseudoIPD, data.pseudoIPD[,c("group","study")], function(x) {cor(x$y1,x$y2)}))))
-        
-        colnames(check)<- c(colnames(check)[1:2], "meany1", "meany2","sdy1", "sdy2","cory1y2")
-        check
-        rm(check)
-        
-        # Pre-step to calculate centered baseline values by study
-        data.pseudoIPD$meany1bystudy <- ave(data.pseudoIPD$y1, data.pseudoIPD$study)
-        data.pseudoIPD$y1center      <- data.pseudoIPD$y1 - data.pseudoIPD$meany1bystudy
-        data.pseudoIPD$groupcenter   <- data.pseudoIPD$group - 0.5
-        data.pseudoIPD$arm           <- 1000*data.pseudoIPD$study + data.pseudoIPD$group
-        
+    DT::datatable({
+      
+      if (is.null(pseudoIPD())){return(NULL)}
+      pseudoIPD()
+      df3 <- pseudoIPD()
         
         ctrl <- lmeControl(opt="optim", msMaxIter=100)
         # arm and study specific variances estimated  
-        FRstudyarm    <- lme(fixed=y2 ~ y1center + group + as.factor(study) + y1center*as.factor(study), random= ~ -1 + groupcenter|study,
-                             weights =varIdent(form=~study|arm), control=ctrl,
-                             data=data.pseudoIPD, method='REML')
+        FRstudyarm <- lme(fixed=y2 ~ y1center + group + as.factor(study) + y1center*as.factor(study), random= ~ -1 + groupcenter|study,
+                             weights =varIdent(form=~study|arm), control=ctrl, data=df3, method='REML')
         
         # study-specific variance estimates 
-        FRstudy       <-  lme(fixed=y2 ~ y1center+ group + as.factor(study) + y1center*as.factor(study) , random= ~ -1 + groupcenter|study,
-                              weights =varIdent(form=~1|study), control=ctrl, data=data.pseudoIPD, method='REML')
+        FRstudy    <-  lme(fixed=y2 ~ y1center+ group + as.factor(study) + y1center*as.factor(study) , random= ~ -1 + groupcenter|study,
+                              weights =varIdent(form=~1|study), control=ctrl, data=df3, method='REML')
         
         summary(FRstudy)$tTable["group",1]
         
         # gruop specific variance estimated 
-        FRgroup      <-   lme(fixed=y2 ~ y1center + group+ as.factor(study) + y1center*as.factor(study) , random= ~ -1 + groupcenter|study,
-                              weights =varIdent(form=~1|group), control=ctrl, data=data.pseudoIPD, method='REML')
+        FRgroup    <-   lme(fixed=y2 ~ y1center + group+ as.factor(study) + y1center*as.factor(study) , random= ~ -1 + groupcenter|study,
+                              weights =varIdent(form=~1|group), control=ctrl, data=df3, method='REML')
         
         #one residual variance estimated
-        FRone        <-   lme(fixed=y2 ~ y1center + group + as.factor(study) + y1center*as.factor(study) , random= ~-1 + groupcenter|study,
-                              control=ctrl, data=data.pseudoIPD, method='REML')
+        FRone      <-   lme(fixed=y2 ~ y1center + group + as.factor(study) + y1center*as.factor(study) , random= ~-1 + groupcenter|study,
+                              control=ctrl, data=df3, method='REML')
         
         
         arm_study_specific <- round(summary(FRstudyarm)$tTable["group",1], 3) 
@@ -794,115 +861,45 @@ shinyServer(function(input, output, session) {
       
       extensions = c("Buttons", "Scroller"),
       
-      options = list(
-        paging = TRUE,
-        searching = TRUE,
+  options = list(
+        paging =       TRUE,
+        searching =    TRUE,
         fixedColumns = TRUE,
-        autoWidth = TRUE,
-        ordering = TRUE,
+        autoWidth =    TRUE,
+        ordering =     TRUE,
         dom = 'tB',
         buttons = c('copy', 'pdf', 'print')
       ),
       class="display"
-    ))
+    )
+  )
   
-  #})
   
   # Output one-stage pseudo IPD main effect--------------------------------------------------------------------------------------------------------------------------
   
   output$oneINT <- DT::renderDataTable(
     DT::datatable(
       {
-        #renderPrint({
-        if (is.null(analysis_data())){return(NULL)}
-        analysis_data()
-        df2 <- analysis_data()
-        # Generate the pseudo baselines and outcomes
-        data.IPD <- data.frame(study         = rep(df2$ID, df2$NCFB),
-                               group         = rep(df2$group, df2$NCFB),
-                               meanBaseline  = rep(df2$MeanBaseline, df2$NCFB),
-                               sdBaseline    = rep(df2$sdBaseline, df2$NCFB),
-                               meanPost      = rep(df2$MeanFU, df2$NCFB),
-                               sdPost        = rep(df2$sdFU, df2$NCFB),
-                               correlation   = rep(df2$Correlation,df2$NCFB))
-        
-        set.seed(123456)
-        data.IPD$ytmp1 <- rnorm(nrow(data.IPD),0,1)
-        set.seed(7891011)
-        data.IPD$ytmp2 <- rnorm(nrow(data.IPD),0,1)
-        
-        # Standardize ytmp1 and ytmp2, calculate correlation between ytmp1 and ytmp2, 
-        # and the residuals of regressing ytmp2 on ytmp1
-        # per study and group
-        
-        data.IPD2 <- NULL
-        for(study in unique(data.IPD$study))
-        {   for (group in unique(data.IPD$group))
-        { datatmp     <- data.IPD[data.IPD$study==study & data.IPD$group==group,]
-        # standardized y1tmp
-        datatmp$ytmp1 <- (datatmp$ytmp1-mean(datatmp$ytmp1))/sd(datatmp$ytmp1)
-        # standardized y2tmp
-        datatmp$ytmp2 <- (datatmp$ytmp2-mean(datatmp$ytmp2))/sd(datatmp$ytmp2)
-        # correlation between y1tmp and y2tmp
-        cor.ytmp      <- cor(datatmp$ytmp1, datatmp$ytmp2)
-        # residuals of regression of ytmp2 on ytmp1
-        resid         <- residuals(lm(ytmp2 ~ ytmp1 - 1 , data = datatmp))
-        Resid <- datatmp$ytmp2 - cor.ytmp*datatmp$ytmp1
-        # coefficient beta of regression of ytmp2 on ytmp1
-        #coef          <- coef(lm(ytmp2 ~ ytmp1 - 1 , data = datatmp))
-        data.IPD2     <- rbind( data.IPD2, data.frame(datatmp,cor.ytmp,resid,Resid))
-        }  
-        } 
-        
-        # temporary variable needed to generate the pseudo baseline and pseudo follow-up outcomes
-        data.IPD2$ytmp3 <- data.IPD2$ytmp1*data.IPD2$correlation + sqrt(1-data.IPD2$correlation^2)*data.IPD2$resid/sqrt(1-data.IPD2$cor.ytmp^2)
-        # generate pseudo baseline and pseudo follow-up outcomes
-        data.IPD2$y1    <- data.IPD2$ytmp1*data.IPD2$sdBaseline + data.IPD2$meanBaseline
-        data.IPD2$y2    <- data.IPD2$ytmp3*data.IPD2$sdPost + data.IPD2$meanPost
-        
-        # make new dataset, with only relevant variables
-        data.pseudoIPD <- data.IPD2[,c("study", "group", "y1", "y2")]
-        #View(data.pseudoIPD) # final pseudo IPD dataset 
-        rm(data.IPD2,data.IPD)
-        
-        # Check the mean and sd of y1 and y2, and correlation y1, y2
-        check <-cbind(aggregate(y1~group+study, data=data.pseudoIPD, mean), 
-                      aggregate(y2~group+study, data=data.pseudoIPD, mean)[3],
-                      aggregate(y1~group+study, data=data.pseudoIPD, sd)[3],
-                      aggregate(y2~group+study, data=data.pseudoIPD, sd)[3],
-                      as.vector(cbind(by(data.pseudoIPD, data.pseudoIPD[,c("group","study")], function(x) {cor(x$y1,x$y2)}))))
-        
-        colnames(check)<- c(colnames(check)[1:2], "meany1", "meany2","sdy1", "sdy2","cory1y2")
-        check
-        rm(check)
-        
-        # Pre-step to calculate centered baseline values by study
-        data.pseudoIPD$meany1bystudy <- ave(data.pseudoIPD$y1, data.pseudoIPD$study)
-        data.pseudoIPD$y1center      <- data.pseudoIPD$y1 - data.pseudoIPD$meany1bystudy
-        data.pseudoIPD$groupcenter   <- data.pseudoIPD$group - 0.5
-        data.pseudoIPD$arm           <- 1000*data.pseudoIPD$study + data.pseudoIPD$group
-        
+        if (is.null(pseudoIPD())){return(NULL)}
+        pseudoIPD()
+        df3 <- pseudoIPD()
         
         ctrl <- lmeControl(opt="optim", msMaxIter=100)
         # arm and study specific variances estimated  
-        FRstudyarmInt <- lme(fixed=y2 ~ y1center*as.factor(study) + y1center*group + group:meany1bystudy, random= ~ -1 + groupcenter|study,
-                             weights =varIdent(form=~study|arm), control=ctrl,
-                             data=data.pseudoIPD, method='REML')
+        FRstudyarmInt <-lme(fixed=y2 ~ y1center*as.factor(study) + y1center*group + group:meany1bystudy, random= ~ -1 + groupcenter|study,
+                             weights =varIdent(form=~study|arm), control=ctrl, data=df3, method='REML')
         
         # study-specific variance estimates 
-        FRstudyInt   <-   lme(fixed=y2 ~ y1center*as.factor(study) + y1center*group + group:meany1bystudy, random= ~ -1 + groupcenter|study,
-                              weights =varIdent(form=~1|study), control=ctrl,
-                              data=data.pseudoIPD, method='REML')
+        FRstudyInt   <- lme(fixed=y2 ~ y1center*as.factor(study) + y1center*group + group:meany1bystudy, random= ~ -1 + groupcenter|study,
+                              weights =varIdent(form=~1|study), control=ctrl, data=df3, method='REML')
         
         
         # gruop specific variance estimated 
-        FRgroupInt   <-   lme(fixed=y2 ~ y1center*as.factor(study) + y1center*group + group:meany1bystudy, random= ~ -1 + groupcenter|study,
-                              weights =varIdent(form=~1|group), control=ctrl,
-                              data=data.pseudoIPD, method='REML')
+        FRgroupInt   <- lme(fixed=y2 ~ y1center*as.factor(study) + y1center*group + group:meany1bystudy, random= ~ -1 + groupcenter|study,
+                              weights =varIdent(form=~1|group), control=ctrl, data=df3, method='REML')
         
         #one residual variance estimated
-        FRoneInt     <-   lme(fixed=y2 ~ y1center*as.factor(study) + y1center*group + group:meany1bystudy , random= ~ -1 + groupcenter|study,
-                              control=ctrl,data=data.pseudoIPD, method='REML')
+        FRoneInt     <- lme(fixed=y2 ~ y1center*as.factor(study) + y1center*group + group:meany1bystudy , random= ~ -1 + groupcenter|study, control=ctrl, data=df3, method='REML')
         
         
         arm_study_specificINT <- round(summary(FRstudyarmInt)$tTable["y1center:group",1], 3) 
