@@ -1177,7 +1177,7 @@ shinyServer(function(input, output, session) {
         png(file)
       if(input$format == "pdf")
         pdf(file)
-      print(fforest_twostageME.int())
+      print(forest_twostageME.int())
       dev.off()
     }
   )
