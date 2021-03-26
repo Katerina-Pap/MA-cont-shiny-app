@@ -335,7 +335,7 @@ shinyServer(function(input, output, session) {
   re.final()
   })
   
-  # Forest plots for FE and RE 
+  # Forest plots for FE and RE - final scores 
   forest.final <- function(){
     
     if (input$type == "ce") {
@@ -355,7 +355,7 @@ shinyServer(function(input, output, session) {
   }
     
     output$final.forest <- renderPlot({
-        withProgress(message = 'Rendering', detail = 'Forest plot - CE model', value = 0, {
+        withProgress(message = 'Rendering', detail = 'Forest plot', value = 0, {
           for (i in 1:5) {
             incProgress(1/5)
             Sys.sleep(0.05)
@@ -376,27 +376,27 @@ shinyServer(function(input, output, session) {
       }
     )  
     
-    # Funnel plots for FE and RE 
+    # Funnel plots for FE and RE  - final scores 
     funnel.final <- function(){
       
       if (input$type == "ce") {
         
         MA.fixed.final <- final.FE()$MA.fixed.final
         
-        funnel(MA.fixed.final, main="Standard Error")
+        funnel(MA.fixed.final, main="Standard Error", level=c(90, 95, 99), shade=c("white", "gray55", "gray75"), legend=TRUE, back="cadetblue")
       }
       
       else if (input$type == "re") {
         
         MA.random.final <- final.RE()$MA.random.final
         
-        funnel(MA.random.final, main="Standard Error")
+        funnel(MA.random.final, main="Standard Error", level=c(90, 95, 99), shade=c("white", "gray55", "gray75"), legend=TRUE, back="cadetblue")
       }
       
     }
     
     output$final.funnel <- renderPlot({
-      withProgress(message = 'Rendering', detail = 'Forest plot - CE model', value = 0, {
+      withProgress(message = 'Rendering', detail = 'Funnel plot', value = 0, {
         for (i in 1:5) {
           incProgress(1/5)
           Sys.sleep(0.05)
@@ -501,7 +501,7 @@ shinyServer(function(input, output, session) {
   })
   
   
-  # Forest plots for FE and RE 
+  # Forest plots for FE and RE - change scores 
   forest.change <- function(){
     
     if (input$type == "ce") {
@@ -522,7 +522,7 @@ shinyServer(function(input, output, session) {
   
   output$change.forest <- renderPlot(
     {
-      withProgress(message = 'Rendering', detail = 'Forest plot - CE model', value = 0, {
+      withProgress(message = 'Rendering', detail = 'Forest plot', value = 0, {
         for (i in 1:5) {
           incProgress(1/5)
           Sys.sleep(0.05)
@@ -542,6 +542,48 @@ shinyServer(function(input, output, session) {
       dev.off()
     }
   )  
+  
+  # Funnel plots for FE and RE - change scores 
+  funnel.change<- function(){
+    
+    if (input$type == "ce") {
+      
+      MA.fixed.change <- change.FE()$MA.fixed.change
+      
+      funnel(MA.fixed.change, main="Standard Error", level=c(90, 95, 99), shade=c("white", "gray55", "gray75"), legend=TRUE, back="cadetblue")
+    }
+    
+    else if (input$type == "re") {
+      
+      MA.random.change <- change.RE()$MA.random.change
+      
+      funnel(MA.random.change, main="Standard Error", level=c(90, 95, 99), shade=c("white", "gray55", "gray75"), legend=TRUE, back="cadetblue")
+    }
+    
+  }
+  
+  output$change.funnel <- renderPlot({
+    withProgress(message = 'Rendering', detail = 'Funnel plot', value = 0, {
+      for (i in 1:5) {
+        incProgress(1/5)
+        Sys.sleep(0.05)
+      }
+    })
+    print(funnel.change())
+  })
+  
+  
+  output$downloadchangeFunnel <- downloadHandler(
+    filename = function() {
+      paste('change.funnel', Sys.Date(), '.pdf', sep='')
+    },
+    content = function(FILE=NULL) {
+      pdf(file=FILE)
+      print(funnel.change())
+      dev.off()
+    }
+  )  
+  
   
   
   # Output recovered ANCOVA approach -------------------------------------------------------------------------------------------------------------------------------
@@ -702,7 +744,51 @@ shinyServer(function(input, output, session) {
       print(forest.ancova())
       dev.off()
     }
-  )  
+  ) 
+  
+  
+  # Funnel plots for FE and RE - ANCOVA reconstructed  
+  funnel.ancova<- function(){
+    
+    if (input$type == "ce") {
+      
+      MA.fixed.ANCOVA <- ancova.FE()$MA.fixed.ANCOVA
+      
+      funnel(MA.fixed.ANCOVA, main="Standard Error", level=c(90, 95, 99), shade=c("white", "gray55", "gray75"), legend=TRUE, back="cadetblue")
+    }
+    
+    else if (input$type == "re") {
+      
+      MA.random.ANCOVA <- ancova.RE()$MA.random.ANCOVA
+      
+      funnel(MA.random.ANCOVA, main="Standard Error", level=c(90, 95, 99), shade=c("white", "gray55", "gray75"), legend=TRUE, back="cadetblue")
+    }
+    
+  }
+
+  output$ancova.funnel <- renderPlot({
+    withProgress(message = 'Rendering', detail = 'Funnel plot', value = 0, {
+      for (i in 1:5) {
+        incProgress(1/5)
+        Sys.sleep(0.05)
+      }
+    })
+    print(funnel.ancova())
+  })
+  
+
+
+  output$downloadANCOVAFunnel <- downloadHandler(
+    filename = function() {
+      paste('ancova.funnel', Sys.Date(), '.pdf', sep='')
+    },
+    content = function(FILE=NULL) {
+      pdf(file=FILE)
+      print(funnel.ancova())
+      dev.off()
+    }
+  )
+
   
 
   # Print window of standard AD results -----------------------------------------------------------------------------------------------------------------------------
@@ -1039,7 +1125,7 @@ shinyServer(function(input, output, session) {
   })
   
 
-  # Forestplots of two stage approach for the main effect ------------------
+  # Funnel plot of two stage approach for the main effect ------------------
   
   forest_twostageME = function(){
     
@@ -1085,6 +1171,51 @@ shinyServer(function(input, output, session) {
     }
   )
   
+  # Forest plot of two stage approach for the main effect ------------------
+  
+  forest_twostageME = function(){
+    
+    if (input$type == "ce") {
+      MA_twostageME <- twostage_ME.FE()$MA_twostageME
+      forest(MA_twostageME)
+      
+    }
+    
+    if (input$type == "re") {
+      
+      MA_twostageMEre <- twostage_ME.RE()$MA_twostageMEre
+      forest(MA_twostageMEre)
+      
+    }
+  }
+  
+  output$forest_twoME<- renderPlot(
+    {
+      withProgress(message = 'Rendering', detail = 'Forest plot - Two-stage analysis', value = 0, {
+        for (i in 1:2) {
+          incProgress(1/2)
+          Sys.sleep(0.05)
+        }
+      })
+      
+      forest_twostageME()
+      
+    }) 
+  
+  
+  output$downloadPlot <- downloadHandler(
+    filename = function() {
+      paste("Twostage_main.effect", Sys.Date(), sep='')
+    },
+    content = function(file){
+      if(input$format == "png")
+        png(file)
+      if(input$format == "pdf")
+        pdf(file)
+      print(forest_twostageME())
+      dev.off()
+    }
+  )
   #---------------------------------------------------------------------------------------------------------------------------------------------------------------
   # Output two-stage pseudo IPD interaction effect 
   

@@ -71,7 +71,7 @@ shinyUI(
                    ),
                    mainPanel(
                      fluidRow(
-                       column(width = 6, align="left", h3(strong("Getting started"))),
+                       column(width = 6, align="left", h3(strong("Getting started")) ),
                        column(
                          width = 6,
                          align = "right",
@@ -203,13 +203,11 @@ shinyUI(
     # Tab 2: Data upload with -----------------------------------------------------------------------------
     tabPanel("Meta-Analysis", icon = icon("bar-chart-o"),
              
-             #tabsetPanel(type = "tabs",
                          tabPanel("",
                                   fluidPage(
                                     sidebarLayout(
                                       sidebarPanel(
                                         h2("Perform meta-analysis of pre/post effect size"),
-                                        #h3("Effect size: Mean difference"),
                                         prettyRadioButtons(inputId = "es",  icon=icon("check"), # input is effect size - for now only MD, extension to SMD possible
                                                            h3('Select the effect size:'),
                                                            choices =   c('Mean difference'),
@@ -256,13 +254,16 @@ shinyUI(
                                                                verbatimTextOutput('final_re.out'),
                                                                br(),
                                                                
+                                                               fluidRow(
+                                                               column(width=6, align="left",
                                                                h3("Forest plot"),
                                                                downloadButton('downloadfinalForest', 'Download the plot as pdf'),
-                                                               plotOutput("final.forest",  height = "550px", width = "600px"),
+                                                               plotOutput("final.forest",  height = "550px", width = "600px")),
+                                                               column(width=6,
                                                                h3("Funnel plot"),
                                                                downloadButton('downloadfinalFunnel', 'Download the plot as pdf'),
-                                                               plotOutput("final.funnel",  height = "550px", width = "600px"),
-
+                                                               plotOutput("final.funnel",  height = "550px", width = "600px")),
+                                                               )
 
                                                                ),
 
@@ -272,22 +273,37 @@ shinyUI(
                                                                verbatimTextOutput('change_fe.out'),
                                                                verbatimTextOutput('change_re.out'),
                                                                br(),
-                                                               h3("Forest plot"),
-                                                               downloadButton('downloadchangeForest', 'Download the plot as pdf'),
-                                                               plotOutput("change.forest",  height = "550px", width = "600px"),
+                                                               
+                                                               fluidRow(
+                                                               column(width=6, align="left", 
+                                                                         h3("Forest plot"),
+                                                                         downloadButton('downloadchangeForest', 'Download the plot as pdf'),
+                                                                         plotOutput("change.forest",  height = "550px", width = "600px") ),
+                                                               column(width=6, 
+                                                                         h3("Funnel plot"),
+                                                                         downloadButton('downloadchangeFunnel', 'Download the plot as pdf'),
+                                                                         plotOutput("change.funnel",  height = "550px", width = "600px") ),
+                                                               )
                                                                
                                                                ),
                                                       
                                                       tabPanel("ANCOVA Recovered effect estimates",
                                                                h2("Results"),
-                                                               #verbatimTextOutput("ancova"),
                                                                verbatimTextOutput('ancova_fe.out'),
                                                                verbatimTextOutput('ancova_re.out'),
                                                                br(),
-                                                               h3("Forest plot"),
-                                                               downloadButton('downloadANCOVAForest', 'Download the plot as pdf'),
-                                                               plotOutput("ancova.forest",  height = "550px", width = "600px"),
-
+                                                               fluidRow(
+                                                               column(width=6, align="left",
+                                                                        h3("Forest plot"),
+                                                                        downloadButton('downloadANCOVAForest', 'Download the plot as pdf'),
+                                                                        plotOutput("ancova.forest",  height = "550px", width = "600px") ),
+                                                               column(width=6, 
+                                                                       h3("Funnelplot"), 
+                                                                       downloadButton('downloadANCOVAFunnel', 'Download the plot as pdf'),
+                                                                       plotOutput("ancova.funnel", height = "550px", width = "600px")
+                                                                     )
+                                                               
+                                                                     )
                                                                ) 
                                                      
                                                      ),
