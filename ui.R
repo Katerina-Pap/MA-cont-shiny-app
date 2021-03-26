@@ -385,15 +385,25 @@ shinyUI(
                                                               
                                                               verbatimTextOutput("twostageME_FE.out"),
                                                               verbatimTextOutput("twostageME_RE.out"),
-                                                              h3("Forest plot"),
-
-                                                              selectInput("format","Choose file format",
+                                                              br(), 
+                                                              
+                                                              fluidRow(
+                                                                column(width=6, align="left",
+                                                                       h3("Forest plot"),
+                                                                       selectInput("format","Choose file format",
                                                                            choices = list("pdf","png")),
-                                                              downloadButton("downloadPlot","Download Here"),
+                                                                       downloadButton("downloadPlot","Download Here"),
                                                               #downloadButton('downloadANCOVAForest', 'Download the plot as pdf'),
-                                                              plotOutput("forest_twoME",  height = "550px", width = "600px")
+                                                                       plotOutput("forest_twoME",  height = "550px", width = "600px") ),
+                                                                column(width=6, 
+                                                                       h3("Funnel plot"),
+                                                                       selectInput("format","Choose file format",
+                                                                                   choices = list("pdf","png")),
+                                                                       downloadButton("downloadFunnel","Download Here"),
+                                                                       plotOutput("funnel_twoME",  height = "550px", width = "600px")
+                                                                       )
                                                               
-                                                              
+                                                              )
                                                               ),
                                                      
                                                      tabPanel("Treatment-by-baseline interaction effect",
