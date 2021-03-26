@@ -1313,7 +1313,8 @@ shinyServer(function(input, output, session) {
   })
   
   
-  # Forestplots of two stage approach for the main effect ------------------
+ 
+  # Forest plot of two stage approach for the interaction effect ------------------
   
   forest_twostageME.int = function(){
     
@@ -1355,6 +1356,50 @@ shinyServer(function(input, output, session) {
       dev.off()
     }
   )
+  
+  # Funnel plot of two stage approach for the interaction effect ------------------
+  
+  funnel_twostageME.int = function(){
+    
+    if (input$type == "ce") {
+      MA_int <- twostage_ME.FEint()$MA_int 
+      funnel(MA_int, main="Standard Error", level=c(90, 95, 99), shade=c("white", "gray55", "gray75"), legend=TRUE, back="cadetblue")
+    }
+    
+    if (input$type == "re") {
+      MA_int.re <- twostage_ME.REint()$MA_int.re
+      funnel(MA_int.re, main="Standard Error", level=c(90, 95, 99), shade=c("white", "gray55", "gray75"), legend=TRUE, back="cadetblue")
+    }
+  }
+  
+  output$funnel_twoMEint<- renderPlot(
+    {
+      withProgress(message = 'Rendering', detail = 'Forest plot - Two-stage interaction', value = 0, {
+        for (i in 1:2) {
+          incProgress(1/2)
+          Sys.sleep(0.05)
+        }
+      })
+      
+      funnel_twostageME.int()
+      
+    }) 
+  
+  
+  output$downloadFunnelInt <- downloadHandler(
+    filename = function() {
+      paste("Twostage_Funnel", Sys.Date(), sep='')
+    },
+    content = function(file){
+      if(input$format == "png")
+        png(file)
+      if(input$format == "pdf")
+        pdf(file)
+      print(funnel_twostageME.int())
+      dev.off()
+    }
+  )
+  
   
   
   

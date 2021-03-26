@@ -410,13 +410,25 @@ shinyUI(
                                                               h3('Results'),
                                                               verbatimTextOutput("twostageME_FEint.out"),
                                                               verbatimTextOutput("twostageME_REint.out"),
-                                                              h3('Forest plot'),
-                                                              selectInput("format","Choose file format",
-                                                                          choices = list("pdf","png")),
-                                                              downloadButton("downloadPlotInt","Download Here"),
-                                                              #downloadButton('downloadANCOVAForest', 'Download the plot as pdf'),
-                                                              plotOutput("forest_twoMEint",  height = "550px", width = "600px")
+                                                              br(),
                                                               
+                                                              fluidRow(
+                                                                column(width=6, align="left",
+                                                                      h3('Forest plot'),
+                                                                      selectInput("format","Choose file format",
+                                                                          choices = list("pdf","png")),
+                                                                      downloadButton("downloadPlotInt","Download Here"),
+                                                              #downloadButton('downloadANCOVAForest', 'Download the plot as pdf'),
+                                                                      plotOutput("forest_twoMEint",  height = "550px", width = "600px") ),
+                                                                column(width=6,
+                                                                       h3("Funnel plot"),
+                                                                       selectInput("format","Choose file format",
+                                                                                   choices = list("pdf","png")),
+                                                                       downloadButton("downloadFunnelInt","Download Here"),
+                                                                       plotOutput("funnel_twoMEint",  height = "550px", width = "600px")
+                                                                )
+                                                              
+                                                              )
                                                               ) 
                                                      
                                                    ),
