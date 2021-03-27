@@ -258,7 +258,7 @@ shinyUI(
                                                                
                                                                fluidRow(
                                                                column(width=6, align="left",
-                                                               h3("Forest plot"),
+                                                               h3("Forestplot"),
                                                                downloadButton('downloadfinalForest', 'Download the plot as pdf'),
                                                                plotOutput("final.forest",  height = "550px", width = "600px")),
                                                                column(width=6,
