@@ -64,9 +64,11 @@ shinyUI(
                      p(
                        "Log an issue on",
                        a(href = "https://github.com/Katerina-Pap/MA-cont-pre-post-ES-shiny-app/issues", "GitHub")
-                     )
-                    #,
-                     #width = 4
+                     ),
+                    
+                    br(),
+                    h4(textOutput("counter")) # to include number of users 
+                  
                      
                    ),
                    mainPanel(
