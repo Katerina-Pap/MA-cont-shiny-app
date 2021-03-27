@@ -300,7 +300,7 @@ shinyUI(
                                                                         downloadButton('downloadANCOVAForest', 'Download the plot as pdf'),
                                                                         plotOutput("ancova.forest",  height = "550px", width = "600px") ),
                                                                column(width=6, 
-                                                                       h3("Funnelplot"), 
+                                                                       h3("Funnel plot"), 
                                                                        downloadButton('downloadANCOVAFunnel', 'Download the plot as pdf'),
                                                                        plotOutput("ancova.funnel", height = "550px", width = "600px")
                                                                      )
