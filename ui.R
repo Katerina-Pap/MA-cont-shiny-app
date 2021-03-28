@@ -215,7 +215,7 @@ shinyUI(
                                                            choices =   c('Mean difference'),
                                                            selected = "Mean difference"),
                                         
-                                        #p("The goal ...."),
+                                       
                                         
                                         radioButtons("type", h3("Select the MA model:"),
                                                      list("Random-effects (RE)" = "re",
