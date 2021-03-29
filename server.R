@@ -43,7 +43,7 @@ shinyServer(function(input, output, session) {
   # Load default data 
   
   defaultDat <- reactive({
-    defaultDat <- read.csv("./www/example.csv", sep=";"
+    defaultDat <- read.csv("./www/example.csv", sep=";")
     
   })
   
