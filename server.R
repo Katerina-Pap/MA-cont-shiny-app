@@ -113,7 +113,7 @@ shinyServer(function(input, output, session) {
     req(df_upload())
     Dataset <- df_upload() # Renaming the data set to appear better in the table
     skim(Dataset)
-    #summary(Dataset)
+    
   })
   
   
