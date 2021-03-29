@@ -1,5 +1,5 @@
 library(shiny)
-nvisitors = reactiveVal(0
+nvisitors = reactiveVal(0)
 
 # Function to format output of analysis ------------------------------------------------------------------------------------------------------------------------
 format.list <- function (l) {
@@ -270,7 +270,7 @@ shinyServer(function(input, output, session) {
       df <- analysis_data()
       # change to wide format
       drop         <- which(colnames(df) %in% "Study")
-      df           <-  df[,-drop]
+      df           <- df[,-drop]
       data.AD_wide <- dcast(melt(df, id.vars=c("ID", "group")), ID~variable+group)
       
       MA.fixed.final <- rma(m1i=MeanFU_1, m2i=MeanFU_0, sd1i=sdFU_1, sd2i=sdFU_0, n1i=NCFB_1, n2i=NCFB_0, data=data.AD_wide, measure="MD", method="FE")
@@ -308,12 +308,12 @@ shinyServer(function(input, output, session) {
       df <- analysis_data()
       # change to wide format 
       drop         <- which(colnames(df) %in% "Study")
-      df          <-  df[,-drop]
+      df           <-  df[,-drop]
       data.AD_wide <- dcast(melt(df, id.vars=c("ID", "group")), ID~variable+group)
       
       MA.random.final <- rma(m1i=MeanFU_1, m2i=MeanFU_0, sd1i=sdFU_1, sd2i=sdFU_0, n1i=NCFB_1, n2i=NCFB_0, data=data.AD_wide, measure="MD", method="REML", knha=input$HK)
       list(MA.random.final = MA.random.final) 
-      # MA.random.final
+      
       
     }
     

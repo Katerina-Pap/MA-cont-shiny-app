@@ -1,4 +1,4 @@
-﻿ID;Study;MeanBaseline;sdBaseline;seBaseline;MeanFU;sdFU;seFU;Correlation;MeanCFB;sdCFB;seCFB;NCFB;group
+ID;Study;MeanBaseline;sdBaseline;seBaseline;MeanFU;sdFU;seFU;Correlation;MeanCFB;sdCFB;seCFB;NCFB;group
 1;Chee;56.1;8.9;;;9.4;;;0.3;;0.27;91;1
 2;Jensen;94.6;;2.8;89;;2.6;;;;;24;1
 3;Lau;56.9;7.1;;;;;;0.52;;0.27;95;1
