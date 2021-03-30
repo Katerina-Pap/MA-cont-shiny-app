@@ -1316,7 +1316,7 @@ shinyServer(function(input, output, session) {
   
   
   
-  # Forest plot of two stage approach for the interaction effect ------------------
+  # Forest plot of two stage approach for the interaction effect -----------------
   
   forest_twostageME.int = function(){
     
