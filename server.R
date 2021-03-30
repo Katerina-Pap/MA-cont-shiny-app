@@ -174,7 +174,7 @@ shinyServer(function(input, output, session) {
     if(is.null(df3()))
     {return(NULL)}
     df3()
-    #coalsce(df3(),df1())
+    
   })
   
   
