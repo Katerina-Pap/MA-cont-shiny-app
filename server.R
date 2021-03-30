@@ -191,7 +191,7 @@ shinyServer(function(input, output, session) {
     if(is.null(df4()))
     {return(NULL)}
     df4()
-    #coalsce(df4(),df1())
+    
   })
   
   # Dataset 5: Make final calculations --------------------------------------------------------------------------------------------------------------------------
