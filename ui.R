@@ -260,11 +260,11 @@ shinyUI(
                                                                column(width=6, align="left",
                                                                h3("Forest plot"),
                                                                downloadButton('downloadfinalForest', 'Download the plot as pdf'),
-                                                               plotOutput("final.forest",  height = "550px", width = "600px")),
+                                                               plotOutput("final.forest",  height = "550px", width = "550px")),
                                                                column(width=6,
                                                                h3("Funnel plot"),
                                                                downloadButton('downloadfinalFunnel', 'Download the plot as pdf'),
-                                                               plotOutput("final.funnel",  height = "550px", width = "600px")),
+                                                               plotOutput("final.funnel",  height = "550px", width = "550px")),
                                                                )
 
                                                                ),
@@ -280,11 +280,11 @@ shinyUI(
                                                                column(width=6, align="left", 
                                                                          h3("Forest plot"),
                                                                          downloadButton('downloadchangeForest', 'Download the plot as pdf'),
-                                                                         plotOutput("change.forest",  height = "550px", width = "600px") ),
+                                                                         plotOutput("change.forest",  height = "550px", width = "550px") ),
                                                                column(width=6, 
                                                                          h3("Funnel plot"),
                                                                          downloadButton('downloadchangeFunnel', 'Download the plot as pdf'),
-                                                                         plotOutput("change.funnel",  height = "550px", width = "600px") ),
+                                                                         plotOutput("change.funnel",  height = "550px", width = "550px") ),
                                                                )
                                                                
                                                                ),
@@ -298,11 +298,11 @@ shinyUI(
                                                                column(width=6, align="left",
                                                                         h3("Forest plot"),
                                                                         downloadButton('downloadANCOVAForest', 'Download the plot as pdf'),
-                                                                        plotOutput("ancova.forest",  height = "550px", width = "600px") ),
+                                                                        plotOutput("ancova.forest",  height = "550px", width = "550px") ),
                                                                column(width=6, 
                                                                        h3("Funnel plot"), 
                                                                        downloadButton('downloadANCOVAFunnel', 'Download the plot as pdf'),
-                                                                       plotOutput("ancova.funnel", height = "550px", width = "600px")
+                                                                       plotOutput("ancova.funnel", height = "550px", width = "550px")
                                                                      )
                                                                
                                                                      )
@@ -402,7 +402,7 @@ shinyUI(
                                                                        selectInput("format","Choose file format",
                                                                                    choices = list("pdf","png")),
                                                                        downloadButton("downloadFunnel","Download Here"),
-                                                                       plotOutput("funnel_twoME",  height = "550px", width = "600px")
+                                                                       plotOutput("funnel_twoME",  height = "550px", width = "550px")
                                                                        )
                                                               
                                                               )
@@ -421,13 +421,13 @@ shinyUI(
                                                                           choices = list("pdf","png")),
                                                                       downloadButton("downloadPlotInt","Download Here"),
                                                               #downloadButton('downloadANCOVAForest', 'Download the plot as pdf'),
-                                                                      plotOutput("forest_twoMEint",  height = "550px", width = "600px") ),
+                                                                      plotOutput("forest_twoMEint",  height = "550px", width = "550px") ),
                                                                 column(width=6,
                                                                        h3("Funnel plot"),
                                                                        selectInput("format","Choose file format",
                                                                                    choices = list("pdf","png")),
                                                                        downloadButton("downloadFunnelInt","Download Here"),
-                                                                       plotOutput("funnel_twoMEint",  height = "550px", width = "600px")
+                                                                       plotOutput("funnel_twoMEint",  height = "550px", width = "550px")
                                                                 )
                                                               
                                                               )
