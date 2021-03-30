@@ -175,7 +175,7 @@ shinyServer(function(input, output, session) {
     if(is.null(df3()))
     {return(NULL)}
     df3()
-    #coalsce(df3(),df1())
+    
   })
   
   
@@ -191,7 +191,7 @@ shinyServer(function(input, output, session) {
     if(is.null(df4()))
     {return(NULL)}
     df4()
-    #coalsce(df4(),df1())
+    
   })
   
   # Dataset 5: Make final calculations --------------------------------------------------------------------------------------------------------------------------
@@ -272,7 +272,7 @@ shinyServer(function(input, output, session) {
       df <- analysis_data()
       # change to wide format
       drop         <- which(colnames(df) %in% "Study")
-      df           <-  df[,-drop]
+      df           <- df[,-drop]
       data.AD_wide <- dcast(melt(df, id.vars=c("ID", "group")), ID~variable+group)
       
       MA.fixed.final <- rma(m1i=MeanFU_1, m2i=MeanFU_0, sd1i=sdFU_1, sd2i=sdFU_0, n1i=NCFB_1, n2i=NCFB_0, data=data.AD_wide, measure="MD", method="FE")
@@ -310,12 +310,12 @@ shinyServer(function(input, output, session) {
       df <- analysis_data()
       # change to wide format 
       drop         <- which(colnames(df) %in% "Study")
-      df          <-  df[,-drop]
+      df           <-  df[,-drop]
       data.AD_wide <- dcast(melt(df, id.vars=c("ID", "group")), ID~variable+group)
       
       MA.random.final <- rma(m1i=MeanFU_1, m2i=MeanFU_0, sd1i=sdFU_1, sd2i=sdFU_0, n1i=NCFB_1, n2i=NCFB_0, data=data.AD_wide, measure="MD", method="REML", knha=input$HK)
       list(MA.random.final = MA.random.final) 
-      # MA.random.final
+      
       
     }
     
