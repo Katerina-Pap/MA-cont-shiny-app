@@ -215,7 +215,7 @@ shinyUI(
                                                            choices =   c('Mean difference'),
                                                            selected = "Mean difference"),
                                         
-                                        #p("The goal ...."),
+                                       
                                         
                                         radioButtons("type", h3("Select the MA model:"),
                                                      list("Random-effects (RE)" = "re",
@@ -396,7 +396,7 @@ shinyUI(
                                                                            choices = list("pdf","png")),
                                                                        downloadButton("downloadPlot","Download Here"),
                                                               #downloadButton('downloadANCOVAForest', 'Download the plot as pdf'),
-                                                                       plotOutput("forest_twoME",  height = "550px", width = "600px") ),
+                                                                       plotOutput("forest_twoME",  height = "550px", width = "550px") ),
                                                                 column(width=6, 
                                                                        h3("Funnel plot"),
                                                                        selectInput("format","Choose file format",
