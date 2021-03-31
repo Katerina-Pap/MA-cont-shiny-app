@@ -1345,19 +1345,18 @@ shinyServer(function(input, output, session) {
     }) 
   
   
-  output$downloadPlotInt <- downloadHandler(
+  output$downloadForestInt <- downloadHandler(
     filename = function() {
-      paste("Twostage_interaction", Sys.Date(), sep='')
+      paste("Twostage_Forest", Sys.Date(), sep='', input$format_forestINT)
     },
     content = function(file){
-      if(input$format == "png")
-        png(file)
-      if(input$format == "pdf")
-        pdf(file)
+      if (input$format_forestINT=="PDF"){pdf(file=file)}
+      else {png(file=file)}
       print(forest_twostageME.int())
       dev.off()
     }
   )
+  
   
   # Funnel plot of two stage approach for the interaction effect ------------------
   
@@ -1376,7 +1375,7 @@ shinyServer(function(input, output, session) {
   
   output$funnel_twoMEint<- renderPlot(
     {
-      withProgress(message = 'Rendering', detail = 'Forest plot - Two-stage interaction', value = 0, {
+      withProgress(message = 'Rendering', detail = 'Funnel plot - Two-stage interaction', value = 0, {
         for (i in 1:10) {
           incProgress(1/10)
           Sys.sleep(0.05)
@@ -1412,7 +1411,7 @@ shinyServer(function(input, output, session) {
   #   }
   # )
   
-  
+ 
   
   
   
