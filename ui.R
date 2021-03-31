@@ -392,14 +392,14 @@ shinyUI(
                                                               fluidRow(
                                                                 column(width=6, align="left",
                                                                        h3("Forest plot"),
-                                                                       selectInput("format","Choose file format",
+                                                                       selectInput("format_forestME","Choose file format",
                                                                            choices = list("pdf","png")),
-                                                                       downloadButton("downloadPlot","Download Here"),
-                                                              #downloadButton('downloadANCOVAForest', 'Download the plot as pdf'),
+                                                                       downloadButton("downloadForest","Download Here"),
                                                                        plotOutput("forest_twoME",  height = "550px", width = "550px") ),
+                                                                
                                                                 column(width=6, 
                                                                        h3("Funnel plot"),
-                                                                       selectInput("format","Choose file format",
+                                                                       selectInput("format_funnelME","Choose file format",
                                                                                    choices = list("pdf","png")),
                                                                        downloadButton("downloadFunnel","Download Here"),
                                                                        plotOutput("funnel_twoME",  height = "550px", width = "550px")
@@ -418,14 +418,14 @@ shinyUI(
                                                                 column(width=6, align="left",
                                                                       h3('Forest plot'),
                                                                       selectInput("format_forestINT","Choose file format",
-                                                                          choices = list("pdf","png")),
+                                                                                    choices = list("pdf","png")),
                                                                       downloadButton("downloadForestInt","Download Here"),
                                                                       plotOutput("forest_twoMEint",  height = "550px", width = "550px") ),
                                                                 
                                                                 column(width=6,
                                                                        h3("Funnel plot"),
                                                                        selectInput("format_funnelINT","Choose file format",
-                                                                                   choices = list("pdf","png")),
+                                                                                    choices = list("pdf","png")),
                                                                        downloadButton("downloadFunnelInt","Download Here"),
                                                                        plotOutput("funnel_twoMEint",  height = "550px", width = "550px")
                                                                 )

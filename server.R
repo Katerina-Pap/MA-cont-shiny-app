@@ -1159,19 +1159,30 @@ shinyServer(function(input, output, session) {
     }) 
   
   
-  output$downloadPlot <- downloadHandler(
+  output$downloadForest <- downloadHandler(
     filename = function() {
-      paste("Twostage_main.effect", Sys.Date(), sep='')
+      paste("Twostage_ForestME", Sys.Date(), sep='', input$format_forestME)
     },
     content = function(file){
-      if(input$format == "png")
-        png(file)
-      if(input$format == "pdf")
-        pdf(file)
+      if (input$format_forestME=="pdf"){pdf(file=file)}
+      else {png(file=file)}
       print(forest_twostageME())
       dev.off()
     }
   )
+  
+  output$downloadFunnel<- downloadHandler(
+    filename = function() {
+      paste("Twostage_FunnelME", Sys.Date(), sep='', input$format_funnelME)
+    },
+    content = function(file){
+      if (input$format_funnelME=="pdf"){pdf(file=file)}
+      else {png(file=file)}
+      print(funnel_twostageME())
+      dev.off()
+    }
+  )
+  
   
   # Funnel plot of two stage approach for the main effect ------------------
   
@@ -1207,17 +1218,16 @@ shinyServer(function(input, output, session) {
   
   output$downloadFunnel<- downloadHandler(
     filename = function() {
-      paste("Funnel main.effect", Sys.Date(), sep='')
+      paste("Twostage_FunnelME", Sys.Date(), sep='', input$format_funnelME)
     },
     content = function(file){
-      if(input$format == "png")
-        png(file)
-      if(input$format == "pdf")
-        pdf(file)
+      if (input$format_funnelME=="pdf"){pdf(file=file)}
+      else {png(file=file)}
       print(funnel_twostageME())
       dev.off()
     }
   )
+  
   
   
   #---------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -1347,10 +1357,10 @@ shinyServer(function(input, output, session) {
   
   output$downloadForestInt <- downloadHandler(
     filename = function() {
-      paste("Twostage_Forest", Sys.Date(), sep='', input$format_forestINT)
+      paste("Twostage_ForestINT", Sys.Date(), sep='', input$format_forestINT)
     },
     content = function(file){
-      if (input$format_forestINT=="PDF"){pdf(file=file)}
+      if (input$format_forestINT=="pdf"){pdf(file=file)}
       else {png(file=file)}
       print(forest_twostageME.int())
       dev.off()
@@ -1388,33 +1398,16 @@ shinyServer(function(input, output, session) {
   
   output$downloadFunnelInt <- downloadHandler(
     filename = function() {
-      paste("Twostage_Funnel", Sys.Date(), sep='', input$format_funnelINT)
+      paste("Twostage_FunnelINT", Sys.Date(), sep='', input$format_funnelINT)
     },
     content = function(file){
-      if (input$format_funnelINT=="PDF"){pdf(file=file)}
+      if (input$format_funnelINT=="pdf"){pdf(file=file)}
       else {png(file=file)}
       print(funnel_twostageME.int())
       dev.off()
     }
   ) 
-  # output$downloadFunnelInt <- downloadHandler(
-  #   filename = function() {
-  #     paste("Twostage_Funnel", Sys.Date(), sep='')
-  #   },
-  #   content = function(file){
-  #     if(input$format == "png")
-  #       png(file)
-  #     if(input$format == "pdf")
-  #       pdf(file)
-  #     print(funnel_twostageME.int())
-  #     dev.off()
-  #   }
-  # )
-  
- 
-  
-  
-  
+
   
 }
 )
