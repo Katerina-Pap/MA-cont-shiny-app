@@ -334,6 +334,7 @@ shinyServer(function(input, output, session) {
   
   
   output$final_re.out<- renderPrint({
+    
     re.final()
   })
   
@@ -357,7 +358,7 @@ shinyServer(function(input, output, session) {
   }
   
   output$final.forest <- renderPlot({
-    withProgress(message = 'Rendering', detail = 'Forest plot', value = 0, {
+    withProgress(message = 'Rendering', detail = 'Forest plot-FS', value = 0, {
       for (i in 1:10) {
         incProgress(1/10)
         Sys.sleep(0.05)
@@ -398,7 +399,7 @@ shinyServer(function(input, output, session) {
   }
   
   output$final.funnel <- renderPlot({
-    withProgress(message = 'Rendering', detail = 'Funnel plot', value = 0, {
+    withProgress(message = 'Rendering', detail = 'Funnel plot-FS', value = 0, {
       for (i in 1:10) {
         incProgress(1/10)
         Sys.sleep(0.05)
@@ -524,7 +525,7 @@ shinyServer(function(input, output, session) {
   
   output$change.forest <- renderPlot(
     {
-      withProgress(message = 'Rendering', detail = 'Forest plot', value = 0, {
+      withProgress(message = 'Rendering', detail = 'Forest plot-CS', value = 0, {
         for (i in 1:10) {
           incProgress(1/10)
           Sys.sleep(0.05)
@@ -565,7 +566,7 @@ shinyServer(function(input, output, session) {
   }
   
   output$change.funnel <- renderPlot({
-    withProgress(message = 'Rendering', detail = 'Funnel plot', value = 0, {
+    withProgress(message = 'Rendering', detail = 'Funnel plot-CS', value = 0, {
       for (i in 1:10) {
         incProgress(1/10)
         Sys.sleep(0.05)
@@ -621,7 +622,7 @@ shinyServer(function(input, output, session) {
       
       ancova_est      <- with(data.AD_wide, (MeanFU_1-MeanFU_0)-ripooled*(sdpooledF/sdpooledB)*(MeanBaseline_1-MeanBaseline_0))
       
-      var_ancova_est  <- with(data.AD_wide, sdpooledF^2*(1/NCFB_1)+sdpooledF^2*(1/NCFB_0))*(1-ripooled^2) # for different sample sizes from McKenzie and from Senn
+      var_ancova_est  <- with(data.AD_wide, sdpooledF^2*(1/NCFB_1)+sdpooledF^2*(1/NCFB_0))*(1-ripooled^2)  # for different sample sizes from McKenzie and from Senn
       
       se_ancovas_est  <- with(data.AD_wide,sqrt(var_ancova_est))
       
@@ -727,7 +728,7 @@ shinyServer(function(input, output, session) {
   
   output$ancova.forest <- renderPlot(
     {
-      withProgress(message = 'Rendering', detail = 'Forest plot - CE model', value = 0, {
+      withProgress(message = 'Rendering', detail = 'Forest plot-ANCOVA', value = 0, {
         for (i in 1:10) {
           incProgress(1/10)
           Sys.sleep(0.05)
@@ -769,7 +770,7 @@ shinyServer(function(input, output, session) {
   }
   
   output$ancova.funnel <- renderPlot({
-    withProgress(message = 'Rendering', detail = 'Funnel plot', value = 0, {
+    withProgress(message = 'Rendering', detail = 'Funnel plot-ANCOVA', value = 0, {
       for (i in 1:10) {
         incProgress(1/10)
         Sys.sleep(0.05)
@@ -907,10 +908,10 @@ shinyServer(function(input, output, session) {
       # study-specific variance estimates 
       FRstudy    <- lme(fixed=y2 ~ y1center+ group + as.factor(study) + y1center*as.factor(study) , random= ~ -1 + groupcenter|study, weights =varIdent(form=~1|study), control=ctrl, data=df3, method='REML')
       
-      # gruop specific variance estimated 
+      # group specific variance estimated 
       FRgroup    <- lme(fixed=y2 ~ y1center + group+ as.factor(study) + y1center*as.factor(study) , random= ~ -1 + groupcenter|study, weights =varIdent(form=~1|group), control=ctrl, data=df3, method='REML')
       
-      #one residual variance estimated
+      # one residual variance estimated
       FRone      <- lme(fixed=y2 ~ y1center + group + as.factor(study) + y1center*as.factor(study) , random= ~-1 + groupcenter|study, control=ctrl, data=df3, method='REML')
       
       
@@ -979,10 +980,10 @@ shinyServer(function(input, output, session) {
       # study-specific variance estimates 
       FRstudyInt    <- lme(fixed=y2 ~ y1center*as.factor(study) + y1center*group + group:meany1bystudy, random= ~ -1 + groupcenter|study, weights =varIdent(form=~1|study), control=ctrl, data=df3, method='REML')
       
-      # gruop specific variance estimated 
+      # group specific variance estimated 
       FRgroupInt    <- lme(fixed=y2 ~ y1center*as.factor(study) + y1center*group + group:meany1bystudy, random= ~ -1 + groupcenter|study,  weights =varIdent(form=~1|group), control=ctrl, data=df3, method='REML')
       
-      #one residual variance estimated
+      # one residual variance estimated
       FRoneInt      <- lme(fixed=y2 ~ y1center*as.factor(study) + y1center*group + group:meany1bystudy , random= ~ -1 + groupcenter|study, control=ctrl, data=df3, method='REML')
       
       arm_study_specificINT <- round(summary(FRstudyarmInt)$tTable["y1center:group",1], 3) 
@@ -1145,9 +1146,9 @@ shinyServer(function(input, output, session) {
     }
   }
   
-  output$forest_twoME<- renderPlot(
-    {
-      withProgress(message = 'Rendering', detail = 'Forest plot - Two-stage analysis', value = 0, {
+  output$forest_twoME<- renderPlot({
+    
+      withProgress(message = 'Rendering', detail = 'Forest plot - Two-stage main effect', value = 0, {
         for (i in 1:10) {
           incProgress(1/10)
           Sys.sleep(0.05)
@@ -1204,7 +1205,7 @@ shinyServer(function(input, output, session) {
   
   output$funnel_twoME<- renderPlot(
     {
-      withProgress(message = 'Rendering', detail = 'Funnel plot - Two-stage analysis', value = 0, {
+      withProgress(message = 'Rendering', detail = 'Funnel plot - Two-stage main effect', value = 0, {
         for (i in 1:10) {
           incProgress(1/10)
           Sys.sleep(0.05)

@@ -11,7 +11,10 @@ More technical details on the model formulations is provided in the references a
 #### How to use the tool best?
 
 We encourage the user to watch the video of instructions under the [`Home`] tab, demonstrating the functionalities of this app. 
-Different methods of increasing complexity are applied and the output needs to be interpreted assuming a basic understanding of the models running in the backend. 
+Different methods of increasing complexity are applied and the output needs to be interpreted assuming a basic understanding of the models running in the backend. All code is freely available in a [Github](https://github.com/Katerina-Pap/MA-cont-shiny-app)
+
+
+
 
 
 
