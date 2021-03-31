@@ -610,7 +610,7 @@ shinyServer(function(input, output, session) {
       sdpooledB<- with(data.AD_wide, sqrt((((NCFB_1 - 1)*(sdBaseline_1^2)) + (NCFB_0 - 1)*(sdBaseline_0^2))/((NCFB_1+NCFB_0)-2)))
       sdpooledF<- with(data.AD_wide, sqrt((((NCFB_1 - 1)*(sdFU_1^2)) + (NCFB_0 - 1)*(sdFU_0^2))/((NCFB_1+NCFB_0)-2)))
       
-      # Calculate ancova estimate using formula from Senn et al. 2007
+      # Calculate ancova estimate using formula from Senn et al. 2007 and McKenzie et al 2016
       # using the pooled correlation
       
       ripooled <- with(data.AD_wide, ((NCFB_1*Correlation_1*sdBaseline_1*sdFU_1 +  NCFB_0*Correlation_0*sdBaseline_0*sdFU_0) )
