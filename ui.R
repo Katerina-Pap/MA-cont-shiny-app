@@ -424,7 +424,7 @@ shinyUI(
                                                                       plotOutput("forest_twoMEint",  height = "550px", width = "550px") ),
                                                                 column(width=6,
                                                                        h3("Funnel plot"),
-                                                                       selectInput("format","Choose file format",
+                                                                       selectInput("format_funnelINT","Choose file format",
                                                                                    choices = list("pdf","png")),
                                                                        downloadButton("downloadFunnelInt","Download Here"),
                                                                        plotOutput("funnel_twoMEint",  height = "550px", width = "550px")

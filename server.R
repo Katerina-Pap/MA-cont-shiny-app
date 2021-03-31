@@ -1387,20 +1387,30 @@ shinyServer(function(input, output, session) {
       
     }) 
   
-  
   output$downloadFunnelInt <- downloadHandler(
     filename = function() {
-      paste("Twostage_Funnel", Sys.Date(), sep='')
+      paste("Twostage_Funnel", Sys.Date(), sep='', input$format_funnelINT)
     },
     content = function(file){
-      if(input$format == "png")
-        png(file)
-      if(input$format == "pdf")
-        pdf(file)
+      if (input$format_funnelINT=="PDF"){pdf(file=file)}
+      else {png(file=file)}
       print(funnel_twostageME.int())
       dev.off()
     }
-  )
+  ) 
+  # output$downloadFunnelInt <- downloadHandler(
+  #   filename = function() {
+  #     paste("Twostage_Funnel", Sys.Date(), sep='')
+  #   },
+  #   content = function(file){
+  #     if(input$format == "png")
+  #       png(file)
+  #     if(input$format == "pdf")
+  #       pdf(file)
+  #     print(funnel_twostageME.int())
+  #     dev.off()
+  #   }
+  # )
   
   
   
