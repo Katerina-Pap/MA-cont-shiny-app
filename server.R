@@ -1402,6 +1402,18 @@ shinyServer(function(input, output, session) {
     }
   )
   
+  output$downloadComp2 <- downloadHandler(
+    filename = function() {
+      paste0('All_studies.', input$format_freq3)
+    },
+    content = function(file) {
+      if (input$format_freq3=="PDF"){pdf(file=file)}
+      else {png(file=file)}
+      make_netComp(freq_all(), ref_alter()$ref_all)
+      #title("Results for all studies")
+      dev.off()
+    }
+  )
   
   
   

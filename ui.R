@@ -417,14 +417,14 @@ shinyUI(
                                                               fluidRow(
                                                                 column(width=6, align="left",
                                                                       h3('Forest plot'),
-                                                                      selectInput("format","Choose file format",
+                                                                      selectInput("format_forest","Choose file format",
                                                                           choices = list("pdf","png")),
                                                                       downloadButton("downloadPlotInt","Download Here"),
-                                                              #downloadButton('downloadANCOVAForest', 'Download the plot as pdf'),
                                                                       plotOutput("forest_twoMEint",  height = "550px", width = "550px") ),
+                                                                
                                                                 column(width=6,
                                                                        h3("Funnel plot"),
-                                                                       selectInput("format","Choose file format",
+                                                                       selectInput("format_funnel","Choose file format",
                                                                                    choices = list("pdf","png")),
                                                                        downloadButton("downloadFunnelInt","Download Here"),
                                                                        plotOutput("funnel_twoMEint",  height = "550px", width = "550px")
