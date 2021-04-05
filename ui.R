@@ -63,7 +63,7 @@ shinyUI(
                      p(strong("OR")),
                      p(
                        "Log an issue on",
-                       a(href = "https://github.com/Katerina-Pap/MA-cont-pre-post-ES-shiny-app/issues", "GitHub")
+                       a(href = "https://github.com/Katerina-Pap/MA-cont-shiny-app/issues", "GitHub")
                      ),
                     
                     br(),
