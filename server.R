@@ -358,7 +358,7 @@ shinyServer(function(input, output, session) {
   }
   
   output$final.forest <- renderPlot({
-    withProgress(message = 'Rendering', detail = 'Forest plot-FS', value = 0, {
+    withProgress(message = 'Rendering', detail = 'Forest plot — FS', value = 0, {
       for (i in 1:10) {
         incProgress(1/10)
         Sys.sleep(0.05)
@@ -399,7 +399,7 @@ shinyServer(function(input, output, session) {
   }
   
   output$final.funnel <- renderPlot({
-    withProgress(message = 'Rendering', detail = 'Funnel plot-FS', value = 0, {
+    withProgress(message = 'Rendering', detail = 'Funnel plot — FS', value = 0, {
       for (i in 1:10) {
         incProgress(1/10)
         Sys.sleep(0.05)
@@ -525,7 +525,7 @@ shinyServer(function(input, output, session) {
   
   output$change.forest <- renderPlot(
     {
-      withProgress(message = 'Rendering', detail = 'Forest plot-CS', value = 0, {
+      withProgress(message = 'Rendering', detail = 'Forest plot — CS', value = 0, {
         for (i in 1:10) {
           incProgress(1/10)
           Sys.sleep(0.05)
@@ -566,7 +566,7 @@ shinyServer(function(input, output, session) {
   }
   
   output$change.funnel <- renderPlot({
-    withProgress(message = 'Rendering', detail = 'Funnel plot-CS', value = 0, {
+    withProgress(message = 'Rendering', detail = 'Funnel plot — CS', value = 0, {
       for (i in 1:10) {
         incProgress(1/10)
         Sys.sleep(0.05)
@@ -728,7 +728,7 @@ shinyServer(function(input, output, session) {
   
   output$ancova.forest <- renderPlot(
     {
-      withProgress(message = 'Rendering', detail = 'Forest plot-ANCOVA', value = 0, {
+      withProgress(message = 'Rendering', detail = 'Forest plot — ANCOVA', value = 0, {
         for (i in 1:10) {
           incProgress(1/10)
           Sys.sleep(0.05)
@@ -770,7 +770,7 @@ shinyServer(function(input, output, session) {
   }
   
   output$ancova.funnel <- renderPlot({
-    withProgress(message = 'Rendering', detail = 'Funnel plot-ANCOVA', value = 0, {
+    withProgress(message = 'Rendering', detail = 'Funnel plot — ANCOVA', value = 0, {
       for (i in 1:10) {
         incProgress(1/10)
         Sys.sleep(0.05)
@@ -1148,7 +1148,7 @@ shinyServer(function(input, output, session) {
   
   output$forest_twoME<- renderPlot({
     
-      withProgress(message = 'Rendering', detail = 'Forest plot - Two-stage main effect', value = 0, {
+      withProgress(message = 'Rendering', detail = 'Forest plot — Two-stage main effect', value = 0, {
         for (i in 1:10) {
           incProgress(1/10)
           Sys.sleep(0.05)
@@ -1205,7 +1205,7 @@ shinyServer(function(input, output, session) {
   
   output$funnel_twoME<- renderPlot(
     {
-      withProgress(message = 'Rendering', detail = 'Funnel plot - Two-stage main effect', value = 0, {
+      withProgress(message = 'Rendering', detail = 'Funnel plot — Two-stage main effect', value = 0, {
         for (i in 1:10) {
           incProgress(1/10)
           Sys.sleep(0.05)
@@ -1344,7 +1344,7 @@ shinyServer(function(input, output, session) {
   
   output$forest_twoMEint<- renderPlot(
     {
-      withProgress(message = 'Rendering', detail = 'Forest plot - Two-stage interaction', value = 0, {
+      withProgress(message = 'Rendering', detail = 'Forest plot — Two-stage interaction', value = 0, {
         for (i in 1:10) {
           incProgress(1/10)
           Sys.sleep(0.05)
@@ -1386,7 +1386,7 @@ shinyServer(function(input, output, session) {
   
   output$funnel_twoMEint<- renderPlot(
     {
-      withProgress(message = 'Rendering', detail = 'Funnel plot - Two-stage interaction', value = 0, {
+      withProgress(message = 'Rendering', detail = 'Funnel plot — Two-stage interaction', value = 0, {
         for (i in 1:10) {
           incProgress(1/10)
           Sys.sleep(0.05)
