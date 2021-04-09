@@ -113,12 +113,12 @@ shinyServer(function(input, output, session) {
   output$structure <- renderPrint({
     req(df_upload())
     Dataset <- df_upload() # Renaming the data set to appear better in the table
-    skim(Dataset)
+    #skim(Dataset)
     
-    # skim(Dataset) %>%
-    #   dplyr::select(skim_variable, n_missing, complete_rate, numeric.mean, numeric.sd,numeric.p25, numeric.p50,
-    #                           numeric.p75, numeric.hist)
-    # 
+    skim(Dataset) %>%
+      dplyr::select(-numeric.p0, - numeric.p100)
+      #skim_with(numeric = list(hist = NULL))
+
   })
   
   
