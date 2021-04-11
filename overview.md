@@ -1,3 +1,4 @@
+
 A worked example, including missing summary statistics, is provided as a default data set. A data template is given under the [`Data upload and pre-processing`] tab and should be used to prepare your data accordingly, for example long format is required. 
 - Use the 'Browse' button to upload your data set and follow the steps to fill-in any missing data
 - Once your data set is complete (no missing data), proceed to the [`View final data`] tab
@@ -14,6 +15,7 @@ For details regarding the models' analytic expressions and statistical calculati
 
 For more information on how to use the tool please follow the instructive video or get in contact with the developer of the tool. The app is powered by [Shiny](shiny.rstudio.com) using the statistical software [R](http://cran.r-project.org/).
 
+* * *
 
 ####   **Disclaimer**
 

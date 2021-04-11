@@ -82,12 +82,14 @@ shinyUI(
                    mainPanel(
                      fluidRow(
                        column(width = 6, align="left", h3(strong("Getting started")) ),
+                       # column(width = 6, align="left"),
                        column(
                          width = 6,
                          align = "right",
                          br(),
                          actionButton("gotodata", "Upload your data")
                        ),
+                       br(),
                   includeMarkdown("overview.md"), # to uncomment out later
                   )
                )
