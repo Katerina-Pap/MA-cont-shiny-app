@@ -4,7 +4,7 @@
 `MA-cont: pre/post effect size` v0.1 is a complement of [Meta‐analysis of continuous outcomes: Using pseudo IPD created from aggregate data to adjust for baseline imbalance and assess treatment‐by‐baseline modification, Res Synth Methods July 2020](https://doi.org/10.1002/jrsm.1434)
 
 It enables the user to fit routinely used AD approaches and the novel pseudo IPD ANCOVA approach to meta-analyse continuous outcomes measured at baseline and follow-up.
-More technical details on the model formulations is provided in the references above. 
+More technical details on the model formulations are provided in the references above. 
 <br>
 <br>
 

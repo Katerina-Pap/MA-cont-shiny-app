@@ -39,7 +39,7 @@ shinyUI(
     # Tab1: Main or home tab; include only an RMD file 
     tabPanel("Home", icon = icon("far fa-home"),
              h1(strong("MA-cont: pre/post effect size")),               
-             h3("Run meta-analysis of continuous outcome data measured at baseline and follow-up"),
+             h3("Run meta-analysis of continuous outcomes measured at baseline and follow-up"),
              fluidRow(
                column(
                  8,
