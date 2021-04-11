@@ -1,9 +1,9 @@
 
-A worked example, including missing summary statistics, is provided as a default data set. A data template is given under the [`Data upload and pre-processing`] tab and should be used to prepare your data accordingly, for example long format is required. 
+A worked example, including missing summary statistics, is provided as a default data set. A data template is given under the `Data upload and pre-processing` tab and should be used to prepare your data accordingly, for example long format is required. 
 - Use the 'Browse' button to upload your data set and follow the steps to fill-in any missing data
-- Once your data set is complete (no missing data), proceed to the [`View final data`] tab
+- Once your data set is complete (no missing data), proceed to the `View final data` tab
 
-The tool is designed to perform meta-analysis of continuous aggregate data (AD) measured at baseline (pre-treatment) and follow-up (post-treatment) [`Meta-Analysis`].
+The tool is designed to perform meta-analysis of continuous aggregate data (AD) measured at baseline (pre-treatment) and follow-up (post-treatment) `Meta-Analysis`.
 
 The available statistical approaches are:
 
