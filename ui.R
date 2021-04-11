@@ -465,8 +465,9 @@ shinyUI(
     tabPanel("About", icon = icon("fas fa-book-reader"),
              withMathJax(includeMarkdown("technical_notes.md"))
     ),
-
-    
+ 
+ 
+    #hr(),   
     footer = titlePanel( 
       div(
         column(width = 6,   
