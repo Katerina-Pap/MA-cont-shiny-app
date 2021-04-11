@@ -56,7 +56,8 @@ shinyServer(function(input, output, session) {
       
       try(read.csv(inFile$datapath, header = input$header, sep = input$separator, dec =input$dec), silent=T)
     
-    # validate(need(is.data.frame(rv$df) == TRUE, paste("Error with file import:",  rv$df)) )
+
+     #validate(need(is.data.frame(inFile$datapath) == TRUE, paste("Error with file import:",  inFile$datapath)) )
     # rv$df
     
     
