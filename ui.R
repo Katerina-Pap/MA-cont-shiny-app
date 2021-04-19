@@ -34,7 +34,7 @@ shinyUI(
   navbarPage(
     id    = "mytabsetpanel",
     theme = shinytheme("flatly"), 
-    title = div("MA-cont: pre/post effect size"),
+    title = "MA-cont: pre/post effect size",
     # Begin overview of tabs-------------------------------------------------------------------------------
     # Tab1: Main or home tab; include only an RMD file 
     tabPanel("Home", icon = icon("far fa-home"),
