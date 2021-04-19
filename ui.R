@@ -113,7 +113,7 @@ shinyUI(
              
            #tabsetPanel(type = "tabs",
              tabPanel("",
-                      fluidPage(
+                      fluidPage(tags$style(HTML('body {font-family:"arial",Georgia,Serif}')),
                         sidebarLayout(
                           sidebarPanel(
                             h4("Select a data file (.csv) to upload"),
