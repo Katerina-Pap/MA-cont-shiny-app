@@ -1,4 +1,4 @@
-library(shiny)
+# Server external functions ---------------------------------------------------------------------------------------------------
 nvisitors = reactiveVal(0)
 
 # Function to format output of analysis ------------------------------------------------------------------------------------------------------------------------
@@ -37,6 +37,18 @@ shinyServer(function(input, output, session) {
   observeEvent(input$SEfromSD, {
     updateTabsetPanel(session, inputId = 'mytabsetpanel', selected = 'missing')
   })
+  
+  # Download data template ---------------------------------------------------------
+  
+  # output$downloadtemp <- downloadHandler(
+  #                                        filename = function() {
+  #                                          paste("example", "csv", sep = ",")
+  #                                        },
+  #                                        content = function(file) {
+  #                                          file.copy("www/example.csv", file)
+  #                                        }
+  #                                  
+  # )
   
   # Define reactive values ---------------------------------------------------------------------------------------------------------------------------------------
   

@@ -1,18 +1,7 @@
-library(shiny)
-library(shinythemes)
-library(DT)
-library(MASS)
-library(dplyr)
-library(skimr)
-library(shinyjs)
-library(shinyalert)
-library(shinyWidgets)
-library(shinycssloaders)
-library(reshape2)
-library(nlme)
-library(metafor)
-library(meta)
 
+#UI functions #-----------------------------------------------------------------------------------------------------------------------------------------------------
+
+source("library.R")
 
 # function to print table of results 
 jsCode <- 'shinyjs.winprint = function(){
@@ -130,12 +119,14 @@ shinyUI(
                             ),
                             
                             h5(tags$a(href = 'example.csv', class = "btn", icon("download"), style='background-color:#91d1c2ff; color: #fdfbfb',
-                                      'Download and use the data template to prepare your file')),
+                                      'Download data template')),
                             
-                            # h5(tags$a(href = 'example.csv', class = "btn", icon("download"), style='background-color:#91d1c2ff; color: #fdfbfb; display:inline-block; 
-                            #           height:60px; width:700px',
-                            #           'Download and use the template to prepare your file')),
+                            # br(),
                             
+                            # p(  Alternative data download handler
+                            #   downloadButton("downloadtemp", "Download data template")
+                            #   
+                            # ),
                             #style="color:#DCDCDC",
                             # Input: Checkbox if file has header ---------
                             checkboxInput("header", "Header", TRUE),
