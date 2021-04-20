@@ -25,7 +25,6 @@ shinyUI(
     theme = shinytheme("flatly"), 
     title = "MA-cont: pre/post effect size",
     # Begin overview of tabs-------------------------------------------------------------------------------
-    # Tab1: Main or home tab; include only an RMD file 
     tabPanel("Home", icon = icon("far fa-home"),
              h1(strong("MA-cont: pre/post effect size")),               
              h3("Run meta-analysis of continuous outcomes measured at baseline and follow-up"),
@@ -70,13 +69,15 @@ shinyUI(
                    ),
                    mainPanel(
                      fluidRow(
-                       column(width = 6, h3(strong("Getting started")) ),
+                       column(width = 6, align="left", offset=-5,  h3(strong("Getting started")) ),
                        # column(width = 6, align="left"),
                        column(
                          width = 6,
                          align = "right",
                          br(),
-                         actionButton("gotodata", "Upload your data")
+                    
+                         actionButton("gotodata", "Upload your data", icon("paper-plane"), 
+                                      style="color: #FFFFFF; background-color:#91d1c2ff; border-color: #91d1c2ff")
                        ),
                        br(),
                        br(),
