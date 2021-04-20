@@ -105,13 +105,16 @@ shinyUI(
            #tabsetPanel(type = "tabs",
              tabPanel("",
                       fluidPage(tags$style(HTML('body {font-family:"arial",Georgia,Serif}')),
+                                # tags$head(
+                                #   tags$style(HTML("hr {border-top: 1px solid #696969;}"))
+                                # ),
                         sidebarLayout(
                           sidebarPanel(
                             h4("Select a data file (.csv) to upload"),
                             h6(tags$div(
                               HTML(paste("", tags$span(icon("fas fa-exclamation-triangle"), style = "background-color:#DCDCDC", "Excel files should be saved in .csv (comma delimited) format"), sep = ""))
                             )),
-                            p(HTML("<b><div style='background-color:#91d1c2ff;border:1px solid black;'>Your data needs to have exactly the same header (variable names) in the first row.</div></b>")),
+                            p(HTML("<b><div style='background-color:#91d1c2ff;border:1px solid black;'>Your columns need to have exactly the same order as shown in the first row.</div></b>")),
                             fileInput('data_upload',
                                       '',
                                       accept = c('text/csv',
@@ -145,7 +148,11 @@ shinyUI(
                             radioButtons("dec","Decimal",
                                          choices = c(Point = ".",Comma = ","),                                
                                          selected  = '.'),
-                            br(),
+                            #br(),
+                            hr(),
+                            
+                            h4("Perform calculations and data imputations"),
+                            
                             fluidRow(column(2,  actionButton(inputId = "SEfromSD", class = "SEfromSD", label = "Fill-in SD from SE"))),
                             br(),
                             fluidRow(column(2,  actionButton(inputId = "sameSD", class = "sameSD", label = "Equal SDs at pre/post"))), 
