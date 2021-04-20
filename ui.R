@@ -115,7 +115,7 @@ shinyUI(
                             h6(tags$div(
                               HTML(paste("", tags$span(icon("fas fa-exclamation-triangle"), style = "background-color:#DCDCDC", "Excel files should be saved in .csv (comma delimited) format"), sep = ""))
                             )),
-                            p(HTML("<b><div style='background-color:#91d1c2ff;border:1px solid black;'>Your columns need to have exactly the same order as shown in the first row.</div></b>")),
+                            p(HTML("<b><div style='background-color:#91d1c2ff;border:1px solid black;'>Your file needs to have exactly the same format as shown in the data input table.</div></b>")),
                             fileInput('data_upload',
                                       '',
                                       accept = c('text/csv',

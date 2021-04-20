@@ -129,7 +129,11 @@ shinyServer(function(input, output, session) {
     #skim(Dataset)
     
     skim(Dataset) %>%
-      dplyr::select(-numeric.p0, - numeric.p100)
+      filter(skim_type == "numeric") %>%
+      filter(skim_variable != "ID") %>%
+      filter(skim_variable != "group") %>%
+      select(-c(n_missing))%>%
+      select(-numeric.p0, - numeric.p100)
       #skim_with(numeric = list(hist = NULL))
 
   })
@@ -160,7 +164,8 @@ shinyServer(function(input, output, session) {
     
     rv$df2  <- rv$df %>%
       mutate (MeanFU     = ifelse(is.na(rv$MeanFU),  rv$MeanCFB + rv$MeanBaseline, rv$MeanFU),
-              MeanCFB    = ifelse(is.na(rv$MeanCFB), rv$MeanFU - rv$MeanBaseline, rv$MeanCFB) )
+              MeanCFB    = ifelse(is.na(rv$MeanCFB), rv$MeanFU - rv$MeanBaseline, rv$MeanCFB))
+              #sdCFB      = ifelse(is.na(rv$sdCFB),   rv$seCFB*sqrt(rv$NCFB), rv$sdCFB))
   })
   
   # Dataset 2: Calculate SDs from SEs-----------------------------------------------------------------------------------------------------------------------------
@@ -168,7 +173,8 @@ shinyServer(function(input, output, session) {
     df1() %>%
       mutate (sdBaseline = ifelse(is.na(rv$sdBaseline), rv$seBaseline*sqrt(rv$NCFB), rv$sdBaseline), 
               sdFU       = ifelse(is.na(rv$sdFU),       rv$seFU*sqrt(rv$NCFB),  rv$sdFU),
-              sdCFB      = ifelse(is.na(rv$sdCFB),      rv$seCFB*sqrt(rv$NCFB), rv$sdCFB)
+              #sdCFB      = ifelse(is.na(rv$sdCFB),      rv$seCFB*sqrt(rv$NCFB), rv$sdCFB),
+              sdCFB       = ifelse(is.na(rv$sdCFB), sqrt(rv$sdBaseline^2+rv$sdFU^2-2*rv$Correlation*rv$sdBaseline*rv$sdFU), rv$sdCFB)
       )
   })
   
