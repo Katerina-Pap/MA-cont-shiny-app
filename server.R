@@ -168,7 +168,7 @@ shinyServer(function(input, output, session) {
               #sdCFB      = ifelse(is.na(rv$sdCFB),   rv$seCFB*sqrt(rv$NCFB), rv$sdCFB))
   })
   
-  # Dataset 2: Calculate SDs from SEs-----------------------------------------------------------------------------------------------------------------------------
+  # Dataset 2: Calculate SDs from SEs  ----------------------------------------------------------------------------------------------------------------------------
   df2 <- eventReactive(input$SEfromSD, {
     df1() %>%
       mutate (sdBaseline = ifelse(is.na(rv$sdBaseline), rv$seBaseline*sqrt(rv$NCFB), rv$sdBaseline), 
