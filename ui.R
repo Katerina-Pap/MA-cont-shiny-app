@@ -43,22 +43,22 @@ shinyUI(
                        ),
                     # br(),
                      hr(),
-                     h3(strong("Citation")),
-                     p(
-                       "If you use",
-                       em("MA-cont: pre/post effect size"),
-                       "to perform your analyses, please remember to cite the tool."
-                     ),
-                     hr(),
+                     # h3(strong("Citation")),
+                     # p(
+                     #   "If you use",
+                     #   em("MA-cont: pre/post effect size"),
+                     #   "to perform your analyses, please remember to cite the tool."
+                     # ),
+                     # hr(),
                      
-                     h3(strong("Found a bug?")),
+                     h3(strong("Request a new feature")),
                      p(
                        "Please ",
                        a(href = "mailto:katerina.papadimitropoulou@gmail.com", "email me")
                      ),
                      p(strong("OR")),
                      p(
-                       "Log an issue on",
+                       "Open an issue on",
                        a(href = "https://github.com/Katerina-Pap/MA-cont-shiny-app/issues", "GitHub")
                      ),
                     
