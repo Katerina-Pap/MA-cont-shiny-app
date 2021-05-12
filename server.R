@@ -929,13 +929,13 @@ shinyServer(function(input, output, session) {
       FRstudyarm <- lme(fixed=y2 ~ y1center + group + as.factor(study) + y1center*as.factor(study), random= ~ -1 + groupcenter|study,  weights =varIdent(form=~study|arm), control=ctrl, data=df3, method='REML')
       
       # study-specific variance estimates 
-      FRstudy    <- lme(fixed=y2 ~ y1center+ group + as.factor(study) + y1center*as.factor(study) , random= ~ -1 + groupcenter|study, weights =varIdent(form=~1|study), control=ctrl, data=df3, method='REML')
+      FRstudy    <- lme(fixed=y2 ~ y1center+ group + as.factor(study) + y1center*as.factor(study), random= ~ -1 + groupcenter|study, weights =varIdent(form=~1|study), control=ctrl, data=df3, method='REML')
       
       # group specific variance estimated 
-      FRgroup    <- lme(fixed=y2 ~ y1center + group+ as.factor(study) + y1center*as.factor(study) , random= ~ -1 + groupcenter|study, weights =varIdent(form=~1|group), control=ctrl, data=df3, method='REML')
+      FRgroup    <- lme(fixed=y2 ~ y1center + group+ as.factor(study) + y1center*as.factor(study), random= ~ -1 + groupcenter|study, weights =varIdent(form=~1|group), control=ctrl, data=df3, method='REML')
       
       # one residual variance estimated
-      FRone      <- lme(fixed=y2 ~ y1center + group + as.factor(study) + y1center*as.factor(study) , random= ~-1 + groupcenter|study, control=ctrl, data=df3, method='REML')
+      FRone      <- lme(fixed=y2 ~ y1center + group + as.factor(study) + y1center*as.factor(study), random= ~-1 + groupcenter|study, control=ctrl, data=df3, method='REML')
       
       
       arm_study_specific <- round(summary(FRstudyarm)$tTable["group",1], 3) 
