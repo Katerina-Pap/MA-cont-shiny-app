@@ -28,6 +28,7 @@ shinyUI(
     tabPanel("Home", icon = icon("far fa-home"),
              h1(strong("MA-cont: pre/post effect size")),               
              h3("Run meta-analysis of continuous outcomes measured at baseline and follow-up"),
+             br(),
              fluidRow(
                column(
                  8,

@@ -16,7 +16,7 @@ shinyServer(function(input, output, session) {
   
   # Video instructions ------------------------------------------------------------------------------------------------------------------------------------------
   output$video <- renderUI({
-    h3("How to use the tool? Watch the video!", align="center", tags$video(type = "video/mp4", src = "video_final.mp4", width="350px", height="350px", controls = "controls",  style="display: block; margin-left: auto; margin-right: auto;"))
+    h3(strong("How to use the tool? Watch the video!", align="center", tags$video(type = "video/mp4", src = "video_final.mp4", width="350px", height="350px", controls = "controls",  style="display: block; margin-left: auto; margin-right: auto;")))
   })
   
   # Track number of visitors at the bottom of page ---------------------------------------------------------------------------------------------------------------
