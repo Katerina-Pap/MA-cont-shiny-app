@@ -56,7 +56,7 @@ shinyServer(function(input, output, session) {
   
   defaultDat <- reactive({
     
-    defaultDat <- readxl::read_excel("./www/template.xlsx", sheet = 1, col_names = TRUE, skip=1, range = cell_cols(1:14))
+    defaultDat <- readxl::read_excel("./www/template.xlsx", sheet = 1, col_names = TRUE, range = cell_cols(1:14))
     
     #defaultDat <- read.csv("./www/example.csv", sep=";")
     
