@@ -16,7 +16,7 @@ shinyServer(function(input, output, session) {
   
   # Video instructions ------------------------------------------------------------------------------------------------------------------------------------------
   output$video <- renderUI({
-    h3(strong("How to use the tool? Watch the video!", align="center", tags$video(type = "video/mp4", src = "video_final.mp4", width="350px", height="350px", controls = "controls",  style="display: block; margin-left: auto; margin-right: auto;")))
+    h3(strong("How to use the tool? Watch the video!", align="left", tags$video(type = "video/mp4", src = "video_final.mp4", width="450px", height="350px", controls = "controls",  style="display: block; margin-left: auto; margin-right: auto;")))
   })
   
   # Track number of visitors at the bottom of page ---------------------------------------------------------------------------------------------------------------
@@ -69,8 +69,8 @@ shinyServer(function(input, output, session) {
       try(read.csv(inFile$datapath, header = input$header, sep = input$separator, dec =input$dec), silent=T)
     
 
-     #validate(need(is.data.frame(inFile$datapath) == TRUE, paste("Error with file import:",  inFile$datapath)) )
-    # rv$df
+     # validate(need(is.data.frame(inFile$datapath) == TRUE, paste("Error with file import:",  inFile$datapath)) )
+     # rv$df
     
     
     # df_upload <- reactive({
@@ -173,8 +173,8 @@ shinyServer(function(input, output, session) {
     df1() %>%
       mutate (sdBaseline = ifelse(is.na(rv$sdBaseline), rv$seBaseline*sqrt(rv$NCFB), rv$sdBaseline), 
               sdFU       = ifelse(is.na(rv$sdFU),       rv$seFU*sqrt(rv$NCFB),  rv$sdFU),
-              #sdCFB      = ifelse(is.na(rv$sdCFB),      rv$seCFB*sqrt(rv$NCFB), rv$sdCFB),
-              sdCFB       = ifelse(is.na(rv$sdCFB), sqrt(rv$sdBaseline^2+rv$sdFU^2-2*rv$Correlation*rv$sdBaseline*rv$sdFU), rv$sdCFB)
+              #sdCFB     = ifelse(is.na(rv$sdCFB),      rv$seCFB*sqrt(rv$NCFB), rv$sdCFB),
+              sdCFB      = ifelse(is.na(rv$sdCFB), sqrt(rv$sdBaseline^2+rv$sdFU^2-2*rv$Correlation*rv$sdBaseline*rv$sdFU), rv$sdCFB)
       )
   })
   
@@ -220,8 +220,8 @@ shinyServer(function(input, output, session) {
   # Dataset 5: Make final calculations --------------------------------------------------------------------------------------------------------------------------
   df5 <- eventReactive(input$final_calc, {
     df4() %>%
-      mutate (Correlation  = ifelse(is.na(Correlation) & (group=="0"), tapply(Correlation, group, median, na.rm=T)[1], Correlation), # for control group
-              Correlation  = ifelse(is.na(Correlation) & (group=="1"), tapply(Correlation, group, median, na.rm=T)[2], Correlation), # for treatment group
+      mutate (Correlation  = ifelse(is.na(Correlation)| (Correlation<=1) | (Correlation>1) & (group=="0"), tapply(Correlation, group, median, na.rm=T)[1], Correlation), # for control group
+              Correlation  = ifelse(is.na(Correlation)| (Correlation<=1) | (Correlation>1) & (group=="1"), tapply(Correlation, group, median, na.rm=T)[2], Correlation), # for treatment group
               seBaseline   = ifelse(is.na(seBaseline), sdBaseline/sqrt(NCFB), seBaseline),
               seFU         = ifelse(is.na(seFU), sdFU/sqrt(NCFB), seFU),
               sdCFB        = ifelse(is.na(sdCFB), sqrt(sdBaseline^2+sdFU^2-2*Correlation*sdBaseline*sdFU), sdCFB),

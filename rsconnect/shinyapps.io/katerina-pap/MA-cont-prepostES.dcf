@@ -5,8 +5,8 @@ account: katerina-pap
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 3883685
-bundleId: 4566131
+bundleId: 4611684
 url: https://katerina-pap.shinyapps.io/MA-cont-prepostES/
-when: 1620319541.50425
+when: 1621347695.54512
 asMultiple: FALSE
 asStatic: FALSE
