@@ -220,8 +220,8 @@ shinyServer(function(input, output, session) {
   # Dataset 5: Make final calculations --------------------------------------------------------------------------------------------------------------------------
   df5 <- eventReactive(input$final_calc, {
     df4() %>%
-      mutate (Correlation  = ifelse(is.na(Correlation)| (Correlation<=1) | (Correlation>1) & (group=="0"), tapply(Correlation, group, median, na.rm=T)[1], Correlation), # for control group
-              Correlation  = ifelse(is.na(Correlation)| (Correlation<=1) | (Correlation>1) & (group=="1"), tapply(Correlation, group, median, na.rm=T)[2], Correlation), # for treatment group
+      mutate (Correlation  = ifelse(is.na(Correlation)| (Correlation<=-1.0) | (Correlation>1.0)  & (group=="0"), tapply(Correlation, group, median, na.rm=T)[1], Correlation), # for control group
+              Correlation  = ifelse(is.na(Correlation)| (Correlation<=-1.0) | (Correlation>1.0)  & (group=="1"), tapply(Correlation, group, median, na.rm=T)[2], Correlation), # for treatment group
               seBaseline   = ifelse(is.na(seBaseline), sdBaseline/sqrt(NCFB), seBaseline),
               seFU         = ifelse(is.na(seFU), sdFU/sqrt(NCFB), seFU),
               sdCFB        = ifelse(is.na(sdCFB), sqrt(sdBaseline^2+sdFU^2-2*Correlation*sdBaseline*sdFU), sdCFB),
