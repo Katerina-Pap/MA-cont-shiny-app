@@ -112,17 +112,18 @@ shinyUI(
                                 # ),
                         sidebarLayout(
                           sidebarPanel(
-                            h4("Select a data file (.csv) to upload"),
-                            h6(tags$div(
-                              HTML(paste("", tags$span(icon("fas fa-exclamation-triangle"), style = "background-color:#DCDCDC", "Excel files should be saved in .csv (comma delimited) format"), sep = ""))
-                            )),
+                            h4("Select a file (.xslx) to upload"),
+                            # h6(tags$div(
+                            #   HTML(paste("", tags$span(icon("fas fa-exclamation-triangle"), style = "background-color:#DCDCDC", "Excel files should be saved in .csv (comma delimited) format"), sep = ""))
+                            # )),
                             p(HTML("<b><div style='background-color:#91d1c2ff;border:1px solid black;'>Your file needs to have exactly the same format as shown in the data input table.</div></b>")),
                             fileInput('data_upload',
                                       '',
-                                      accept = c('text/csv',
-                                                 'text/comma-separated-values',
-                                                 '.csv')
-                                      #accept = c(".xlsx", ".xls", ".csv")
+                                      accept = c(".xlsx")
+                                      # accept = c('text/csv',
+                                      #            'text/comma-separated-values',
+                                      #            '.csv')
+                                      # #accept = c(".xlsx", ".xls", ".csv")
                             ),
                             
                             h5(tags$a(href = 'example.csv', class = "btn", icon("download"), style='background-color:#91d1c2ff; color: #fdfbfb',
