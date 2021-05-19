@@ -158,8 +158,8 @@ shinyServer(function(input, output, session) {
     df1() %>%
       mutate (sdBaseline = ifelse(is.na(rv$sdBaseline), rv$seBaseline*sqrt(rv$NCFB), rv$sdBaseline), 
               sdFU       = ifelse(is.na(rv$sdFU),       rv$seFU*sqrt(rv$NCFB),  rv$sdFU),
-              #sdCFB     = ifelse(is.na(rv$sdCFB),      rv$seCFB*sqrt(rv$NCFB), rv$sdCFB),
-              sdCFB      = ifelse(is.na(rv$sdCFB), sqrt(rv$sdBaseline^2+rv$sdFU^2-2*rv$Correlation*rv$sdBaseline*rv$sdFU), rv$sdCFB)
+              sdCFB      = ifelse(is.na(rv$sdCFB),      rv$seCFB*sqrt(rv$NCFB), rv$sdCFB),
+              #sdCFB      = ifelse(is.na(rv$sdCFB), sqrt(rv$sdBaseline^2+rv$sdFU^2-2*rv$Correlation*rv$sdBaseline*rv$sdFU), rv$sdCFB)
       )
   })
   

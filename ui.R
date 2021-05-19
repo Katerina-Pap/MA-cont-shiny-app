@@ -165,7 +165,7 @@ shinyUI(
                             br(),
                             fluidRow(column(2,  actionButton(inputId = "correl", class = "correl", label = "Step 3: Calculate within-group correlations"))),
                             br(),
-                            fluidRow(column(2,  actionButton(inputId = "final_calc", class = "final_calc", label = "Step 4:Make final calculations")))
+                            fluidRow(column(2,  actionButton(inputId = "final_calc", class = "final_calc", label = "Step 4: Make final calculations")))
                           ),  
                           
                           
