@@ -70,8 +70,8 @@ shinyUI(
                    ),
                    mainPanel(
                      fluidRow(
-                       column(width = 6, align="left", offset=-5,  h3(strong("Getting started")) ),
-                       # column(width = 6, align="left"),
+                       column(width = 6, align="left", offset=-5,  h3(strong("Getting started"), align="left") ),
+                      
                        column(
                          width = 6,
                          align = "right",
@@ -92,6 +92,7 @@ shinyUI(
                  4,
                  align="right", 
                  br(),
+                 h3(strong("How to use the tool? Watch the video !"), align="center"),
                  uiOutput("video")
                )
             )
@@ -116,18 +117,24 @@ shinyUI(
                             h5(tags$div(
                               HTML(paste("", tags$span(icon("fas fa-exclamation-triangle"), style = "background-color:#DCDCDC", "Your file needs to have exactly the same structure as shown in the data input table"), sep = ""))
                             )),
+                            h5(tags$a(href = 'template.xlsx', class = "btn", icon("download"), style='background-color:#91d1c2ff; color: #fdfbfb',
+                                      'Download data template')),
                             #p(HTML("<b><div style='background-color:#91d1c2ff;border:1px solid black;'>Your file needs to have exactly the same format as shown in the data input table.</div></b>")),
                             fileInput('data_upload',
                                       '',
                                       accept = c(".xlsx")
-                                      # accept = c('text/csv',
-                                      #            'text/comma-separated-values',
-                                      #            '.csv')
-                                      # #accept = c(".xlsx", ".xls", ".csv")
+                                     
                             ),
                             
-                            h5(tags$a(href = 'template.xlsx', class = "btn", icon("download"), style='background-color:#91d1c2ff; color: #fdfbfb',
-                                      'Download data template')),
+                            radioButtons("display", 
+                                         "Display:", 
+                                         choices  = c("preview"="preview", "summary"="summary"),
+                                         selected = "preview",
+                                         inline   = TRUE,  
+                            ),
+                            
+                            # h5(tags$a(href = 'template.xlsx', class = "btn", icon("download"), style='background-color:#91d1c2ff; color: #fdfbfb',
+                            #           'Download data template')),
                             
                             # br(),
                             
@@ -139,22 +146,7 @@ shinyUI(
                             
                             
                             
-                            # # Input: Checkbox if file has header ---------
-                            # checkboxInput("header", "Header", TRUE),
-                            # 
-                            # # Input: Select separator --------------------
-                            # radioButtons( "separator",
-                            #               "Separator: ",
-                            #               choices   = c(";", ",", ":"),
-                            #               selected  = ";",
-                            #               inline    = TRUE
-                            # ),
-                            # 
-                            # # Input: Select decimals ---------------------------------------------------------------------------------
-                            # radioButtons("dec","Decimal",
-                            #              choices = c(Point = ".",Comma = ","),                                
-                            #              selected  = '.'),
-                            #br(),
+                            
                             hr(),
                             
                             h4("Perform algebraic calculations and imputation"),
@@ -177,10 +169,14 @@ shinyUI(
                                                   ".shiny-output-error { visibility: hidden; }",
                                                   ".shiny-output-error:before { visibility: hidden; }"
                                        ),
+                                       
                                        # output data table
-                                       h2("Data Input"),
-                                       DT::dataTableOutput("input_table"),
-                                       textOutput("warning"),
+                                       # h2("Data Input"),
+                                       # DT::dataTableOutput("input_table"),
+                                       
+                                       conditionalPanel("input.display == 'preview'", h2("Data Preview"), DT::dataTableOutput("input_table")),
+                                       conditionalPanel("input.display == 'summary'", h2("Data Summary"),  verbatimTextOutput("structure")),
+                                       textOutput("warning"), # Warning if wrong file format is uploaded 
                                        
                                        tags$head(tags$style("#warning {color: red;
                                                                       font-size: 20px;
@@ -189,8 +185,15 @@ shinyUI(
                                                  
                                        ),
                                        
-                                       h2("Data Structure"),
-                                       verbatimTextOutput("structure"),
+                                       h3("Description"),
+                                       p("A long format dataset comprised of 14 columns. The varables are as follows:"),
+                                       
+                                       h3("Variables"),
+                                       
+                                       includeMarkdown("variables.md"),
+                                       
+                                       # h2("Data Structure"),
+                                       # verbatimTextOutput("structure"),
                               ),
                               
                               tabPanel(value="missing",

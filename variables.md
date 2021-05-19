@@ -1,0 +1,14 @@
+- ID = numeric indicator of the number of studies
+- Study = Author's name 
+- MeanBaseline = mean baseline scores of the continuous outcome
+- sdBaseline = standard deviations of baseline scores
+- seBaseline = standard error of baseline scores
+- MeanFU = mean follow-up (FU) scores
+- sdFU = standard deviations of follow-up scores
+- seFU = standard error of follow-up scores
+- Correlation = correlation value between baseline and follow-up scores
+- MeanCFB = mean change from baseline (CFB) scores $\bar{Y}_{follow-up} - \bar{Y}_{baseline}$
+- sdCFB = standard deviations of change from baseline scores
+- seCFB = standard error of change from baseline scores
+- NCFB  = sample size for participants with scores at baseline and follow-up
+- group = 0/1 variable to indicate treatment group; 1: active, 0: control/placebo
