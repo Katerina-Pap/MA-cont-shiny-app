@@ -112,11 +112,11 @@ shinyUI(
                                 # ),
                         sidebarLayout(
                           sidebarPanel(
-                            h4("Select a file (.xslx) to upload"),
-                            # h6(tags$div(
-                            #   HTML(paste("", tags$span(icon("fas fa-exclamation-triangle"), style = "background-color:#DCDCDC", "Excel files should be saved in .csv (comma delimited) format"), sep = ""))
-                            # )),
-                            p(HTML("<b><div style='background-color:#91d1c2ff;border:1px solid black;'>Your file needs to have exactly the same format as shown in the data input table.</div></b>")),
+                            h4("Select an excel file to upload"),
+                            h5(tags$div(
+                              HTML(paste("", tags$span(icon("fas fa-exclamation-triangle"), style = "background-color:#DCDCDC", "Your file needs to have exactly the same structure as shown in the data input table"), sep = ""))
+                            )),
+                            #p(HTML("<b><div style='background-color:#91d1c2ff;border:1px solid black;'>Your file needs to have exactly the same format as shown in the data input table.</div></b>")),
                             fileInput('data_upload',
                                       '',
                                       accept = c(".xlsx")
@@ -126,7 +126,7 @@ shinyUI(
                                       # #accept = c(".xlsx", ".xls", ".csv")
                             ),
                             
-                            h5(tags$a(href = 'example.csv', class = "btn", icon("download"), style='background-color:#91d1c2ff; color: #fdfbfb',
+                            h5(tags$a(href = 'template.xlsx', class = "btn", icon("download"), style='background-color:#91d1c2ff; color: #fdfbfb',
                                       'Download data template')),
                             
                             # br(),
@@ -136,33 +136,36 @@ shinyUI(
                             #   
                             # ),
                             #style="color:#DCDCDC",
-                            # Input: Checkbox if file has header ---------
-                            checkboxInput("header", "Header", TRUE),
                             
-                            # Input: Select separator --------------------
-                            radioButtons( "separator",
-                                          "Separator: ",
-                                          choices   = c(";", ",", ":"),
-                                          selected  = ";",
-                                          inline    = TRUE
-                            ),
                             
-                            # Input: Select decimals ---------------------------------------------------------------------------------
-                            radioButtons("dec","Decimal",
-                                         choices = c(Point = ".",Comma = ","),                                
-                                         selected  = '.'),
+                            
+                            # # Input: Checkbox if file has header ---------
+                            # checkboxInput("header", "Header", TRUE),
+                            # 
+                            # # Input: Select separator --------------------
+                            # radioButtons( "separator",
+                            #               "Separator: ",
+                            #               choices   = c(";", ",", ":"),
+                            #               selected  = ";",
+                            #               inline    = TRUE
+                            # ),
+                            # 
+                            # # Input: Select decimals ---------------------------------------------------------------------------------
+                            # radioButtons("dec","Decimal",
+                            #              choices = c(Point = ".",Comma = ","),                                
+                            #              selected  = '.'),
                             #br(),
                             hr(),
                             
-                            h4("Perform calculations and data imputations"),
+                            h4("Perform algebraic calculations and imputation"),
                             
-                            fluidRow(column(2,  actionButton(inputId = "SEfromSD", class = "SEfromSD", label = "Fill-in SD from SE"))),
+                            fluidRow(column(2,  actionButton(inputId = "SEfromSD", class = "SEfromSD", label = "Step 1: Fill-in SD from SE"))),
                             br(),
-                            fluidRow(column(2,  actionButton(inputId = "sameSD", class = "sameSD", label = "Equal SDs at pre/post"))), 
+                            fluidRow(column(2,  actionButton(inputId = "sameSD", class = "sameSD", label = "Step 2: Equal SDs at pre/post"))), 
                             br(),
-                            fluidRow(column(2,  actionButton(inputId = "correl", class = "correl", label = "Calculate within-group correlations"))),
+                            fluidRow(column(2,  actionButton(inputId = "correl", class = "correl", label = "Step 3: Calculate within-group correlations"))),
                             br(),
-                            fluidRow(column(2,  actionButton(inputId = "final_calc", class = "final_calc", label = "Make final calculations")))
+                            fluidRow(column(2,  actionButton(inputId = "final_calc", class = "final_calc", label = "Step 4:Make final calculations")))
                           ),  
                           
                           
@@ -177,6 +180,15 @@ shinyUI(
                                        # output data table
                                        h2("Data Input"),
                                        DT::dataTableOutput("input_table"),
+                                       textOutput("warning"),
+                                       
+                                       tags$head(tags$style("#warning {color: red;
+                                                                      font-size: 20px;
+                                                                      font-style: italic;
+                                                                      }" )
+                                                 
+                                       ),
+                                       
                                        h2("Data Structure"),
                                        verbatimTextOutput("structure"),
                               ),

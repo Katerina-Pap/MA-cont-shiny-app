@@ -55,7 +55,10 @@ shinyServer(function(input, output, session) {
   # Load default data 
   
   defaultDat <- reactive({
-    defaultDat <- read.csv("./www/example.csv", sep=";")
+    
+    defaultDat <- readxl::read_excel("./www/template.xlsx", sheet = 1, col_names = TRUE, skip=1, range = cell_cols(1:14))
+    
+    #defaultDat <- read.csv("./www/example.csv", sep=";")
     
   })
   
@@ -64,38 +67,20 @@ shinyServer(function(input, output, session) {
     inFile <- input$data_upload
     if (is.null(inFile)) {return(defaultDat())}
     else 
-      #rv$df <- try(read.csv(inFile$datapath, header = input$header, sep = input$separator, dec =input$dec), silent=T)  
       
-      try(read.csv(inFile$datapath, header = input$header, sep = input$separator, dec =input$dec), silent=T)
+      data <- tryCatch(readxl::read_excel(inFile$datapath[1], sheet = 1, col_names = TRUE), error = function(e) e)
+    
+    if(inherits(data, "error")) {
+      output$warning <- renderText(paste0("Error in uploading file: ", data$message))
+      return(NULL)
+    }
+    return(data)
+    
+     
+      
+   #try(read.csv(inFile$datapath, header = input$header, sep = input$separator, dec =input$dec), silent=T)
     
 
-     # validate(need(is.data.frame(inFile$datapath) == TRUE, paste("Error with file import:",  inFile$datapath)) )
-     # rv$df
-    
-    
-    # df_upload <- reactive({
-    #      inFile <- input$data_upload
-    #       if (is.null(inFile)) {return(NULL)}
-    #       rv$df <- try(read.csv(inFile$datapath, header = input$header, sep = input$separator, dec =input$dec), silent=T)
-    # 
-    #   validate(need(is.data.frame(rv$df) == TRUE, paste("Error with file import:",  rv$df)) )
-    #   rv$df
-    # 
-    # rv$ID           <- rv$df[[1]]
-    # rv$Study        <- rv$df[[2]]
-    # rv$MeanBaseline <- rv$df[[3]]
-    # rv$sdBaseline   <- rv$df[[4]]
-    # rv$seBaseline   <- rv$df[[5]]
-    # rv$MeanFU       <- rv$df[[6]]
-    # rv$sdFU         <- rv$df[[7]]
-    # rv$seFU         <- rv$df[[8]]
-    # rv$Correlation  <- rv$df[[9]]
-    # rv$MeanCFB      <- rv$df[[10]]
-    # rv$sdCFB        <- rv$df[[11]]
-    # rv$seCFB        <- rv$df[[12]]
-    # rv$NCFB         <- rv$df[[13]]
-    # rv$group        <- rv$df[[14]]
-    
     
     # Note to try later: once the analysis_data are loaded, I want  make reactive the sliders for the ANCOVA method
     #  if the code below is uncommented out, there is lag in uploading the dataset
