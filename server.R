@@ -1157,14 +1157,14 @@ shinyServer(function(input, output, session) {
     
     if (input$type == "ce") {
       MA_twostageME <- twostage_ME.FE()$MA_twostageME
-      forest(MA_twostageME, showweights=TRUE)
+      forest(MA_twostageME, showweights=TRUE, xlab="Mean difference")
       
     }
     
     if (input$type == "re") {
       
       MA_twostageMEre <- twostage_ME.RE()$MA_twostageMEre
-      forest(MA_twostageMEre, showweights=TRUE)
+      forest(MA_twostageMEre, showweights=TRUE, xlab="Mean difference")
       
     }
   }
@@ -1359,12 +1359,12 @@ shinyServer(function(input, output, session) {
     
     if (input$type == "ce") {
       MA_int <- twostage_ME.FEint()$MA_int 
-      forest(MA_int, showweights=TRUE)
+      forest(MA_int, showweights=TRUE, xlab="Mean difference")
     }
     
     if (input$type == "re") {
       MA_int.re <- twostage_ME.REint()$MA_int.re
-      forest(MA_int.re, showweights=TRUE)
+      forest(MA_int.re, showweights=TRUE, xlab="Mean difference")
     }
   }
   
