@@ -1123,9 +1123,10 @@ shinyServer(function(input, output, session) {
       }
       
       # Prepare data for two stage MA
-      two_stageMA      <- data.frame(study=unique(df3$study), coef_group=coef_ancova[,"group"], secoef_group = se_ancova[,"group"])
+      two_stageMA      <- data.frame(study=unique(df3$study), coef_group=coef_ancova[,"group"], secoef_group = se_ancova[,"group"],
+                                     Author=unique(df3$author))
       # Run aggregate meta-analysis 
-      MA_twostageMEre  <- rma(yi=coef_group, sei=secoef_group, slab=study, method="REML", data=two_stageMA, knha=input$HK)
+      MA_twostageMEre  <- rma(yi=coef_group, sei=secoef_group, slab=Author, method="REML", data=two_stageMA, knha=input$HK)
       list(MA_twostageMEre = MA_twostageMEre)
       
     }
@@ -1275,9 +1276,11 @@ shinyServer(function(input, output, session) {
       }
       
       # Prepare data for two stage MA
-      two_stageMA_int <- data.frame(study=unique(df3$study), coef_group=coef_ancova_int[,"y1center:group"], secoef_group = se_ancova_int[,"y1center:group"])
+      two_stageMA_int <- data.frame(study=unique(df3$study), coef_group=coef_ancova_int[,"y1center:group"], secoef_group = se_ancova_int[,"y1center:group"],
+                                    Author=unique(df3$author))
+      
       # Run aggregate meta-analysis 
-      MA_int  <- rma(yi=coef_group, sei=secoef_group, slab=study, method="FE", data=two_stageMA_int)
+      MA_int  <- rma(yi=coef_group, sei=secoef_group, slab=Author, method="FE", data=two_stageMA_int)
       list(MA_int = MA_int)
       
     }
@@ -1321,9 +1324,10 @@ shinyServer(function(input, output, session) {
       }
       
       # Prepare data for two stage MA
-      two_stageMA_int <- data.frame(study=unique(df3$study), coef_group=coef_ancova_int[,"y1center:group"], secoef_group = se_ancova_int[,"y1center:group"])
+      two_stageMA_int <- data.frame(study=unique(df3$study), coef_group=coef_ancova_int[,"y1center:group"], secoef_group = se_ancova_int[,"y1center:group"],
+                                    Author=unique(df3$author))
       # Run aggregate meta-analysis 
-      MA_int.re  <- rma(yi=coef_group, sei=secoef_group, slab=study, method="REML", data=two_stageMA_int,  knha=input$HK)
+      MA_int.re  <- rma(yi=coef_group, sei=secoef_group, slab=Author, method="REML", data=two_stageMA_int,  knha=input$HK)
       list(MA_int.re = MA_int.re)
       
     }
