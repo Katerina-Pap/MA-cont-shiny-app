@@ -97,14 +97,14 @@ shinyServer(function(input, output, session) {
   output$input_table <- DT::renderDataTable({
     df_upload()
     if (is.null(df_upload())){return(NULL)}
-    DT::datatable(df_upload() 
-                  ,
-                  filter = 'top',
-                  selection = list(mode = 'single', selected = 1),
-                  options = list(search = list(caseInsensitive = TRUE),
-                                 searchHighlight = TRUE,
-                                 scrollX = TRUE,
-                                 pageLength = 10))
+    DT::datatable(df_upload())
+                  # ,
+                  # filter = 'top',
+                  # selection = list(mode = 'single', selected = 1),
+                  # options = list(search = list(caseInsensitive = TRUE),
+                  #                searchHighlight = TRUE,
+                  #                scrollX = TRUE,
+                  #                pageLength = 10))
   })
   
   # Print data structure ---------------------------------------------------------------------------------------------------------------------------------
