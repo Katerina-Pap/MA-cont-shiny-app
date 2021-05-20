@@ -186,7 +186,7 @@ shinyUI(
                                        ),
                                        
                                        h3("Description"),
-                                       p("A long format dataset comprised of 14 columns. The varables are as follows:"),
+                                       p("A long format dataset comprised of 14 columns. The variables are as follows:"),
                                        
                                        h3("Variables"),
                                        

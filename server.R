@@ -277,13 +277,14 @@ shinyServer(function(input, output, session) {
       
       if (is.null(analysis_data())){return(NULL)}
       analysis_data()
-      df <- analysis_data()
+      df     <- analysis_data()
+      Author <- df$Study[which(df$group=="0")]
       # change to wide format
-       drop         <- which(colnames(df) %in% "Study")
-       df           <- df[,-drop]
+      drop         <- which(colnames(df) %in% "Study")
+      df           <- df[,-drop]
       data.AD_wide <- dcast(melt(df, id.vars=c("ID", "group")), ID~variable+group)
       
-      MA.fixed.final <- rma(m1i=MeanFU_1, m2i=MeanFU_0, sd1i=sdFU_1, sd2i=sdFU_0, n1i=NCFB_1, n2i=NCFB_0, data=data.AD_wide, measure="MD", method="FE")
+      MA.fixed.final <- rma(m1i=MeanFU_1, m2i=MeanFU_0, sd1i=sdFU_1, sd2i=sdFU_0, n1i=NCFB_1, n2i=NCFB_0, data=data.AD_wide, measure="MD", method="FE", slab=Author)
       list(MA.fixed.final = MA.fixed.final) 
     }
     
@@ -316,12 +317,14 @@ shinyServer(function(input, output, session) {
       if (is.null(analysis_data())){return(NULL)}
       analysis_data()
       df <- analysis_data()
+      Author <- df$Study[which(df$group=="0")]
       # change to wide format 
       drop         <- which(colnames(df) %in% "Study")
       df           <-  df[,-drop]
       data.AD_wide <- dcast(melt(df, id.vars=c("ID", "group")), ID~variable+group)
       
-      MA.random.final <- rma(m1i=MeanFU_1, m2i=MeanFU_0, sd1i=sdFU_1, sd2i=sdFU_0, n1i=NCFB_1, n2i=NCFB_0, data=data.AD_wide, measure="MD", method="REML", knha=input$HK)
+      MA.random.final <- rma(m1i=MeanFU_1, m2i=MeanFU_0, sd1i=sdFU_1, sd2i=sdFU_0, n1i=NCFB_1, n2i=NCFB_0, data=data.AD_wide, measure="MD", method="REML", knha=input$HK,
+                             slab=Author)
       list(MA.random.final = MA.random.final) 
       
       
@@ -439,6 +442,7 @@ shinyServer(function(input, output, session) {
       if (is.null(analysis_data())){return(NULL)}
       analysis_data()
       df <- analysis_data()
+      Author <- df$Study[which(df$group=="0")]
       
       # change to wide format 
       drop         <- which(colnames(df) %in% "Study")
@@ -446,7 +450,7 @@ shinyServer(function(input, output, session) {
       data.AD_wide <- dcast(melt(df, id.vars=c("ID", "group")), ID~variable+group)
       
       MA.fixed.change <- rma(m1i=MeanCFB_1, m2i=MeanCFB_0, sd1i=sdCFB_1, sd2i=sdCFB_0, n1i=NCFB_1, n2i=NCFB_0,
-                             data=data.AD_wide, measure="MD", method="FE")
+                             data=data.AD_wide, measure="MD", method="FE", slab=Author)
       list(MA.fixed.change = MA.fixed.change) 
       
     }
@@ -479,6 +483,7 @@ shinyServer(function(input, output, session) {
       if (is.null(analysis_data())){return(NULL)}
       analysis_data()
       df <- analysis_data()
+      Author <- df$Study[which(df$group=="0")]
       
       # change to wide format 
       drop         <- which(colnames(df) %in% "Study")
@@ -486,7 +491,7 @@ shinyServer(function(input, output, session) {
       data.AD_wide <- dcast(melt(df, id.vars=c("ID", "group")), ID~variable+group)
       
       MA.random.change <- rma(m1i=MeanCFB_1, m2i=MeanCFB_0, sd1i=sdCFB_1, sd2i=sdCFB_0, n1i=NCFB_1, n2i=NCFB_0,
-                              data=data.AD_wide, measure="MD", method="REML", knha=input$HK)
+                              data=data.AD_wide, measure="MD", method="REML", knha=input$HK, slab=Author)
       list(MA.random.change = MA.random.change) 
       
       
@@ -607,7 +612,7 @@ shinyServer(function(input, output, session) {
       if (is.null(analysis_data())){return(NULL)}
       analysis_data()
       df <- analysis_data()
-      
+      Author <- df$Study[which(df$group=="0")]
       
       drop         <- which(colnames(df) %in% "Study")
       df           <-  df[,-drop]
@@ -634,7 +639,7 @@ shinyServer(function(input, output, session) {
       
       se_ancovas_est  <- with(data.AD_wide,sqrt(var_ancova_est))
       
-      MA.fixed.ANCOVA <- rma(yi=ancova_est, sei=se_ancovas_est, method="FE")
+      MA.fixed.ANCOVA <- rma(yi=ancova_est, sei=se_ancovas_est, method="FE", slab=Author)
       list(MA.fixed.ANCOVA = MA.fixed.ANCOVA) 
       
     }
@@ -667,6 +672,7 @@ shinyServer(function(input, output, session) {
       if (is.null(analysis_data())){return(NULL)}
       analysis_data()
       df <- analysis_data()
+      Author <- df$Study[which(df$group=="0")]
       # calculate pooled standard deviations of baseline and follow-up values
       # For the first three methods the data need to be in wide format
       drop         <- which(colnames(df) %in% "Study")
@@ -690,7 +696,7 @@ shinyServer(function(input, output, session) {
       
       se_ancovas_est  <- with(data.AD_wide,sqrt(var_ancova_est))
       
-      MA.random.ANCOVA <- rma(yi=ancova_est, sei=se_ancovas_est, method="REML", knha=input$HK)
+      MA.random.ANCOVA <- rma(yi=ancova_est, sei=se_ancovas_est, method="REML", knha=input$HK, slab=Author)
       list(MA.random.ANCOVA = MA.random.ANCOVA) 
       
     }
@@ -813,11 +819,17 @@ shinyServer(function(input, output, session) {
   # Make the pseudo IPD as reactive data set to be used in the modelling further
   pseudoIPD <- reactive({
     
+   # Author <- df$Study[which(df$group=="0")]
+    
     if (is.null(analysis_data())){return(NULL)}
+    
     analysis_data()
-    df2 <- analysis_data()
+    df2    <- analysis_data()
+    #Author <- df2$Study[which(df2$group=="0")]
+    
     # Generate the pseudo baselines and outcomes
     data.IPD <- data.frame(study         = rep(df2$ID, df2$NCFB),
+                           author        = rep(df2$Study, df2$NCFB),
                            group         = rep(df2$group, df2$NCFB),
                            meanBaseline  = rep(df2$MeanBaseline, df2$NCFB),
                            sdBaseline    = rep(df2$sdBaseline, df2$NCFB),
@@ -860,7 +872,7 @@ shinyServer(function(input, output, session) {
     data.IPD2$y2    <- data.IPD2$ytmp3*data.IPD2$sdPost + data.IPD2$meanPost
     
     # make new dataset, with only relevant variables
-    data.pseudoIPD <- data.IPD2[,c("study", "group", "y1", "y2")]
+    data.pseudoIPD <- data.IPD2[,c("study", "author", "group", "y1", "y2")]
     #View(data.pseudoIPD) # final pseudo IPD dataset 
     rm(data.IPD2,data.IPD)
     
@@ -1063,9 +1075,11 @@ shinyServer(function(input, output, session) {
       }
       
       # Prepare data for two stage MA
-      two_stageMA <- data.frame(study=unique(df3$study), coef_group=coef_ancova[,"group"], secoef_group = se_ancova[,"group"])
+      two_stageMA <- data.frame(study=unique(df3$study), coef_group=coef_ancova[,"group"], secoef_group = se_ancova[,"group"],
+                                Author=unique(df3$author))
+      
       # Run aggregate meta-analysis 
-      MA_twostageME  <- rma(yi=coef_group, sei=secoef_group, slab=study, method="FE", data=two_stageMA)
+      MA_twostageME  <- rma(yi=coef_group, sei=secoef_group, slab=Author, method="FE", data=two_stageMA)
       list(MA_twostageME = MA_twostageME)
       
     }
@@ -1109,7 +1123,7 @@ shinyServer(function(input, output, session) {
       }
       
       # Prepare data for two stage MA
-      two_stageMA <- data.frame(study=unique(df3$study), coef_group=coef_ancova[,"group"], secoef_group = se_ancova[,"group"])
+      two_stageMA      <- data.frame(study=unique(df3$study), coef_group=coef_ancova[,"group"], secoef_group = se_ancova[,"group"])
       # Run aggregate meta-analysis 
       MA_twostageMEre  <- rma(yi=coef_group, sei=secoef_group, slab=study, method="REML", data=two_stageMA, knha=input$HK)
       list(MA_twostageMEre = MA_twostageMEre)
@@ -1142,14 +1156,14 @@ shinyServer(function(input, output, session) {
     
     if (input$type == "ce") {
       MA_twostageME <- twostage_ME.FE()$MA_twostageME
-      forest(MA_twostageME)
+      forest(MA_twostageME, showweights=TRUE)
       
     }
     
     if (input$type == "re") {
       
       MA_twostageMEre <- twostage_ME.RE()$MA_twostageMEre
-      forest(MA_twostageMEre)
+      forest(MA_twostageMEre, showweights=TRUE)
       
     }
   }
@@ -1341,12 +1355,12 @@ shinyServer(function(input, output, session) {
     
     if (input$type == "ce") {
       MA_int <- twostage_ME.FEint()$MA_int 
-      forest(MA_int)
+      forest(MA_int, showweights=TRUE)
     }
     
     if (input$type == "re") {
       MA_int.re <- twostage_ME.REint()$MA_int.re
-      forest(MA_int.re)
+      forest(MA_int.re, showweights=TRUE)
     }
   }
   
