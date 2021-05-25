@@ -115,7 +115,7 @@ shinyUI(
                           sidebarPanel(
                             h4("Select an excel file to upload"),
                             h5(tags$div(
-                              HTML(paste("", tags$span(icon("fas fa-exclamation-triangle"), style = "background-color:#DCDCDC", "Your file needs to have exactly the same structure as shown in the data input table"), sep = ""))
+                              HTML(paste("", tags$span(icon("fas fa-exclamation-triangle"), style = "background-color:#DCDCDC", "Your file needs to have exactly the same structure as shown in the data preview table"), sep = ""))
                             )),
                             h5(tags$a(href = 'template.xlsx', class = "btn", icon("download"), style='background-color:#91d1c2ff; color: #fdfbfb',
                                       'Download data template')),
