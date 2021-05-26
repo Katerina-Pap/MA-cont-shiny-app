@@ -728,14 +728,14 @@ shinyServer(function(input, output, session) {
       
       MA.fixed.ANCOVA <- ancova.FE()$MA.fixed.ANCOVA
       
-      forest(MA.fixed.ANCOVA, showweights=TRUE)
+      forest(MA.fixed.ANCOVA, showweights=TRUE, xlab="Mean difference")
     }
     
     else if (input$type == "re") {
       
       MA.random.ANCOVA <- ancova.RE()$MA.random.ANCOVA
       
-      forest(MA.random.ANCOVA, showweights=TRUE)
+      forest(MA.random.ANCOVA, showweights=TRUE, xlab="Mean difference")
     }
     
   }
