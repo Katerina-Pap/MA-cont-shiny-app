@@ -70,7 +70,7 @@ shinyUI(
                    ),
                    mainPanel(
                      fluidRow(
-                       column(width = 6, align="left", offset=-5,  h3(strong("Getting started"), align="left") ),
+                       column(width = 6, offset=-5,  h3(strong("Getting started"), align="left") ),
                       
                        column(
                          width = 6,
