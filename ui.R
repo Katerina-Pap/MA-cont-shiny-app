@@ -55,7 +55,7 @@ shinyUI(
                    ),
                    mainPanel(
                      fluidRow(
-                       column(width = 6,  h3(strong("Getting started")),
+                       column(width = 6,  h3(strong("Getting started")) ),
                       
                        column(
                          width = 6,
