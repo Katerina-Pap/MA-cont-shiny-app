@@ -36,14 +36,7 @@ shinyUI(
                        ),
                     # br(),
                      hr(),
-                     # h3(strong("Citation")),
-                     # p(
-                     #   "If you use",
-                     #   em("MA-cont: pre/post effect size"),
-                     #   "to perform your analyses, please remember to cite the tool."
-                     # ),
-                     # hr(),
-                     
+                   
                      h3(strong("Request a new feature")),
                      p(
                        "Please ",
@@ -62,7 +55,7 @@ shinyUI(
                    ),
                    mainPanel(
                      fluidRow(
-                       column(width = 6, offset=-5,  h3(strong("Getting started"), align="left") ),
+                       column(width = 6,  h3(strong("Getting started")),
                       
                        column(
                          width = 6,
