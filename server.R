@@ -97,7 +97,8 @@ shinyServer(function(input, output, session) {
   output$input_table <- DT::renderDataTable({
     df_upload()
     if (is.null(df_upload())){return(NULL)}
-    DT::datatable(df_upload())
+    DT::datatable(df_upload(), selection = list(mode = 'single', selected = 1)
+                 )
                   # ,
                   # filter = 'top',
                   # selection = list(mode = 'single', selected = 1),

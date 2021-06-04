@@ -8,14 +8,6 @@ jsCode <- 'shinyjs.winprint = function(){
 window.print();
 }'
 
-# em {
-#  font-family: 'Times New Roman', serif;
-#   
-#   font-style:  italic;
-#   
-#   color: red;
-#   }
-
 # Define UI --------------------------------------------------------------------------------------------------------------------------------------------------------
 shinyUI(
 
