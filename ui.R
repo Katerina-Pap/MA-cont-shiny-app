@@ -98,7 +98,7 @@ shinyUI(
                                 # ),
                         sidebarLayout(
                           sidebarPanel(
-                            h4("Select an excel file to upload"),
+                            h4(strong("Select an excel file to upload")),
                             h5(tags$div(
                               HTML(paste("", tags$span(icon("fas fa-exclamation-triangle"), style = "background-color:#DCDCDC", "Your file needs to have exactly the same structure as shown in the data preview table"), sep = ""))
                             )),
@@ -224,15 +224,15 @@ shinyUI(
                                   fluidPage(
                                     sidebarLayout(
                                       sidebarPanel(
-                                        h2("Perform meta-analysis of pre/post effect size"),
+                                        h3(strong("Perform meta-analysis of pre/post effect size")),
                                         prettyRadioButtons(inputId = "es",  icon=icon("check"), # input is effect size - for now only MD, extension to SMD possible
-                                                           h3('Select the effect size:'),
+                                                           h4('Select the effect size:'),
                                                            choices =   c('Mean difference'),
                                                            selected = "Mean difference"),
                                         
                                        
                                         
-                                        radioButtons("type", h3("Select the MA model:"),
+                                        radioButtons("type", h4("Select the MA model:"),
                                                      list("Random-effects (RE)" = "re",
                                                           "Common(fixed)-effect (CE)" = "ce"
                                                      ),
