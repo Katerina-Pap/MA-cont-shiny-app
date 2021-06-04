@@ -1219,14 +1219,16 @@ shinyServer(function(input, output, session) {
     
     if (input$type == "ce") {
       MA_twostageME <- twostage_ME.FE()$MA_twostageME
-      funnel(MA_twostageME, main="Standard Error", level=c(90, 95, 99), shade=c("white", "gray55", "gray75"), legend=TRUE, back="cadetblue")
+      funnel(MA_twostageME, main="Standard Error", level=c(90, 95, 99), shade=c("white", "gray55", "gray75"), legend=TRUE,
+             back="cadetblue", xlab="Mean Difference")
       
     }
     
     if (input$type == "re") {
       
       MA_twostageMEre <- twostage_ME.RE()$MA_twostageMEre
-      funnel(MA_twostageMEre, main="Standard Error", level=c(90, 95, 99), shade=c("white", "gray55", "gray75"), legend=TRUE, back="cadetblue")
+      funnel(MA_twostageMEre, main="Standard Error", level=c(90, 95, 99), shade=c("white", "gray55", "gray75"), legend=TRUE, 
+             back="cadetblue", xlab="Mean Difference")
       
     }
   }
@@ -1256,7 +1258,6 @@ shinyServer(function(input, output, session) {
       dev.off()
     }
   )
-  
   
   
   #---------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -1406,12 +1407,14 @@ shinyServer(function(input, output, session) {
     
     if (input$type == "ce") {
       MA_int <- twostage_ME.FEint()$MA_int 
-      funnel(MA_int, main="Standard Error", level=c(90, 95, 99), shade=c("white", "gray55", "gray75"), legend=TRUE, back="cadetblue")
+      funnel(MA_int, main="Standard Error", level=c(90, 95, 99), shade=c("white", "gray55", "gray75"), legend=TRUE, 
+             back="cadetblue", xlab="Mean Difference")
     }
     
     if (input$type == "re") {
       MA_int.re <- twostage_ME.REint()$MA_int.re
-      funnel(MA_int.re, main="Standard Error", level=c(90, 95, 99), shade=c("white", "gray55", "gray75"), legend=TRUE, back="cadetblue")
+      funnel(MA_int.re, main="Standard Error", level=c(90, 95, 99), shade=c("white", "gray55", "gray75"), legend=TRUE, 
+             back="cadetblue", xlab="Mean Difference")
     }
   }
   
