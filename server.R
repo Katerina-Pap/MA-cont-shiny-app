@@ -774,14 +774,16 @@ shinyServer(function(input, output, session) {
       
       MA.fixed.ANCOVA <- ancova.FE()$MA.fixed.ANCOVA
       
-      funnel(MA.fixed.ANCOVA, main="Standard Error", level=c(90, 95, 99), shade=c("white", "gray55", "gray75"), legend=TRUE, back="cadetblue")
+      funnel(MA.fixed.ANCOVA, main="Standard Error", level=c(90, 95, 99), shade=c("white", "gray55", "gray75"), legend=TRUE, 
+             back="cadetblue", xlab="Mean Difference")
     }
     
     else if (input$type == "re") {
       
       MA.random.ANCOVA <- ancova.RE()$MA.random.ANCOVA
       
-      funnel(MA.random.ANCOVA, main="Standard Error", level=c(90, 95, 99), shade=c("white", "gray55", "gray75"), legend=TRUE, back="cadetblue")
+      funnel(MA.random.ANCOVA, main="Standard Error", level=c(90, 95, 99), shade=c("white", "gray55", "gray75"), legend=TRUE,
+             back="cadetblue", xlab="Mean Difference")
     }
     
   }
