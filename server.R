@@ -398,14 +398,16 @@ shinyServer(function(input, output, session) {
       
       MA.fixed.final <- final.FE()$MA.fixed.final
       
-      funnel(MA.fixed.final, main="Standard Error", level=c(90, 95, 99), shade=c("white", "gray55", "gray75"), legend=TRUE, back="cadetblue")
+      funnel(MA.fixed.final, main="Standard Error", level=c(90, 95, 99), shade=c("white", "gray55", "gray75"), legend=TRUE, 
+             back="cadetblue")
     }
     
     else if (input$type == "re") {
       
       MA.random.final <- final.RE()$MA.random.final
       
-      funnel(MA.random.final, main="Standard Error", level=c(90, 95, 99), shade=c("white", "gray55", "gray75"), legend=TRUE, back="cadetblue")
+      funnel(MA.random.final, main="Standard Error", level=c(90, 95, 99), shade=c("white", "gray55", "gray75"), legend=TRUE, 
+             back="cadetblue")
     }
     
   }
