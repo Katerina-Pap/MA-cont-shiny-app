@@ -185,7 +185,7 @@ shinyUI(
                                        'Fill-in data', 
                                        fluidRow(column(12, style = "background-color:#cfcfcf",
                                        h3("Calculate SD from SE"),
-                                       tableOutput('SDfromSE')  )),
+                                       DT::dataTableOutput('SDfromSE')  )),
                                        br(),
                                        fluidRow(column(12, style = "background-color:#dcdcdc",
                                        h3("Assume equal SDs at baseline and follow-up"),

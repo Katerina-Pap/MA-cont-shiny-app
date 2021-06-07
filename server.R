@@ -112,7 +112,7 @@ shinyServer(function(input, output, session) {
   output$structure <- renderPrint({
     req(df_upload())
     Dataset <- df_upload() # Renaming the data set to appear better in the table
-    #skim(Dataset)
+    # skim(Dataset)
     
     skim(Dataset) %>%
       filter(skim_type == "numeric") %>%
@@ -165,10 +165,13 @@ shinyServer(function(input, output, session) {
   })
   
   # Output table of SDs from SEs actionbutton 
-  output$SDfromSE<-renderTable({
+  output$SDfromSE<-  DT::renderDataTable({
     if(is.null(df2()))
     {return(NULL)}
-    df2()
+    df2() %>% datatable() %>%
+      formatRound(columns=c('sdBaseline', 'sdFU'), digits=2)
+    
+    #DT::datatable(df2(), formatRound(columns=c('sdBaseline', 'sdFU'), digits=2) )
     #coalsce(df2(),df1())
   })
   
