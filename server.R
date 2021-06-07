@@ -169,7 +169,7 @@ shinyServer(function(input, output, session) {
     if(is.null(df2()))
     {return(NULL)}
     df2() %>% datatable() %>%
-      formatRound(columns=c('sdBaseline', 'sdFU'), digits=2)
+      formatRound(columns=c('sdBaseline', 'sdFU', 'MeanCFB', 'sdCFB', 'seCFB'), digits=2)
     
     #DT::datatable(df2(), formatRound(columns=c('sdBaseline', 'sdFU'), digits=2) )
     #coalsce(df2(),df1())
@@ -183,10 +183,11 @@ shinyServer(function(input, output, session) {
   })
   
   # Output table of equal SDs pre/post actiobutton
-  output$sameSDboth<-renderTable({
+  output$sameSDboth<- DT::renderDataTable({
     if(is.null(df3()))
     {return(NULL)}
-    df3()
+    df3() %>% datatable() %>%
+      formatRound(columns=c('sdBaseline', 'sdFU', 'MeanCFB', 'sdCFB', 'seCFB'), digits=2)
     
   })
   
