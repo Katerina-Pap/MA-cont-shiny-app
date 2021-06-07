@@ -189,7 +189,7 @@ shinyUI(
                                        br(),
                                        fluidRow(column(12, style = "background-color:#dcdcdc",
                                        h3("Assume equal SDs at baseline and follow-up"),
-                                       tableOutput('sameSDboth') )),
+                                       DT::dataTableOutput('sameSDboth') )),
                                        br(),
                                        fluidRow(column(12, style = "background-color:#e9e9e9",
                                        h3("Calculate correlations from SDs from baseline, follow-up and change scores"),
