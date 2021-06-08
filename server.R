@@ -200,10 +200,11 @@ shinyServer(function(input, output, session) {
   })
   
   # Output table of correlation actiobutton   
-  output$correl_output<-renderTable({
+  output$correl_output<-DT::renderDataTable({
     if(is.null(df4()))
     {return(NULL)}
-    df4()
+    df4() %>% datatable() %>%
+      formatRound(columns=c('sdBaseline', 'sdFU', 'Correlation', 'MeanCFB', 'sdCFB', 'seCFB'), digits=2)
     
   })
   
@@ -220,10 +221,12 @@ shinyServer(function(input, output, session) {
   })
   
   # Output table of final calculations
-  output$full_data <-renderTable({
+  output$full_data <- DT::renderDataTable({
     if(is.null(df5()))
     {return(NULL)}
-    df5()
+    df5() %>% datatable() %>%
+      formatRound(columns=c('sdBaseline', 'seBaseline', 'sdFU', 'seFU', 'Correlation', 'MeanCFB', 'sdCFB', 'seCFB'), digits=2)
+    
     #coalesce(df5(), df1())
     
     # inFile <- input$data_upload
