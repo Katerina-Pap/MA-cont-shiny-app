@@ -269,7 +269,13 @@ shinyServer(function(input, output, session) {
   output$final_data<-renderTable({
     if(is.null(analysis_data()))
     {return(NULL)}
-    analysis_data()
+    df <- analysis_data()
+    df$ID <- sprintf('%1.0f', df$ID)
+    df$group <- sprintf('%1.0f', df$group)
+    df
+    
+    #analysis_data()$ID <-  sprintf('%1.3f', analysis_data()$ID)
+    #analysis_data()
   })
   
   
