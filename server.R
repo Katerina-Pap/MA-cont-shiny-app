@@ -165,13 +165,18 @@ shinyServer(function(input, output, session) {
   })
   
   # Output table of SDs from SEs actionbutton 
-  output$SDfromSE<-  DT::renderDataTable({
+  output$SDfromSE<-  renderTable({
     if(is.null(df2()))
     {return(NULL)}
-    df2() %>% datatable() %>%
-      formatRound(columns=c('sdBaseline', 'sdFU', 'MeanCFB', 'sdCFB', 'seCFB'), digits=2)
+    df2 <- df2()
+    df2$ID <- sprintf('%1.0f', df2$ID)
+    df2$group <- sprintf('%1.0f', df2$group)
+    df2
     
-    #DT::datatable(df2(), formatRound(columns=c('sdBaseline', 'sdFU'), digits=2) )
+    # df2() %>% datatable() %>%
+    #   formatRound(columns=c('sdBaseline', 'sdFU', 'MeanCFB', 'sdCFB', 'seCFB'), digits=2)
+     
+   
     #coalsce(df2(),df1())
   })
   
@@ -183,11 +188,18 @@ shinyServer(function(input, output, session) {
   })
   
   # Output table of equal SDs pre/post actiobutton
-  output$sameSDboth<- DT::renderDataTable({
+  output$sameSDboth<- renderTable({
     if(is.null(df3()))
     {return(NULL)}
-    df3() %>% datatable() %>%
-      formatRound(columns=c('sdBaseline', 'sdFU', 'MeanCFB', 'sdCFB', 'seCFB'), digits=2)
+    
+    
+    df3 <- df3()
+    df3$ID <- sprintf('%1.0f', df3$ID)
+    df3$group <- sprintf('%1.0f', df3$group)
+    df3
+    
+    #df3() %>% datatable() %>%
+    #  formatRound(columns=c('sdBaseline', 'sdFU', 'MeanCFB', 'sdCFB', 'seCFB'), digits=2)
     
   })
   
