@@ -193,12 +193,12 @@ shinyUI(
                                        br(),
                                        fluidRow(column(12, style = "background-color:#e9e9e9",
                                        h3("Calculate correlations from SDs from baseline, follow-up and change scores"),
-                                       DT::dataTableOutput('correl_output') )),
+                                       tableOutput('correl_output') )),
                                        br(),
                                        fluidRow(column(12, style = "background-color:#f6f6f6",
                                        h3("Final calculations"),
                                        h4("Impute correlations from median correlation values per group and SDs of change scores from correlations"),
-                                       DT::dataTableOutput('full_data') ))
+                                       tableOutput('full_data') ))
                                        
                                        
                                        
