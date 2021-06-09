@@ -149,7 +149,8 @@ shinyServer(function(input, output, session) {
   output$structure <- renderPrint({
     req(all_dat())
     Dataset <- all_dat() # Renaming the data set to appear better in the table
-    # skim(Dataset)
+    
+    #table1(~MeanBaseline + sdBaseline | factor(group), data=Dataset)
     
     skim(Dataset) %>%
       filter(skim_type == "numeric") %>%
@@ -157,9 +158,34 @@ shinyServer(function(input, output, session) {
       filter(skim_variable != "group") %>%
       select(-c(n_missing))%>%
       select(-numeric.p0, - numeric.p100)
+    
       #skim_with(numeric = list(hist = NULL))
 
   })
+  
+  
+  # output$structure1 <- render_gt({
+  #   req(all_dat())
+  #   Dataset <- all_dat() # Renaming the data set to appear better in the table
+  #   
+  #   Dataset2 <- Dataset %>% select(MeanBaseline, sdBaseline, seBaseline, MeanFU, sdFU, seFU, Correlation, NCFB,  group)
+  #   
+  #  test <- tbl_summary(Dataset2, by=group, statistic = list(all_continuous() ~ "{mean} ({sd})")) %>% bold_labels() %>% as_gt()
+  #   
+  # return(test)
+  # 
+  # })
+  
+  # output$structure1 <- renderText({
+  #   req(all_dat())
+  #   Dataset <- all_dat() # Renaming the data set to appear better in the table
+  #   # skim(Dataset)
+  #   
+  #   test <- table1(~MeanBaseline + sdBaseline | factor(group), data=Dataset)
+  #   
+  #   return(test)
+  #   
+  # })
   
   # Need to build multiple reactive dataframes to make the final (filled-in) data set
   

@@ -161,6 +161,9 @@ shinyUI(
                                        
                                        conditionalPanel("input.display == 'preview'", h2("Data Preview"), DT::dataTableOutput("input_table")),
                                        conditionalPanel("input.display == 'summary'", h2("Data Summary"),  verbatimTextOutput("structure")),
+                                       
+                                       #conditionalPanel("input.display == 'summary'", h2("Data Preview"),  htmlOutput("structure1")),
+                                       #conditionalPanel("input.display == 'summary'", h2("Data Preview"),  gt_output('structure1')),
                                        textOutput("warning"), # Warning if wrong file format is uploaded 
                                        
                                        tags$head(tags$style("#warning {color: red;
