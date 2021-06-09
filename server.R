@@ -52,6 +52,8 @@ shinyServer(function(input, output, session) {
   
   # Define reactive values ---------------------------------------------------------------------------------------------------------------------------------------
   
+  rv <- reactiveValues()
+  
   # Load default data 
   
   defaultDat <- reactive({
@@ -76,10 +78,6 @@ shinyServer(function(input, output, session) {
     }
     return(data)
     
-     
-      
-   #try(read.csv(inFile$datapath, header = input$header, sep = input$separator, dec =input$dec), silent=T)
-    
 
     
     # Note to try later: once the analysis_data are loaded, I want  make reactive the sliders for the ANCOVA method
@@ -93,11 +91,50 @@ shinyServer(function(input, output, session) {
     
   })
   
+  
+  # output$table_edited <- renderTable({
+  #   validate(need(rv$data, message = "No valid file loaded. Please see the template."))
+  #   rv$data
+  # })
+  # 
+  
+  
+  # Program logical checks for the uploaded data -------------------------------------------------------------------------------------------------------------------
+    
+  all_dat <- reactive({
+    
+    req(df_upload()) # require the reactive uploaded or default data set
+    
+    raw_sheet <- df_upload()
+    
+    res <- tryCatch({
+      names(raw_sheet)[1] <- "ID"
+      
+      alldat <- raw_sheet 
+      
+      
+      if(names(alldat)[1] != "ID" | ncol(alldat) !=14)  # logical checks conditions 
+      {
+        stop("Incorrect format of the data in the Excel file")
+      }
+      return(alldat)
+    }, error = function(e) e)
+    
+    if(inherits(res, "error")) {
+      output$warning <- renderText(paste0("Error in reading file: ", res$message))
+      return(NULL)
+    }
+    
+    return(res)
+    
+  })
+  
+  
   # Data table of input/example dataset -------------------------------------------------------------------------------------------------------------------
   output$input_table <- DT::renderDataTable({
-    df_upload()
-    if (is.null(df_upload())){return(NULL)}
-    DT::datatable(df_upload(), selection = list(mode = 'single', selected = 1)
+    all_dat()
+    if (is.null(all_dat())){return(NULL)}
+    DT::datatable(all_dat(), selection = list(mode = 'single', selected = 1)
                  )
                   # ,
                   # filter = 'top',
@@ -110,8 +147,8 @@ shinyServer(function(input, output, session) {
   
   # Print data structure ---------------------------------------------------------------------------------------------------------------------------------
   output$structure <- renderPrint({
-    req(df_upload())
-    Dataset <- df_upload() # Renaming the data set to appear better in the table
+    req(all_dat())
+    Dataset <- all_dat() # Renaming the data set to appear better in the table
     # skim(Dataset)
     
     skim(Dataset) %>%
@@ -124,14 +161,13 @@ shinyServer(function(input, output, session) {
 
   })
   
-  
   # Need to build multiple reactive dataframes to make the final (filled-in) data set
   
   # Dataset 1: make reactive calculating means -------------------------------------------------------------------------------------------------------------------
-  rv <- reactiveValues()
+  # rv <- reactiveValues()
   
   df1 <- reactive({
-    rv$df <- df_upload()
+    rv$df <- all_dat()
     
     rv$ID           <- rv$df[[1]]
     rv$Study        <- rv$df[[2]]

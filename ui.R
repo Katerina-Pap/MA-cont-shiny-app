@@ -170,6 +170,8 @@ shinyUI(
                                                  
                                        ),
                                        
+                                       #tableOutput("table_edited"),
+                                       
                                        h3("Description"),
                                        p("A long format dataset comprised of 14 columns. The variables are as follows:"),
                                        
