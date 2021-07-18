@@ -14,12 +14,12 @@ shinyServer(function(input, output, session) {
   
   options(shiny.reactlog=TRUE) 
   
-  # Video instructions ------------------------------------------------------------------------------------------------------------------------------------------
+# Video instructions ------------------------------------------------------------------------------------------------------------------------------------------
   output$video <- renderUI({
    tags$video(type = "video/mp4", src = "video_instructions.mp4", width="350px", height="350px", controls = "controls",  style="display: block; margin-left: auto; margin-right: auto;")
   })
   
-  # Track number of visitors at the bottom of page ---------------------------------------------------------------------------------------------------------------
+# Track number of visitors at the bottom of page ---------------------------------------------------------------------------------------------------------------
   nvisitors(isolate(nvisitors()) + 1)
   onSessionEnded(function(x){ 
     nvisitors(isolate(nvisitors()) - 1)
@@ -38,7 +38,7 @@ shinyServer(function(input, output, session) {
     updateTabsetPanel(session, inputId = 'mytabsetpanel', selected = 'missing')
   })
   
-  # Download data template ---------------------------------------------------------
+# Download data template -------------------------------------------------------------------------------------
   
   # output$downloadtemp <- downloadHandler(
   #                                        filename = function() {
@@ -50,7 +50,7 @@ shinyServer(function(input, output, session) {
   #                                  
   # )
   
-  # Define reactive values ---------------------------------------------------------------------------------------------------------------------------------------
+# Define reactive values ---------------------------------------------------------------------------------------------------------------------------------------
   
   rv <- reactiveValues()
   
@@ -99,7 +99,7 @@ shinyServer(function(input, output, session) {
   # 
   
   
-  # Program logical checks for the uploaded data -------------------------------------------------------------------------------------------------------------------
+# Program logical checks for the uploaded data -------------------------------------------------------------------------------------------------------------------
     
   all_dat <- reactive({
     
@@ -130,7 +130,7 @@ shinyServer(function(input, output, session) {
   })
   
   
-  # Data table of input/example dataset -------------------------------------------------------------------------------------------------------------------
+# Data table of input/example dataset -------------------------------------------------------------------------------------------------------------------
   output$input_table <- DT::renderDataTable({
     all_dat()
     if (is.null(all_dat())){return(NULL)}
@@ -145,7 +145,7 @@ shinyServer(function(input, output, session) {
                   #                pageLength = 10))
   })
   
-  # Print data structure ---------------------------------------------------------------------------------------------------------------------------------
+# Print data structure ---------------------------------------------------------------------------------------------------------------------------------
   output$structure <- renderPrint({
     req(all_dat())
     Dataset <- all_dat() # Renaming the data set to appear better in the table
@@ -189,8 +189,8 @@ shinyServer(function(input, output, session) {
   
   # Need to build multiple reactive dataframes to make the final (filled-in) data set
   
-  # Dataset 1: make reactive calculating means -------------------------------------------------------------------------------------------------------------------
-  # rv <- reactiveValues()
+# Dataset 1: make reactive calculating means -------------------------------------------------------------------------------------------------------------------
+# rv <- reactiveValues()
   
   df1 <- reactive({
     rv$df <- all_dat()
@@ -216,7 +216,7 @@ shinyServer(function(input, output, session) {
               #sdCFB      = ifelse(is.na(rv$sdCFB),   rv$seCFB*sqrt(rv$NCFB), rv$sdCFB))
   })
   
-  # Dataset 2: Calculate SDs from SEs  ----------------------------------------------------------------------------------------------------------------------------
+# Dataset 2: Calculate SDs from SEs  ----------------------------------------------------------------------------------------------------------------------------
   df2 <- eventReactive(input$SEfromSD, {
     df1() %>%
       mutate (sdBaseline = ifelse(is.na(rv$sdBaseline), rv$seBaseline*sqrt(rv$NCFB), rv$sdBaseline), 
@@ -242,7 +242,7 @@ shinyServer(function(input, output, session) {
     #coalsce(df2(),df1())
   })
   
-  # Dataset 3: Assume equal pre and post SDs ---------------------------------------------------------------------------------------------------------------------
+# Dataset 3: Assume equal pre and post SDs ---------------------------------------------------------------------------------------------------------------------
   df3 <- eventReactive(input$sameSD, {
     df2() %>%
       mutate (sdFU = ifelse(is.na(sdFU), sdBaseline, sdFU) 
@@ -265,7 +265,7 @@ shinyServer(function(input, output, session) {
   })
   
   
-  # Dataset 4: Calculate Correlations from SDs--------------------------------------------------------------------------------------------------------------------
+# Dataset 4: Calculate Correlations from SDs -------------------------------------------------------------------------------------------------------------------
   df4 <- eventReactive(input$correl, {
     df3() %>%
       mutate (Correlation = ifelse(is.na(Correlation), (sdBaseline^2+sdFU^2-sdCFB^2)/(2*sdBaseline*sdFU), Correlation)
@@ -288,7 +288,7 @@ shinyServer(function(input, output, session) {
     
   })
   
-  # Dataset 5: Make final calculations --------------------------------------------------------------------------------------------------------------------------
+# Dataset 5: Make final calculations --------------------------------------------------------------------------------------------------------------------------
   df5 <- eventReactive(input$final_calc, {
     df4() %>%
       mutate (Correlation  = ifelse(is.na(Correlation)| (Correlation<=-1.0) | (Correlation>1.0)  & (group=="0"), tapply(Correlation, group, median, na.rm=T)[1], Correlation), # for control group
@@ -300,7 +300,7 @@ shinyServer(function(input, output, session) {
       )
   })
   
-  # Output table of final calculations
+# Output table of final calculations
   output$full_data <- renderTable({
     if(is.null(df5()))
     {return(NULL)}
@@ -321,7 +321,7 @@ shinyServer(function(input, output, session) {
   })
   
   
-  # Final dataset where models will be fitted on ------------------------------------------------------------------------------------------------------------------
+# Final dataset where models will be fitted on ------------------------------------------------------------------------------------------------------------------
   analysis_data <- reactive({
     if(is.null(df5()))
     {return(NULL)}
@@ -365,12 +365,12 @@ shinyServer(function(input, output, session) {
   })
   
   
-  #----------------------------------------------------------------------------------------------------------------------------------------------------------------    
-  # Output Standard AD analyses
+#----------------------------------------------------------------------------------------------------------------------------------------------------------------    
+# Output Standard AD analyses
   
-  # Output final (follow-up) scores analysis ----------------------------------------------------------------
+# Output final (follow-up) scores analysis --------------------------
   
-  # FE analysis results 
+# FE analysis results 
   final.FE <- reactive({
     
     if (input$type == "ce") {
@@ -702,8 +702,6 @@ shinyServer(function(input, output, session) {
     }
   )  
   
-  
-  
 # Output recovered ANCOVA approach -------------------------------------------------------------------------------------------------------------------------------
   
 # FE analysis results 
@@ -965,37 +963,36 @@ shinyServer(function(input, output, session) {
   }  
   } 
     
-    # temporary variable needed to generate the pseudo baseline and pseudo follow-up outcomes
-    data.IPD2$ytmp3 <- data.IPD2$ytmp1*data.IPD2$correlation + sqrt(1-data.IPD2$correlation^2)*data.IPD2$resid/sqrt(1-data.IPD2$cor.ytmp^2)
-    # generate pseudo baseline and pseudo follow-up outcomes
-    data.IPD2$y1    <- data.IPD2$ytmp1*data.IPD2$sdBaseline + data.IPD2$meanBaseline
-    data.IPD2$y2    <- data.IPD2$ytmp3*data.IPD2$sdPost + data.IPD2$meanPost
+  # temporary variable needed to generate the pseudo baseline and pseudo follow-up outcomes
+  data.IPD2$ytmp3 <- data.IPD2$ytmp1*data.IPD2$correlation + sqrt(1-data.IPD2$correlation^2)*data.IPD2$resid/sqrt(1-data.IPD2$cor.ytmp^2)
+  # generate pseudo baseline and pseudo follow-up outcomes
+  data.IPD2$y1    <- data.IPD2$ytmp1*data.IPD2$sdBaseline + data.IPD2$meanBaseline
+  data.IPD2$y2    <- data.IPD2$ytmp3*data.IPD2$sdPost + data.IPD2$meanPost
     
-    # make new dataset, with only relevant variables
-    data.pseudoIPD <- data.IPD2[,c("study", "author", "group", "y1", "y2")]
-    #View(data.pseudoIPD) # final pseudo IPD dataset 
-    rm(data.IPD2,data.IPD)
+  # make new dataset, with only relevant variables
+  data.pseudoIPD <- data.IPD2[,c("study", "author", "group", "y1", "y2")]
+  rm(data.IPD2, data.IPD)
     
-    # Check the mean and sd of y1 and y2, and correlation y1, y2
-    check <-cbind(aggregate(y1~group+study, data=data.pseudoIPD, mean), 
+  # Check the mean and sd of y1 and y2, and correlation y1, y2
+  check <-cbind(aggregate(y1~group+study, data=data.pseudoIPD, mean), 
                   aggregate(y2~group+study, data=data.pseudoIPD, mean)[3],
                   aggregate(y1~group+study, data=data.pseudoIPD, sd)[3],
                   aggregate(y2~group+study, data=data.pseudoIPD, sd)[3],
                   as.vector(cbind(by(data.pseudoIPD, data.pseudoIPD[,c("group","study")], function(x) {cor(x$y1,x$y2)}))))
     
-    colnames(check)<- c(colnames(check)[1:2], "meany1", "meany2","sdy1", "sdy2","cory1y2")
-    check
-    rm(check)
+  colnames(check)<- c(colnames(check)[1:2], "meany1", "meany2","sdy1", "sdy2","cory1y2")
+  check
+  rm(check)
     
-    # Pre-step to calculate centered baseline values by study
-    data.pseudoIPD$meany1bystudy <- round(ave(data.pseudoIPD$y1, data.pseudoIPD$study), 4)
-    data.pseudoIPD$y1center      <- round(data.pseudoIPD$y1 - data.pseudoIPD$meany1bystudy, 4)
-    data.pseudoIPD$groupcenter   <- data.pseudoIPD$group - 0.5
-    data.pseudoIPD$arm           <- 1000*data.pseudoIPD$study + data.pseudoIPD$group
-    data.pseudoIPD$y2            <- round(data.pseudoIPD$y2, 4)
-    data.pseudoIPD$y1            <- round(data.pseudoIPD$y1, 4)
+  # Pre-step to calculate centered baseline values by study
+  data.pseudoIPD$meany1bystudy <- round(ave(data.pseudoIPD$y1, data.pseudoIPD$study), 4)
+  data.pseudoIPD$y1center      <- round(data.pseudoIPD$y1 - data.pseudoIPD$meany1bystudy, 4)
+  data.pseudoIPD$groupcenter   <- data.pseudoIPD$group - 0.5
+  data.pseudoIPD$arm           <- 1000*data.pseudoIPD$study + data.pseudoIPD$group
+  data.pseudoIPD$y2            <- round(data.pseudoIPD$y2, 4)
+  data.pseudoIPD$y1            <- round(data.pseudoIPD$y1, 4)
     
-    data.pseudoIPD
+  data.pseudoIPD
     
   })
   
@@ -1012,7 +1009,7 @@ shinyServer(function(input, output, session) {
     
   })
   
-  # Output one-stage pseudo IPD main effect-------------------------------------------------------------------------------------------------------------------------------------
+# Output one-stage pseudo IPD main effect-------------------------------------------------------------------------------------------------------------------------------------
   
   output$one <- DT::renderDataTable(
     DT::datatable({
@@ -1056,9 +1053,6 @@ shinyServer(function(input, output, session) {
       lower_one          <- round(CIone["group",]$lower, 3)
       upper_one          <- round(CIone["group",]$upper, 3)
       
-      
-      
-      
       table1 <- data.frame(
         Estimate = rbind(arm_study_specific,study_specific, group_specific, one_variance),
         SE       = rbind(se_arm_study, se_study, se_group, se_one),
@@ -1089,7 +1083,7 @@ shinyServer(function(input, output, session) {
   )
   
   
-  # Output one-stage pseudo IPD interaction effect------------------------------------------------------------------------------------------------------------------------
+# Output one-stage pseudo IPD interaction effect------------------------------------------------------------------------------------------------------------------------
   
   output$oneINT <- DT::renderDataTable(
     DT::datatable({
@@ -1158,8 +1152,8 @@ shinyServer(function(input, output, session) {
     )
   )
   
-  #---------------------------------------------------------------------------------------------------------------------------------------------------------------
-  # Output two-stage pseudo IPD main effect 
+#---------------------------------------------------------------------------------------------------------------------------------------------------------------
+# Output two-stage pseudo IPD main effect 
   
   twostage_ME.FE <- reactive({
     
@@ -1256,7 +1250,7 @@ shinyServer(function(input, output, session) {
   })
   
   
-  # Forest plot of two stage approach for the main effect ------------------
+# Forest plot of two stage approach for the main effect ------------------
   
   forest_twostageME = function(){
     
