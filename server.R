@@ -534,9 +534,9 @@ shinyServer(function(input, output, session) {
   )  
   
   
-  # Output change scores analysis --------------------------------------------------------------------------------------------------------------------------------
+# Output change scores analysis --------------------------------------------------------------------------------------------------------------------------------
   
-  # FE analysis results 
+# FE analysis results 
   change.FE <- reactive({
     
     if (input$type == "ce") {
@@ -704,9 +704,9 @@ shinyServer(function(input, output, session) {
   
   
   
-  # Output recovered ANCOVA approach -------------------------------------------------------------------------------------------------------------------------------
+# Output recovered ANCOVA approach -------------------------------------------------------------------------------------------------------------------------------
   
-  # FE analysis results 
+# FE analysis results 
   ancova.FE <- reactive({
     
     if (input$type == "ce") {
@@ -763,7 +763,7 @@ shinyServer(function(input, output, session) {
   })
   
   
-  # RE analysis results 
+# RE analysis results 
   ancova.RE <- reactive({
     
     if (input$type == "re") {
