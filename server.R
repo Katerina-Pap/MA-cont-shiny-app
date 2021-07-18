@@ -577,7 +577,7 @@ shinyServer(function(input, output, session) {
     fe.change()
   })
   
-  # RE analysis results 
+# RE analysis results 
   change.RE <- reactive({
     
     if (input$type == "re") {
@@ -619,7 +619,7 @@ shinyServer(function(input, output, session) {
   })
   
   
-  # Forest plots for FE and RE - change scores 
+# Forest plots for FE and RE - change scores 
   forest.change <- function(){
     
     if (input$type == "ce") {
@@ -661,7 +661,7 @@ shinyServer(function(input, output, session) {
     }
   )  
   
-  # Funnel plots for FE and RE - change scores 
+# Funnel plots for FE and RE - change scores 
   funnel.change<- function(){
     
     if (input$type == "ce") {
@@ -819,7 +819,7 @@ shinyServer(function(input, output, session) {
   })
   
   
-  # Forest plots for FE and RE 
+# Forest plots for FE and RE 
   forest.ancova <- function(){
     
     if (input$type == "ce") {
@@ -862,7 +862,7 @@ shinyServer(function(input, output, session) {
   ) 
   
   
-  # Funnel plots for FE and RE - ANCOVA reconstructed  
+# Funnel plots for FE and RE - ANCOVA reconstructed  
   funnel.ancova<- function(){
     
     if (input$type == "ce") {
@@ -908,27 +908,27 @@ shinyServer(function(input, output, session) {
   
   
   
-  # Print window of standard AD results -----------------------------------------------------------------------------------------------------------------------------
+# Print window of standard AD results -----------------------------------------------------------------------------------------------------------------------------
   observeEvent(input$print,{
     js$winprint()
   })
   
   
-  # One-stage pseudo IPD main effect ---------------------------------------------------------------------------------------------------------------------------------
+# One-stage pseudo IPD main effect ---------------------------------------------------------------------------------------------------------------------------------
   
-  # Make the pseudo IPD as reactive data set to be used in the modeling further
+# Make the pseudo IPD as reactive data set to be used in the modeling further
   pseudoIPD <- reactive({
     
    # Author <- df$Study[which(df$group=="0")]
     
-    if (is.null(analysis_data())){return(NULL)}
+  if (is.null(analysis_data())){return(NULL)}
     
-    analysis_data()
-    df2     <- analysis_data()
-    #Author <- df2$Study[which(df2$group=="0")]
+  analysis_data()
+  df2     <- analysis_data()
+  #Author <- df2$Study[which(df2$group=="0")]
     
-    # Generate the pseudo baselines and outcomes
-    data.IPD <- data.frame(study         = rep(df2$ID, df2$NCFB),
+  # Generate the pseudo baselines and outcomes
+  data.IPD <- data.frame(study         = rep(df2$ID, df2$NCFB),
                            author        = rep(df2$Study, df2$NCFB),
                            group         = rep(df2$group, df2$NCFB),
                            meanBaseline  = rep(df2$MeanBaseline, df2$NCFB),
@@ -937,33 +937,33 @@ shinyServer(function(input, output, session) {
                            sdPost        = rep(df2$sdFU, df2$NCFB),
                            correlation   = rep(df2$Correlation,df2$NCFB))
     
-    set.seed(123456)
-    data.IPD$ytmp1 <- rnorm(nrow(data.IPD),0,1)
-    set.seed(7891011)
-    data.IPD$ytmp2 <- rnorm(nrow(data.IPD),0,1)
+  set.seed(123456)
+  data.IPD$ytmp1 <- rnorm(nrow(data.IPD),0,1)
+  set.seed(7891011)
+  data.IPD$ytmp2 <- rnorm(nrow(data.IPD),0,1)
     
-    # Standardize ytmp1 and ytmp2, calculate correlation between ytmp1 and ytmp2, 
-    # and the residuals of regressing ytmp2 on ytmp1
-    # per study and group
+  # Standardize ytmp1 and ytmp2, calculate correlation between ytmp1 and ytmp2, 
+  # and the residuals of regressing ytmp2 on ytmp1
+  # per study and group
     
-    data.IPD2 <- NULL
-    for(study in unique(data.IPD$study))
-    {   for (group in unique(data.IPD$group))
-    { datatmp     <- data.IPD[data.IPD$study==study & data.IPD$group==group,]
-    # standardized y1tmp
-    datatmp$ytmp1 <- (datatmp$ytmp1-mean(datatmp$ytmp1))/sd(datatmp$ytmp1)
-    # standardized y2tmp
-    datatmp$ytmp2 <- (datatmp$ytmp2-mean(datatmp$ytmp2))/sd(datatmp$ytmp2)
-    # correlation between y1tmp and y2tmp
-    cor.ytmp      <- cor(datatmp$ytmp1, datatmp$ytmp2)
-    # residuals of regression of ytmp2 on ytmp1
-    resid         <- residuals(lm(ytmp2 ~ ytmp1 - 1 , data = datatmp))
-    Resid <- datatmp$ytmp2 - cor.ytmp*datatmp$ytmp1
-    # coefficient beta of regression of ytmp2 on ytmp1
-    #coef          <- coef(lm(ytmp2 ~ ytmp1 - 1 , data = datatmp))
-    data.IPD2     <- rbind( data.IPD2, data.frame(datatmp,cor.ytmp,resid,Resid))
-    }  
-    } 
+  data.IPD2 <- NULL
+  for(study in unique(data.IPD$study))
+  {   for (group in unique(data.IPD$group))
+  { datatmp     <- data.IPD[data.IPD$study==study & data.IPD$group==group,]
+  # standardized y1tmp
+  datatmp$ytmp1 <- (datatmp$ytmp1-mean(datatmp$ytmp1))/sd(datatmp$ytmp1)
+  # standardized y2tmp
+  datatmp$ytmp2 <- (datatmp$ytmp2-mean(datatmp$ytmp2))/sd(datatmp$ytmp2)
+  # correlation between y1tmp and y2tmp
+  cor.ytmp      <- cor(datatmp$ytmp1, datatmp$ytmp2)
+  # residuals of regression of ytmp2 on ytmp1
+  resid         <- residuals(lm(ytmp2 ~ ytmp1 - 1 , data = datatmp))
+  Resid <- datatmp$ytmp2 - cor.ytmp*datatmp$ytmp1
+  # coefficient beta of regression of ytmp2 on ytmp1
+  #coef          <- coef(lm(ytmp2 ~ ytmp1 - 1 , data = datatmp))
+  data.IPD2     <- rbind( data.IPD2, data.frame(datatmp,cor.ytmp,resid,Resid))
+  }  
+  } 
     
     # temporary variable needed to generate the pseudo baseline and pseudo follow-up outcomes
     data.IPD2$ytmp3 <- data.IPD2$ytmp1*data.IPD2$correlation + sqrt(1-data.IPD2$correlation^2)*data.IPD2$resid/sqrt(1-data.IPD2$cor.ytmp^2)
