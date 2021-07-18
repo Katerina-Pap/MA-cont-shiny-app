@@ -721,7 +721,6 @@ shinyServer(function(input, output, session) {
       data.AD_wide <- dcast(melt(df, id.vars=c("ID", "group")), ID~variable+group)
       
       # calculate pooled standard deviations of baseline and follow-up values
-      # For the first three methods the data need to be in wide format
       
       sdpooledB<- with(data.AD_wide, sqrt((((NCFB_1 - 1)*(sdBaseline_1^2)) + (NCFB_0 - 1)*(sdBaseline_0^2))/((NCFB_1+NCFB_0)-2)))
       sdpooledF<- with(data.AD_wide, sqrt((((NCFB_1 - 1)*(sdFU_1^2)) + (NCFB_0 - 1)*(sdFU_0^2))/((NCFB_1+NCFB_0)-2)))
@@ -731,9 +730,6 @@ shinyServer(function(input, output, session) {
       
       ripooled <- with(data.AD_wide, ((NCFB_1*Correlation_1*sdBaseline_1*sdFU_1 +  NCFB_0*Correlation_0*sdBaseline_0*sdFU_0) )
                        /((NCFB_1+NCFB_0)*sdpooledB*sdpooledF))
-      
-      # ripooled <- with(data.AD_wide, ((NCFB_1*Correlation_1*sdBaseline_1*sdFU_1 +  NCFB_0*Correlation_0 *sdBaseline_0*sdFU_0) )
-      #                  /((NCFB_1+NCFB_0)*sdpooledB*sdpooledF))
       
       ancova_est      <- with(data.AD_wide, (MeanFU_1-MeanFU_0)-ripooled*(sdpooledF/sdpooledB)*(MeanBaseline_1-MeanBaseline_0))
       
@@ -918,9 +914,9 @@ shinyServer(function(input, output, session) {
   })
   
   
-  # One-stage pseudo IPD main effect---------------------------------------------------------------------------------------------------------------------------------
+  # One-stage pseudo IPD main effect ---------------------------------------------------------------------------------------------------------------------------------
   
-  # Make the pseudo IPD as reactive data set to be used in the modelling further
+  # Make the pseudo IPD as reactive data set to be used in the modeling further
   pseudoIPD <- reactive({
     
    # Author <- df$Study[which(df$group=="0")]
@@ -928,7 +924,7 @@ shinyServer(function(input, output, session) {
     if (is.null(analysis_data())){return(NULL)}
     
     analysis_data()
-    df2    <- analysis_data()
+    df2     <- analysis_data()
     #Author <- df2$Study[which(df2$group=="0")]
     
     # Generate the pseudo baselines and outcomes
@@ -1062,6 +1058,7 @@ shinyServer(function(input, output, session) {
       
       
       
+      
       table1 <- data.frame(
         Estimate = rbind(arm_study_specific,study_specific, group_specific, one_variance),
         SE       = rbind(se_arm_study, se_study, se_group, se_one),
@@ -1070,7 +1067,11 @@ shinyServer(function(input, output, session) {
       )
       
       names(table1)[c(1,2,3,4)] <- c("Effect estimate", "Standard error", "Lower bound of 95% CI", "Upper bound of 95% CI") 
-      table1},
+      
+      #names(table1)[0] <- "Data domain"
+      table1
+      
+      },
       
       extensions = c("Buttons", "Scroller"),
       
