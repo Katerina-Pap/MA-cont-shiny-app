@@ -135,7 +135,13 @@ shinyServer(function(input, output, session) {
     all_dat()
     if (is.null(all_dat())){return(NULL)}
     DT::datatable(all_dat(), selection = list(mode = 'single', selected = 1)
-                 )
+                  #  extensions = 'Buttons', options = list(
+                  #   dom = 'Bfrtip',
+                  #   buttons = c('copy', 'csv', 'excel', 'pdf', 'print')
+                  # ) 
+                   
+                  )
+                  
                   # ,
                   # filter = 'top',
                   # selection = list(mode = 'single', selected = 1),
