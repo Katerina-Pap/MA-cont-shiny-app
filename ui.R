@@ -128,10 +128,7 @@ shinyUI(
                             #   
                             # ),
                             #style="color:#DCDCDC",
-                            
-                            
-                            
-                            
+     
                             hr(),
                             
                             h4("Perform algebraic calculations and imputation"),
