@@ -754,7 +754,7 @@ shinyServer(function(input, output, session) {
       
       MA.fixed.ANCOVA <- ancova.FE()$MA.fixed.ANCOVA
       
-      cat("--- Mean differences based on reconstructed ANCOVA estimates under the CE model ---","\n")
+      cat("--- Mean differences (adjusted for baseline) based on reconstructed ANCOVA estimates under the CE model ---","\n")
       
       MA.fixed.ANCOVA
     }
