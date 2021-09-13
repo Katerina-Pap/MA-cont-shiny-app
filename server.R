@@ -811,7 +811,7 @@ shinyServer(function(input, output, session) {
       
       MA.random.ANCOVA <- ancova.RE()$MA.random.ANCOVA
       
-      cat("--- Mean differences based on reconstructed ANCOVA estimates under the RE model ---","\n")
+      cat("--- Mean differences (adjusted for baseline) based on reconstructed ANCOVA estimates under the RE model ---","\n")
       
       MA.random.ANCOVA
     }
@@ -932,7 +932,7 @@ shinyServer(function(input, output, session) {
   #Author <- df2$Study[which(df2$group=="0")]
     
   # Generate the pseudo baselines and outcomes
-  data.IPD <- data.frame(study         = rep(df2$ID, df2$NCFB),
+  data.IPD <- data.frame(study           = rep(df2$ID, df2$NCFB),
                            author        = rep(df2$Study, df2$NCFB),
                            group         = rep(df2$group, df2$NCFB),
                            meanBaseline  = rep(df2$MeanBaseline, df2$NCFB),
