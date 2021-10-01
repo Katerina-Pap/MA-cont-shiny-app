@@ -830,14 +830,14 @@ shinyServer(function(input, output, session) {
       
       MA.fixed.ANCOVA <- ancova.FE()$MA.fixed.ANCOVA
       
-      forest(MA.fixed.ANCOVA, showweights=TRUE, xlab="Mean difference")
+      forest(MA.fixed.ANCOVA, showweights=TRUE, xlab="Mean Difference")
     }
     
     else if (input$type == "re") {
       
       MA.random.ANCOVA <- ancova.RE()$MA.random.ANCOVA
       
-      forest(MA.random.ANCOVA, showweights=TRUE, xlab="Mean difference")
+      forest(MA.random.ANCOVA, showweights=TRUE, xlab="Mean Difference")
     }
     
   }
@@ -1262,14 +1262,14 @@ shinyServer(function(input, output, session) {
     
     if (input$type == "ce") {
       MA_twostageME <- twostage_ME.FE()$MA_twostageME
-      forest(MA_twostageME, showweights=TRUE, xlab="Mean difference")
+      forest(MA_twostageME, showweights=TRUE, xlab="Mean Difference")
       
     }
     
     if (input$type == "re") {
       
       MA_twostageMEre <- twostage_ME.RE()$MA_twostageMEre
-      forest(MA_twostageMEre, showweights=TRUE, xlab="Mean difference")
+      forest(MA_twostageMEre, showweights=TRUE, xlab="Mean Difference")
       
     }
   }
