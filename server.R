@@ -38,7 +38,7 @@ shinyServer(function(input, output, session) {
     updateTabsetPanel(session, inputId = 'mytabsetpanel', selected = 'missing')
   })
   
-# Download data template -------------------------------------------------------------------------------------
+# Download data template -------------------------------------------------------------------------------------------------------------------------------------------
   
   # output$downloadtemp <- downloadHandler(
   #                                        filename = function() {
@@ -50,7 +50,7 @@ shinyServer(function(input, output, session) {
   #                                  
   # )
   
-# Define reactive values ---------------------------------------------------------------------------------------------------------------------------------------
+# Define reactive values -------------------------------------------------------------------------------------------------------------------------------------------
   
   rv <- reactiveValues()
   
@@ -590,7 +590,7 @@ shinyServer(function(input, output, session) {
       
       if (is.null(analysis_data())){return(NULL)}
       analysis_data()
-      df <- analysis_data()
+      df     <- analysis_data()
       Author <- df$Study[which(df$group=="0")]
       
       # change to wide format 
@@ -1465,12 +1465,12 @@ shinyServer(function(input, output, session) {
     
     if (input$type == "ce") {
       MA_int <- twostage_ME.FEint()$MA_int 
-      forest(MA_int, showweights=TRUE, xlab="Mean difference")
+      forest(MA_int, showweights=TRUE, xlab="Mean Difference")
     }
     
     if (input$type == "re") {
       MA_int.re <- twostage_ME.REint()$MA_int.re
-      forest(MA_int.re, showweights=TRUE, xlab="Mean difference")
+      forest(MA_int.re, showweights=TRUE, xlab="Mean Difference")
     }
   }
   
