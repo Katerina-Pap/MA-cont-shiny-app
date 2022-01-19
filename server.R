@@ -5,8 +5,8 @@ nvisitors = reactiveVal(0)
 format.list <- function (l) {
   s <- capture.output(print(l))
   writeLines(
-    sub("^ *(\\[,\\d+\\] *)+$", "",        # Remove indices from second dimension.
-        sub("^ *\\[\\d+,?\\] *", "", s)))  # Remove indices from first dimension.
+    sub("^ *(\\[,\\d+\\] *)+$", "",        # Remove indices from second dimension
+        sub("^ *\\[\\d+,?\\] *", "", s)))  # Remove indices from first dimension
 }
 
 # Define server logic ------------------------------------------------------------------------------------------------------------------------------------------
@@ -60,7 +60,7 @@ shinyServer(function(input, output, session) {
     
     defaultDat <- readxl::read_excel("./www/template.xlsx", sheet = 1, col_names = TRUE, range = cell_cols(1:14))
     
-    #defaultDat <- read.csv("./www/example.csv", sep=";")
+    #defaultDat <- read.csv("./www/example.csv", sep=";") # old csv format
     
   })
   
