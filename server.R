@@ -60,7 +60,7 @@ shinyServer(function(input, output, session) {
     
     defaultDat <- readxl::read_excel("./www/template.xlsx", sheet = 1, col_names = TRUE, range = cell_cols(1:14))
     
-    #defaultDat <- read.csv("./www/example.csv", sep=";") # old csv format
+    # defaultDat <- read.csv("./www/example.csv", sep=";") # old csv format
     
   })
   
@@ -156,7 +156,6 @@ shinyServer(function(input, output, session) {
     req(all_dat())
     Dataset <- all_dat() # Renaming the data set to appear better in the table
     
-    #table1(~MeanBaseline + sdBaseline | factor(group), data=Dataset)
     
     skim(Dataset) %>%
       filter(skim_type == "numeric") %>%
