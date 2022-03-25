@@ -29,7 +29,7 @@ shinyServer(function(input, output, session) {
     paste("Users:", nvisitors())
   })
   
-  # To make actionButton to move to a tab
+# To make actionButton to move to a tab
   observeEvent(input$gotodata, {
     updateTabsetPanel(session, inputId = 'mytabsetpanel', selected = 'data')
   })
