@@ -42,7 +42,7 @@ shinyUI(
                      ),
                      p(strong("OR")),
                      p(
-                       "Open an issue on",
+                       "Open an issue at",
                        a(href = "https://github.com/Katerina-Pap/MA-cont-shiny-app/issues", "GitHub")
                      ),
                     
