@@ -47,7 +47,7 @@ shinyUI(
                      ),
                     
                     br(),
-                    h4(textOutput("counter"))
+                    h4(textOutput("counter")) # to record number of users
                   
                      
                    ),

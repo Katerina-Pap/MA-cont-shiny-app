@@ -1,5 +1,5 @@
 # Server external functions ---------------------------------------------------------------------------------------------------
-nvisitors = reactiveVal(0) # record number of visitors/users
+nvisitors = reactiveVal(0) 
 
 # Function to format output of analysis ------------------------------------------------------------------------------------------------------------------------
 format.list <- function (l) {
