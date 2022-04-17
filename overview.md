@@ -8,7 +8,7 @@ The tool is designed to perform meta-analysis of continuous aggregate data (AD) 
 
 The available statistical approaches are:
 
-- Standard AD: Final (follow-up) scores, Change scores, ANCOVA recovered estimates
+- Standard AD: Final (follow-up) scores, Change scores, ANCOVA Recovered effect estimates
 - One-stage pseudo IPD ANCOVA
 - Two-stage pseudo IPD ANCOVA
 
