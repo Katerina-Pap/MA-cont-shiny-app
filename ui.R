@@ -2,7 +2,7 @@
 
 source("library.R")
 
-# function to print table of results 
+# Function to print table of results 
 jsCode <- 'shinyjs.winprint = function(){
 window.print();
 }'
