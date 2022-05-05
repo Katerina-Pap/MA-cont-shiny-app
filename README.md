@@ -1,4 +1,4 @@
-# MA-cont:prepostES shiny app 
+# MA-cont:prepostES
 
 https://katerina-pap.shinyapps.io/MA-cont-prepostES/
 
