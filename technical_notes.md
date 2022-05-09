@@ -8,6 +8,12 @@ More technical details on the model formulations are provided in the references 
 <br>
 <br>
 
+**List of Packages Used** 
+<br>
+```{r}
+library(shiny)
+```
+
 #### How to use the tool best?
 
 We encourage the user to watch the video of instructions under the `Home` tab, demonstrating the functionalities of this app. 
