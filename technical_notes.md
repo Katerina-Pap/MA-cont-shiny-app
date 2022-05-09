@@ -11,7 +11,19 @@ More technical details on the model formulations are provided in the references 
 **List of Packages Used** 
 <br>
 ```{r}
+library(dplyr)
+library(DT)
+library(markdown)
+library(metafor)
+library(nlme)
+library(readxl)
+library(reshape2)
 library(shiny)
+library(shinycssloaders)
+library(shinyjs)
+library(shinythemes)
+library(shinyWidgets)
+library(skimr)
 ```
 
 #### How to use the tool best?
