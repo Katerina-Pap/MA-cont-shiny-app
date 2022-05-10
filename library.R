@@ -12,9 +12,3 @@ library(shinyjs)
 library(shinythemes)
 library(shinyWidgets)
 library(skimr)
-
-# library(table1)
-# library(htmlTable)
-# library(gtsummary)
-# library(gt)
-

@@ -1,7 +1,7 @@
-# Server external functions ---------------------------------------------------------------------------------------------------
+# Server external functions -------------------
 nvisitors = reactiveVal(0) 
 
-# Function to format output of analysis ------------------------------------------------------------------------------------------------------------------------
+# Function to format output of analysis -------------------
 format.list <- function (l) {
   s <- capture.output(print(l))
   writeLines(
@@ -9,12 +9,12 @@ format.list <- function (l) {
         sub("^ *\\[\\d+,?\\] *", "", s)))  # Remove indices from first dimension
 }
 
-# Define server logic ------------------------------------------------------------------------------------------------------------------------------------------
+# Define server logic -------------------
 shinyServer(function(input, output, session) {
   
   options(shiny.reactlog=TRUE) 
   
-# Video instructions ------------------------------------------------------------------------------------------------------------------------------------------
+# Video instructions -------------------
   output$video <- renderUI({
    tags$video(type = "video/mp4", src = "video_instructions.mp4", width="350px", height="350px", controls = "controls",  style="display: block; margin-left: auto; margin-right: auto;")
   })

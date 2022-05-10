@@ -1,4 +1,4 @@
-# UI functions #-----------------------------------------------------------------------------------------------------------------------------------------------------
+# UI functions # -------------------
 
 source("library.R")
 
@@ -7,14 +7,14 @@ jsCode <- 'shinyjs.winprint = function(){
 window.print();
 }'
 
-# Define UI --------------------------------------------------------------------------------------------------------------------------------------------------------
+# Define UI -------------------
 shinyUI(
 
   navbarPage(
     id    = "mytabsetpanel",
     theme = shinytheme("flatly"), 
     title = "MA-cont: pre/post effect size",
-    # Begin overview of tabs-------------------------------------------------------------------------------
+    # Begin overview of tabs -------------------
     tabPanel("Home", icon = icon("far fa-home"),
              h1(strong("MA-cont: pre/post effect size")),               
              h3("Run meta-analysis of continuous outcomes measured at baseline and follow-up"),
@@ -85,7 +85,7 @@ shinyUI(
     ),
     
 
- # Tab 2: Data upload with -----------------------------------------------------------------------------
+ # Tab 2: Data upload with -------------------
     tabPanel("Data upload & pre-processing", icon = icon("table"), value="data",
              
            #tabsetPanel(type = "tabs",
@@ -217,7 +217,7 @@ shinyUI(
            
     ), # end of tabpanel :data upload
     
-    # Tab 2: Data upload with -----------------------------------------------------------------------------
+    # Tab 2: Data upload with -------------------
     tabPanel("Meta-Analysis", icon = icon("bar-chart-o"),
              
                          tabPanel("",
