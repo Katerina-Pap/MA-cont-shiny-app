@@ -1,0 +1,3 @@
+Title:  MA cont shiny app
+DisplayMode: Showcase
+Type: Shiny
