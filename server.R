@@ -97,7 +97,7 @@ shinyServer(function(input, output, session) {
   # })
   # 
   
-# Program logical checks for the uploaded data -------------------------------------------------------------------------------------------------------------------
+# Program logical checks for the uploaded data -------------------
     
   all_dat <- reactive({
     
