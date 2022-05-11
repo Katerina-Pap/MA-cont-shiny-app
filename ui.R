@@ -7,6 +7,7 @@ jsCode <- 'shinyjs.winprint = function(){
 window.print();
 }'
 
+
 # Define UI -------------------
 shinyUI(
 
@@ -237,6 +238,9 @@ shinyUI(
                                                           "Common(fixed)-effect (CE)" = "ce"
                                                      ),
                                         ),
+                                        bsTooltip("final_re.out", "The wait times will be broken into this many", placement = "bottom", trigger = "hover",
+                                                  options = NULL),
+                                        
                                         checkboxInput("HK", label = "Hartung-Knapp Adjustment", value = FALSE),
                                         helpText("Only applicable under RE model")
                                         
@@ -268,8 +272,30 @@ shinyUI(
                                                                ),     
                                                                h2("Results"),
                                                                verbatimTextOutput('final_fe.out'),
-                                                               verbatimTextOutput('final_re.out'),
+                                                               # %>%
+                                                               #   add_prompt(
+                                                               #     message  = "this is a plot, and I add some text to show the size of the box",
+                                                               #     position = "left", type = "error", 
+                                                               #     size = "medium", rounded = TRUE
+                                                               #   ),
+                                                               # 
+                                                               verbatimTextOutput("final_re.out"),
+                                                              
+                                                               
+                                                               # bsTooltip("bins", "The wait times will be broken into this many equally spaced bins",
+                                                               #           "right", options = list(container = "body"))
+                                                               #%>%
+                                                               #   add_prompt(
+                                                               #     message  = "this is a plot, and I add some text to show the size of the box",
+                                                               #     position = "left", type = "error", 
+                                                               #     size = "medium", rounded = TRUE
+                                                               #   ),
                                                                br(),
+                                                               
+                                                               #tags$div(title="My tooltip", verbatimTextOutput('final_fe.out')),
+                                                               
+                                                               # bsTooltip(id = "final_fe.out", title = "This is an input", 
+                                                               #           placement = "left", trigger = "hover"),
                                                                
                                                                fluidRow(
                                                                column(width=6, align="left",

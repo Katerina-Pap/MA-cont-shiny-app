@@ -239,7 +239,7 @@ shinyServer(function(input, output, session) {
     df2
     
     # df2() %>% datatable() %>%
-    #   formatRound(columns=c('sdBaseline', 'sdFU', 'MeanCFB', 'sdCFB', 'seCFB'), digits=2)
+    # formatRound(columns=c('sdBaseline', 'sdFU', 'MeanCFB', 'sdCFB', 'seCFB'), digits=2)
      
    
     #coalsce(df2(),df1())
@@ -286,8 +286,8 @@ shinyServer(function(input, output, session) {
     df4
     
     
-    #df4() %>% datatable() %>%
-    #  formatRound(columns=c('sdBaseline', 'sdFU', 'Correlation', 'MeanCFB', 'sdCFB', 'seCFB'), digits=2)
+    # df4() %>% datatable() %>%
+    # formatRound(columns=c('sdBaseline', 'sdFU', 'Correlation', 'MeanCFB', 'sdCFB', 'seCFB'), digits=2)
     
   })
   
@@ -407,6 +407,8 @@ shinyServer(function(input, output, session) {
     
   })
   
+# addTooltip(session, id = "fe.final", title = "This is an input.",
+#              placement = "left", trigger = "hover")
   
   output$final_fe.out <- renderPrint({
     fe.final()
