@@ -238,8 +238,8 @@ shinyUI(
                                                           "Common(fixed)-effect (CE)" = "ce"
                                                      ),
                                         ),
-                                        bsTooltip("final_re.out", "The wait times will be broken into this many", placement = "bottom", trigger = "hover",
-                                                  options = NULL),
+                                        # bsTooltip("final_re.out", "The wait times will be broken into this many", placement = "bottom", trigger = "hover",
+                                        #           options = NULL),
                                         
                                         checkboxInput("HK", label = "Hartung-Knapp Adjustment", value = FALSE),
                                         helpText("Only applicable under RE model")
@@ -500,7 +500,7 @@ shinyUI(
     footer = titlePanel( 
       div(
         column(width = 6,   
-               h5(strong("Meta-analysis of continuous outcomes: pre/post effect size v0.1")), 
+               h5(strong("Meta-analysis of continuous outcomes: pre/post effect size")), 
                em(), 
                h6("Developed by : Katerina Papadimitropoulou, katerina.papadimitropoulou@gmail.com"),
                em(),
