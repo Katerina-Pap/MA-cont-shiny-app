@@ -16,11 +16,14 @@ Different methods of increasing complexity are applied and the output needs to b
 <br>
 
 #### Glossary of Terms
-      
-|Approach|Description|
-|:-------|----------:|
-|`ANCOVA`  |abcdefg    |
-|`Hartung-Knapp Adjustment`  |gfedcba    |
+
+
+| Approach/Assumption | Description |
+| :-------: | :----------- |
+| `Hartung-Knapp Adjustment` | Derives the SE and CI of the summary treatment effect while justifying percentiles from a t-distribution when sample sizes and/or number of included studies are small            |
+| `Recovered ANCOVA effect estimates` |  TBA           |
+
+|                  |             |
 
 
 
