@@ -1041,7 +1041,7 @@ shinyServer(function(input, output, session) {
       se_arm_study       <- round(summary(FRstudyarm)$tTable["group",2], 3)
       study_specific     <- round(summary(FRstudy)$tTable["group",1], 3)
       se_study           <- round(summary(FRstudy)$tTable["group",2], 3)
-      group_specific     <- round(summary(FRgroup)$tTable["group",1], 3)
+      arm_specific     <- round(summary(FRgroup)$tTable["group",1], 3)
       se_group           <- round(summary(FRgroup)$tTable["group",2], 3)
       one_variance       <- round(summary(FRone)$tTable["group",1], 3)
       se_one             <- round(summary(FRone)$tTable["group",2], 3)
@@ -1059,7 +1059,7 @@ shinyServer(function(input, output, session) {
       upper_one          <- round(CIone["group",]$upper, 3)
       
       table1 <- data.frame(
-        Estimate = rbind(arm_study_specific,study_specific, group_specific, one_variance),
+        Estimate = rbind(arm_study_specific,study_specific, arm_specific, one_variance),
         SE       = rbind(se_arm_study, se_study, se_group, se_one),
         Lower    = rbind(lower_arm, lower_study, lower_group, lower_one),
         Upper    = rbind(upper_arm, upper_study, upper_group, upper_one)
@@ -1114,7 +1114,7 @@ shinyServer(function(input, output, session) {
       se_arm_studyINT       <- round(summary(FRstudyarmInt)$tTable["y1center:group",2], 3)
       study_specificINT     <- round(summary(FRstudyInt)$tTable["y1center:group",1], 3)
       se_studyINT           <- round(summary(FRstudyInt)$tTable["y1center:group",2], 3)
-      group_specificINT     <- round(summary(FRgroupInt)$tTable["y1center:group",1], 3)
+      arm_specificINT     <- round(summary(FRgroupInt)$tTable["y1center:group",1], 3)
       se_groupINT           <- round(summary(FRgroupInt)$tTable["y1center:group",2], 3)
       one_varianceINT       <- round(summary(FRoneInt)$tTable["y1center:group",1], 3)
       se_oneINT             <- round(summary(FRoneInt)$tTable["y1center:group",2], 3)
@@ -1133,7 +1133,7 @@ shinyServer(function(input, output, session) {
       
       
       table1 <- data.frame(
-        Estimate = rbind(arm_study_specificINT,study_specificINT, group_specificINT, one_varianceINT),
+        Estimate = rbind(arm_study_specificINT,study_specificINT, arm_specificINT, one_varianceINT),
         SE       = rbind(se_arm_studyINT, se_studyINT, se_groupINT, se_oneINT),
         Lower    = rbind(lower_armINT, lower_studyINT, lower_groupINT, lower_oneINT),
         Upper    = rbind(upper_armINT, upper_studyINT, upper_groupINT, upper_oneINT)
