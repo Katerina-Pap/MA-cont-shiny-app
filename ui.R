@@ -383,14 +383,15 @@ shinyUI(
                                                                          ".shiny-output-error:before { visibility: hidden; }"
                                                               ), 
                                                               fluidRow(column(10, style = "background-color:#D1E8E2", 
-                                                                              h3("Pseudo IPD"),
+                                                                              h3("Pseudo IPD data set"),
                                                                               DT::dataTableOutput("pseudoData") %>% withSpinner(type = getOption("spinner.type", 5), color="#88BDBC")
                                                                               )),
                                                                               br(), 
                                                                               br(),
                                                                        
                                                               fluidRow(column(10, style = "background-color:#DCDCDC",       
-                                                                              h3("Results: Study-stratified model, options for the residual variances"),
+                                                                              h3("Results"),
+                                                                              h4("Study-stratified model, options for the residual variances"),
                                                                               DT::dataTableOutput("one") %>% withSpinner(type = getOption("spinner.type", 5), color="#88BDBC")
                                                                               )
                                                                        )
@@ -399,7 +400,8 @@ shinyUI(
                                                 
                                                      tabPanel("Treatment-by-baseline interaction effect",
                                                                 fluidRow(column(10, style = "background-color:#DCDCDC",  
-                                                                                h3("Results: Study-stratified model, options for the residual variances"),
+                                                                                h3("Results"),
+                                                                                h4("Study-stratified model, options for the residual variances"),
                                                                                 DT::dataTableOutput("oneINT") %>% withSpinner(type = getOption("spinner.type", 1), color="#88BDBC")
                                                                                 )
                                                                          
