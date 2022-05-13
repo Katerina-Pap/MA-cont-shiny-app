@@ -94,12 +94,10 @@ shinyServer(function(input, output, session) {
   
 
 # Program logical checks for the uploaded data -------------------
-    
   all_dat <- reactive({
     
     req(df_upload()) # require the reactive uploaded or default data set
     raw_sheet <- df_upload()
-    
     
     res <- tryCatch({
       names(raw_sheet)[1] <- "ID"
