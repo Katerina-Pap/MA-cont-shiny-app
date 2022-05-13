@@ -63,19 +63,20 @@ shinyServer(function(input, output, session) {
     
   })
   
-  
   df_upload <- reactive({
     inFile <- input$data_upload
     if (is.null(inFile)) {return(defaultDat())}
     else 
       
-      data <- tryCatch(readxl::read_excel(inFile$datapath[1], sheet = 1, col_names = TRUE), error = function(e) e)
+    data <- tryCatch(readxl::read_excel(inFile$datapath[1], sheet = 1, col_names = TRUE), error = function(e) e)
     
     if(inherits(data, "error")) {
       output$warning <- renderText(paste0("Error in uploading file: ", data$message))
       return(NULL)
     }
     return(data)
+    
+  
     
 
     
@@ -91,12 +92,7 @@ shinyServer(function(input, output, session) {
   })
   
   
-  # output$table_edited <- renderTable({
-  #   validate(need(rv$data, message = "No valid file loaded. Please see the template."))
-  #   rv$data
-  # })
-  # 
-  
+
 # Program logical checks for the uploaded data -------------------
     
   all_dat <- reactive({
@@ -105,11 +101,12 @@ shinyServer(function(input, output, session) {
     
     raw_sheet <- df_upload()
     
+    
+    
     res <- tryCatch({
       names(raw_sheet)[1] <- "ID"
       
       alldat <- raw_sheet 
-      
       
       if(names(alldat)[1] != "ID" | ncol(alldat) !=14)  # logical checks conditions 
       {
@@ -122,10 +119,41 @@ shinyServer(function(input, output, session) {
       output$warning <- renderText(paste0("Error in reading file: ", res$message))
       return(NULL)
     }
-    
     return(res)
     
+  validate(
+        need(is.negative(alldat[13]!="TRUE"), "Please select a data set")
+    
+  )
+    
+ #    res1 <- tryCatch({
+ #      names(raw_sheet)[13] <- "NCFB"
+ # 
+ #      alldat <- raw_sheet
+ #      
+ #      #if(template[13]<0) {print ("negative number")}
+ # 
+ #      if(alldat[13]<0) {print ("negative number")}
+ #     #  {
+ #     #    stop("Sample size has negative values - Please check your data")
+ #     #  }
+ #     #  return(alldat)
+ #     # }, error=function(e) e)
+ # 
+ #    # if(inherits(res1, "error")) {
+ #    #   output$warning1 <- renderText(paste0("Error in reading file: ", res1$message))
+ #    #   return(NULL)
+ #    # }
+ #    # return(res1)
+ #    
+ # })
+    
   })
+  
+
+  
+
+
   
   
 # Data table of input/example data set -------------------
@@ -153,7 +181,6 @@ shinyServer(function(input, output, session) {
   output$structure <- renderPrint({
     req(all_dat())
     Dataset <- all_dat() # Renaming the data set to appear better in the table
-    
     
     skim(Dataset) %>%
       filter(skim_type == "numeric") %>%
