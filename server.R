@@ -54,8 +54,7 @@ shinyServer(function(input, output, session) {
   rv <- reactiveValues()
   
   # Load default data 
-  
-  defaultDat <- reactive({
+    defaultDat <- reactive({
     
     defaultDat <- readxl::read_excel("./www/template.xlsx", sheet = 1, col_names = TRUE, range = cell_cols(1:14))
     
@@ -75,11 +74,7 @@ shinyServer(function(input, output, session) {
       return(NULL)
     }
     return(data)
-    
   
-    
-
-    
     # Note to try later: once the analysis_data are loaded, I want  make reactive the sliders for the ANCOVA method
     #  if the code below is uncommented out, there is lag in uploading the dataset
     
@@ -91,8 +86,6 @@ shinyServer(function(input, output, session) {
     
   })
   
-  
-
 # Program logical checks for the uploaded data -------------------
   all_dat <- reactive({
     
