@@ -98,9 +98,7 @@ shinyServer(function(input, output, session) {
   all_dat <- reactive({
     
     req(df_upload()) # require the reactive uploaded or default data set
-    
     raw_sheet <- df_upload()
-    
     
     
     res <- tryCatch({
