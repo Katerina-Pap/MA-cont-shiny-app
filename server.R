@@ -88,61 +88,53 @@ shinyServer(function(input, output, session) {
   
 # Program logical checks for the uploaded data -------------------
   all_dat <- reactive({
-    
+  
     req(df_upload()) # require the reactive uploaded or default data set
     raw_sheet <- df_upload()
-    
-    res <- tryCatch({
-      names(raw_sheet)[1] <- "ID"
       
-      alldat <- raw_sheet 
+     res <- tryCatch({
+       names(raw_sheet)[1] <- "ID"
       
-      if(names(alldat)[1] != "ID" | ncol(alldat) !=14)  # logical checks conditions 
-      {
-        stop("Incorrect format of the data in the Excel file")
-      }
-      return(alldat)
-    }, error = function(e) e)
-    
-    if(inherits(res, "error")) {
-      output$warning <- renderText(paste0("Error in reading file: ", res$message))
-      return(NULL)
-    }
-    return(res)
-    
-  validate(
-        need(is.negative(alldat[13]=="TRUE"), "Please select a data set")
-    
-  )
-    
- #    res1 <- tryCatch({
- #      names(raw_sheet)[13] <- "NCFB"
- # 
- #      alldat <- raw_sheet
- #      
- #      #if(template[13]<0) {print ("negative number")}
- # 
- #      if(alldat[13]<0) {print ("negative number")}
- #     #  {
- #     #    stop("Sample size has negative values - Please check your data")
- #     #  }
- #     #  return(alldat)
- #     # }, error=function(e) e)
- # 
- #    # if(inherits(res1, "error")) {
- #    #   output$warning1 <- renderText(paste0("Error in reading file: ", res1$message))
- #    #   return(NULL)
- #    # }
- #    # return(res1)
- #    
- # })
-    
+       alldat <- raw_sheet
+       if(names(alldat)[1] != "ID" | ncol(alldat) !=14)  # logical checks conditions
+       {
+         stop("Incorrect format of the data in the Excel file")
+       }
+       return(alldat)
+     }, error = function(e) e)
+
+     if(inherits(res, "error")) {
+       output$warning <- renderText(paste0("Error in reading file: ", res$message))
+       return(NULL)
+     }
+     return(res)
+
   })
-  
-
-  
-
-
+ 
+#   test_dat <- reactive({
+#     
+#     req(df_upload()) # require the reactive uploaded or default data set
+#     test_sheet <- df_upload()
+#      
+#     res1 <- tryCatch({
+#       names(test_sheet)[13] <- "NCFB"
+#  
+#       testdat <- test_sheet
+#  
+#       if(is.negative(testdat[13])=="TRUE")
+#       {
+#         stop("Sample size has negative values - Please check your data")
+#       }
+#       return(alldat)
+#      }, error=function(e) e)
+#  
+#     if(inherits(res1, "error")) {
+#       output$warning1 <- renderText(paste0("Error in reading file: ", res1$message))
+#       return(NULL)
+#     }
+#     return(res1)
+#     
+# })
   
   
 # Data table of input/example data set -------------------
