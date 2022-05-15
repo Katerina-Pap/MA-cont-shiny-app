@@ -15,8 +15,12 @@ shinyServer(function(input, output, session) {
   options(shiny.reactlog=TRUE) 
   
 # Video instructions -------------------
+  # output$video <- renderUI({
+  #  tags$video(type = "video/mp4", src = "video_instructions.mp4", width="350px", height="350px", controls = "controls",  style="display: block; margin-left: auto; margin-right: auto;")
+  # })
+  
   output$video <- renderUI({
-   tags$video(type = "video/mp4", src = "video_instructions.mp4", width="350px", height="350px", controls = "controls",  style="display: block; margin-left: auto; margin-right: auto;")
+    tags$video(type = "video/mov", src = "video_without_captions.mov", width="350px", height="350px", controls = "controls",  style="display: block; margin-left: auto; margin-right: auto;")
   })
   
 # Track number of visitors at the bottom of page -------------------
@@ -243,6 +247,7 @@ shinyServer(function(input, output, session) {
     df2 <- df2()
     df2$ID <- sprintf('%1.0f', df2$ID)
     df2$group <- sprintf('%1.0f', df2$group)
+    df2$NCFB <- sprintf('%1.0f', df2$NCFB)
     df2
     
     # df2() %>% datatable() %>%
@@ -267,6 +272,7 @@ shinyServer(function(input, output, session) {
     df3 <- df3()
     df3$ID <- sprintf('%1.0f', df3$ID)
     df3$group <- sprintf('%1.0f', df3$group)
+    df3$NCFB <- sprintf('%1.0f', df3$NCFB)
     df3
     
     #df3() %>% datatable() %>%
@@ -290,6 +296,7 @@ shinyServer(function(input, output, session) {
     df4 <- df4()
     df4$ID <- sprintf('%1.0f', df4$ID)
     df4$group <- sprintf('%1.0f', df4$group)
+    df4$NCFB <- sprintf('%1.0f', df4$NCFB)
     df4
     
     
@@ -318,6 +325,7 @@ shinyServer(function(input, output, session) {
     df5 <- df5()
     df5$ID <- sprintf('%1.0f', df5$ID)
     df5$group <- sprintf('%1.0f', df5$group)
+    df5$NCFB <- sprintf('%1.0f', df5$NCFB)
     df5
     
     #df5() %>% datatable() %>%
@@ -368,6 +376,7 @@ shinyServer(function(input, output, session) {
     df <- analysis_data()
     df$ID <- sprintf('%1.0f', df$ID)
     df$group <- sprintf('%1.0f', df$group)
+    df$NCFB <- sprintf('%1.0f', df$NCFB)
     df
     
     #analysis_data()$ID <-  sprintf('%1.3f', analysis_data()$ID)
