@@ -18,9 +18,12 @@ Different methods of increasing complexity are applied and the output needs to b
 | Approach/Assumption | Description |
 | :-------: | :----------- |
 | `ANCOVA Recovered effect estimates` | A regression model called, where the final score is the dependent variable and the variables for the treatment groups and baseline scores enter as covariates. The coefficient for the treatment group estimates the **treatment effect**, that is, the difference between the randomised groups and it can be recovered by published aggregate data           |
+|`Change scores analysis`|The treatment effect is estimated as the difference between groups in *mean* changes from baseline scores |
+| | |
 | `Final (follow-up) scores analysis`| The treatment effect is estimated as difference in *mean* final scores between the treatment group and control group. This approach ignores any baseline information|
-| `Hartung-Knapp Adjustment` | Derives the SE and CI of the summary treatment effect while justifying percentiles from a t-distribution when sample sizes and/or number of included studies are small            |
-|                  |             |
+| | |
+| `Hartung-Knapp Adjustment` | Derives the SE and CI of the summary treatment effect while justifying percentiles from a t-distribution when sample sizes and/or number of included studies are small |
+|         |    |
 <br>
 #### List of Packages Used
 ```{r}
