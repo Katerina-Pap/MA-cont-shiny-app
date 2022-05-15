@@ -111,7 +111,7 @@ shinyServer(function(input, output, session) {
     return(res)
     
   validate(
-        need(is.negative(alldat[13]!="TRUE"), "Please select a data set")
+        need(is.negative(alldat[13]=="TRUE"), "Please select a data set")
     
   )
     
