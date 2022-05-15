@@ -136,7 +136,6 @@ shinyServer(function(input, output, session) {
 #     
 # })
   
-  
 # Data table of input/example data set -------------------
   output$input_table <- DT::renderDataTable({
     all_dat()
