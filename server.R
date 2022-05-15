@@ -15,13 +15,13 @@ shinyServer(function(input, output, session) {
   options(shiny.reactlog=TRUE) 
   
 # Video instructions -------------------
-  # output$video <- renderUI({
-  #  tags$video(type = "video/mp4", src = "video_instructions.mp4", width="350px", height="350px", controls = "controls",  style="display: block; margin-left: auto; margin-right: auto;")
-  # })
-  
   output$video <- renderUI({
-    tags$video(type = "video/mov", src = "video_without_captions.mov", width="350px", height="350px", controls = "controls",  style="display: block; margin-left: auto; margin-right: auto;")
+   tags$video(type = "video/mp4", src = "video_with_captions.mp4", width="350px", height="350px", controls = "controls",  style="display: block; margin-left: auto; margin-right: auto;")
   })
+  
+  # output$video <- renderUI({
+  #   tags$video(type = "video/mov", src = "video_without_captions.mov", width="350px", height="350px", controls = "controls",  style="display: block; margin-left: auto; margin-right: auto;")
+  # })
   
 # Track number of visitors at the bottom of page -------------------
   nvisitors(isolate(nvisitors()) + 1)
