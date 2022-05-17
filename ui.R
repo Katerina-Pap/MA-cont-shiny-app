@@ -383,7 +383,7 @@ shinyUI(
                                                                          ".shiny-output-error:before { visibility: hidden; }"
                                                               ), 
                                                               fluidRow(column(10, style = "background-color:#D1E8E2", 
-                                                                              h3("Pseudo IPD data set"),
+                                                                              h3("Pseudo IPD set"),
                                                                               DT::dataTableOutput("pseudoData") %>% withSpinner(type = getOption("spinner.type", 5), color="#88BDBC")
                                                                               )),
                                                                               br(), 
