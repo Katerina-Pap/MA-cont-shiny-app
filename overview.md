@@ -4,7 +4,7 @@ A worked example, including missing summary statistics, is provided as a default
 - Use the `Browse` button to upload your data set and follow the steps to fill-in any missing data
 - Once your data set is complete (no missing data), proceed to the `View final data` tab
 
-The tool is designed to perform meta-analysis of continuous aggregate data (AD) measured at baseline (pre-treatment) and follow-up (post-treatment) and expressed as **mean differences**, under the  `Meta-Analysis` tab.
+The tool is designed to perform meta-analysis of continuous aggregate data (AD) measured at baseline (pre-treatment) and follow-up (post-treatment) and with treatment effects expressed as **mean differences**, under the  `Meta-Analysis` tab.
 
 The available statistical approaches are:
 
