@@ -453,9 +453,7 @@ shinyServer(function(input, output, session) {
     
     if (input$type == "re") {
       MA.random.final <- final.RE()$MA.random.final
-      
       cat("--- Mean differences based on final (follow-up) scores under the RE model ---","\n")
-      
       MA.random.final
     }
   })
@@ -470,9 +468,7 @@ shinyServer(function(input, output, session) {
   forest.final <- function(){
     
     if (input$type == "ce") {
-      
       MA.fixed.final <- final.FE()$MA.fixed.final
-      
       forest(MA.fixed.final, showweights=TRUE)
     }
     
