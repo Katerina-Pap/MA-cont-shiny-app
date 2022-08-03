@@ -7,7 +7,7 @@ It enables the user to fit routinely used AD approaches and the novel pseudo IPD
 More technical details on the model formulations are provided in the references above. 
 <br>
 
-#### How to use the tool best?
+#### How to best use the tool?
 
 We encourage the user to watch the video of instructions under the `Home` tab, demonstrating the functionalities of this app. 
 Different methods of increasing complexity are applied and the output needs to be interpreted assuming a basic understanding of the models running in the backend. All code is freely available in [Github](https://github.com/Katerina-Pap/MA-cont-shiny-app).
