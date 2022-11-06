@@ -317,9 +317,9 @@ shinyServer(function(input, output, session) {
     {return(NULL)}
     
     df5 <- df5()
-    df5$ID <- sprintf('%1.0f', df5$ID)
+    df5$ID    <- sprintf('%1.0f', df5$ID)
     df5$group <- sprintf('%1.0f', df5$group)
-    df5$NCFB <- sprintf('%1.0f', df5$NCFB)
+    df5$NCFB  <- sprintf('%1.0f', df5$NCFB)
     df5
     
     #df5() %>% datatable() %>%
