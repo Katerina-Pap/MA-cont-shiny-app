@@ -288,9 +288,9 @@ shinyServer(function(input, output, session) {
     {return(NULL)}
     
     df4 <- df4()
-    df4$ID <- sprintf('%1.0f', df4$ID)
+    df4$ID    <- sprintf('%1.0f', df4$ID)
     df4$group <- sprintf('%1.0f', df4$group)
-    df4$NCFB <- sprintf('%1.0f', df4$NCFB)
+    df4$NCFB  <- sprintf('%1.0f', df4$NCFB)
     df4
     
     
