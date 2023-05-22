@@ -351,11 +351,6 @@ shinyServer(function(input, output, session) {
   #     else { return (rv$df)}
   #   })
   
-  # analysis_data <-reactive({
-  #     df_upload()
-  #     ifelse(sum(is.na(df_upload()))!=0, return (df5()), ifelse(sum(is.na(df_upload()))==0, return (rv$df), return(df5())) )
-  #     })
-  # 
   
   # analysis_data <-reactive({
   # inFile <- input$data_upload
